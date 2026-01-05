@@ -1,0 +1,25 @@
+import { BookingDetail, BookingTruck } from "./booking-header.model";
+
+interface BookingCreate {
+  warehouseCode: string;
+  warehouseName: string;
+  warehouseDisplay: string;
+  companyCode: string;
+  bookingDate: Date;
+  bookingDetail: BookingDetail[];
+  bookingTruck: BookingTruck[];
+  truckSelected: number;
+  driverName:string;
+  telNo:string;
+  internalDoorId: number;
+  dockDoor:string;
+  startTime: Date;
+  endTime: Date;
+  bookingId: string;
+  totalTruck:number;
+  internalHeaderKey:number;
+  merchType: string;
+  status: string;
+}
+
+export { BookingCreate };

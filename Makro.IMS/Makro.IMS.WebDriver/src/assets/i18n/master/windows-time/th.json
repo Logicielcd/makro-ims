@@ -1,0 +1,81 @@
+{
+  "Title": {
+    "List": "เวลาทำการ",
+    "Create": "สร้างเวลาทำการ",
+    "Detail": "รายละเอียดเวลาทำการ",
+    "Upload": "อัพโหลดเวลาทำการ",
+    "History": "ประวัติ"
+  },
+  "Section": {
+    "Name": "ชื่อ",
+    "Remark": "หมายเหตุ",
+    "Detail": "รายละเอียด"
+  },
+  "Label": {
+    "Name": "ชื่อ",
+    "Remark": "หมายเหตุ",
+    "OperateDay": "วันทำการ",
+    "OpenTime": "เวลาเปิดทำการ",
+    "CloseTime": "เวลาปิดทำการ"
+  },
+  "Button": {
+    "Create": "สร้าง",
+    "Upload": "อัพโหลด",
+    "Excel": "เอ็กซ์เซล",
+    "ClearFilter": "ล้างตัวกรอง",
+    "ChooseColumn": "เลือกคอลัมน์",
+    "Column": "คอลัมน์",
+    "Refresh": "รีเฟรช",
+    "Save": "บันทึก",
+    "Delete": "ลบ",
+    "Back": "ย้อนกลับ",
+    "Yes": "ตกลง",
+    "No": "ยกเลิก",
+    "SelectFile": "เลือกไฟล์",
+    "Cancel": "ยกเลิก"
+  },
+  "History": {
+    "Action": "การดำเนินการ",
+    "Who": "บุคคล",
+    "Timestamp": "ตราเวลา"
+  },
+  "Select": {
+    "OperateDay": "เลือกวันทำการ"
+  },
+  "Message": {
+    "Confirm": {
+      "Delete": {
+        "Title": "ลบข้อมูล",
+        "Message": "ยืนยันการลบข้อมูล ?"
+      },
+      "Upload": {
+        "Title": "อัปโหลดข้อมูล",
+        "Message": "ยืนยันการอัพโหลดข้อมูล ?"
+      }
+    },
+    "Notification": {
+      "Upload": "อัพโหลดสำเร็จ",
+      "Create": "เพิ่มข้อมูลสำเร็จ",
+      "Update": "แก้ไขข้อมูลสำเร็จ",
+      "Delete": "ลบข้อมูลสำเร็จ"
+    },
+    "Validation": {
+      "Required": "{{field}} ไม่สามารถเป็นค่าว่าง"
+    },
+    "FromApi": {
+      "DEPARTMENT_IS_REQUIRED": "แผนกไม่สามารถเป็นค่าว่าง",
+      "WINDOWN_TIME_IS_REQUIRED": "เวลาทำการไม่สามารถเป็นค่าว่าง",
+      "NAME_IS_REQUIRED": "ชื่อไม่สามารถเป็นค่าว่าง",
+      "DEPARTMENT_NOT_FOUND": "ไม่พบแผนก",
+      "WINDOWN_TIME_NOT_FOUND": "ไม่พบเวลาทำการในระบบ",
+      "NAME_ALREADY_EXIST": "ชื่อไม่สามารถใช้ซ้ำได้",
+
+      "WINDOWN_TIME_DETAIL_IS_REQUIRED": "รายละเอียดของเวลาทำการไม่สามารถเป็นค่าว่าง",
+      "OPERATE_DAY_IS_REQUIRED": "วันทำการไม่สามารถเป็นค่าว่าง",
+      "OPEN_TIME_IS_REQUIRED": "เวลาเปิดทำการไม่สามารถเป็นค่าว่าง",
+      "CLOSE_TIME_IS_REQUIRED": "เวลาปิดทำการไม่สามารถเป็นค่าว่าง",
+      "WINDOWN_TIME_DETAIL_NOT_FOUND": "ไม่พบรายละเอียดของเวลาทำการ",
+      "OPERATE_DAY_ALREADY_EXIST": "วันทำการไม่สามารถใช้ซ้ำได้"
+    }
+  }
+}

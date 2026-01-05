@@ -1,0 +1,257 @@
+.ui-autocomplete-token {
+    float: none !important;
+  }
+
+:root .card{
+  border-color: var(--primary-color);
+}
+
+:root .p-steps-title{
+  white-space: pre-wrap;
+  text-align: center;
+}
+
+:root .layout-sidebar{
+  border: 1px solid;
+  border-color: var(--primary-color);
+}
+
+:root .p-highlight{
+  border: 1px solid;
+  border-color: var(--primary-color);
+  border-radius: 8px;
+}
+
+:root .p-dialog .p-dialog-header{
+  background: var(--primary-color);  
+  color: white;
+  height: 50px;
+}
+
+:root .p-dialog .p-dialog-header .p-dialog-title {
+  font-weight: 700;  
+  font-size: 1.25rem;
+}
+
+:root .p-dialog .p-dialog-header .p-dialog-header-icon {
+  color: white;
+}
+
+.p-tag{
+  font-size: 1rem; /* Adjust the font size as needed */
+  height: 40px;
+  min-width: 100px;
+}
+
+ul[role="tablist"] {
+  & li {
+    &.icon {
+      & .p-steps-number {
+        text-indent: -99px;
+        padding: 1rem 1.5rem;
+        height: 5rem !important;
+        &:before {
+          font-family: "primeicons";
+          font-size: 2rem;
+          display: inline-block;
+          vertical-align: middle;
+          font-weight: 900;
+          text-indent: 0;
+          left: 5px;
+          top: 2px;
+        }
+      }
+
+      &.check {
+        & .p-steps-number {
+          &:before {
+            content: "\e909";
+          }
+        }
+      }
+
+      &.checkcircle {
+          & .p-steps-number {
+              &:before {
+                  content: "\e90a";
+              }
+          }
+      }
+
+      &.truck {
+        & .p-steps-number {
+          &:before {
+            content: "\ea00";              
+          }
+        }
+      }
+
+      &.truck-pass {
+        & .p-steps-number {
+          &:before {
+            content: "\ea00";
+            color: green;              
+          }
+        }
+      }
+
+      &.empty {
+        & .p-steps-number {
+          &:before {
+            content: "\e95a";
+          }
+        }
+      }
+
+      &.ticket {
+          & .p-steps-number {
+              &:before {
+                  content: "\e9a9";
+              }
+          }
+      }
+
+      &.ticket-pass {
+        & .p-steps-number {
+            &:before {
+                content: "\e9a9";
+                color: green;                  
+            }
+        }
+      }
+
+      &.signin {
+          & .p-steps-number {
+              &:before {
+                  content: "\e970";
+              }
+          }
+      }
+      
+      &.signin-pass {
+        & .p-steps-number {
+            &:before {
+                content: "\e970";
+                color: green;                  
+            }
+        }
+      }
+
+      &.signout {
+          & .p-steps-number {
+              &:before {
+                  content: "\e971";
+              }
+          }
+      }
+
+      &.signout-pass {
+        & .p-steps-number {
+            &:before {
+                content: "\e971";
+                color: green;                  
+            }
+        }
+      }
+
+      &.box {
+          & .p-steps-number {
+              &:before {
+                  content: "\e9d9";
+              }
+          }
+      }
+
+      &.box-pass {
+        & .p-steps-number {
+            &:before {
+                content: "\e9d9";
+                color: green;
+            }
+        }
+      }
+
+      &.calendarplus {
+          & .p-steps-number {
+              &:before {
+                  content: "\e954";
+              }
+          }
+      }
+
+      &.calendarplus-pass {                  
+        & .p-steps-number {
+            &:before {
+                content: "\e954";
+                color: green;                                
+            }
+        }
+      }
+
+      &.file {
+          & .p-steps-number {
+              &:before {
+                  content: "\e958";
+              }
+          }
+      }
+
+      &.file-pass {
+        & .p-steps-number {
+            &:before {
+                content: "\e958";
+                color: green;
+            }
+        }
+      }
+    
+      &.thumbsup {
+          & .p-steps-number {
+              &:before {
+                  content: "\e9a3";
+              }
+          }
+      }
+      &.thumbsup-pass {
+        & .p-steps-number {
+            &:before {
+                content: "\e9a3";
+                color: green;
+            }
+        }
+      }
+
+      &.megaphone {
+        & .p-steps-number {
+            &:before {
+                content: "\e9fb";
+            }
+        }
+      }
+      &.megaphone-pass {
+        & .p-steps-number {
+            &:before {
+                content: "\e9fb";
+                color: green;
+            }
+        }
+      }
+
+      &.verify {
+        & .p-steps-number {
+            &:before {
+                content: "\ea02";
+            }
+        }
+      }
+      &.verify-pass {
+        & .p-steps-number {
+            &:before {
+                content: "\ea02";
+                color: green;
+            }
+        }
+      }
+    }
+  }
+}

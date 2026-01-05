@@ -1,0 +1,46 @@
+.status-badge {
+  border-radius: var(--border-radius);
+  padding: 0.25em 0.5rem;
+  text-transform: uppercase;
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: 0.3px;
+}
+
+.all {
+  background-color: #fa8d08;
+  color: #282423;
+}
+
+.draft {
+  background-color: #eccfff;
+  color: #694382;
+}
+
+.new {
+  background-color: #b3e5fc;
+  color: #23547b;
+}
+
+.inprocess {
+  background-color: #ffd8b2;
+  color: #805b36;
+}
+
+.completed {
+  background-color: #c8e6c9;
+  color: #256029;
+}
+
+.cancel {
+  background: #e6eaf3;
+  color: black;
+}
+
+.true-icon {
+  color: #1b9c24;
+}
+
+.false-icon {
+  color: #f21b1b;
+}

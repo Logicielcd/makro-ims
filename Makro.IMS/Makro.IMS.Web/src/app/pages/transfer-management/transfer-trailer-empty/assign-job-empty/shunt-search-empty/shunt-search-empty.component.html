@@ -1,0 +1,123 @@
+<div class="surface-card p-4">
+  <div class="flex flex-column md:flex-row md:justify-content-between mb-3">
+    <div class="flex align-items-center">
+      <p-button
+        label="Clear"
+        icon="pi pi-filter-slash"
+        (onClick)="clear(dt)"
+        severity="help"
+        class="mr-2"
+      ></p-button>
+      <span class="p-input-icon-left w-full md:w-20rem">
+        <i class="pi pi-search"></i>
+        <input
+          #filter
+          pInputText
+          type="text"
+          (input)="onGlobalFilter(dt, $event)"
+          placeholder="Search shunts..."
+          class="w-full"
+        />
+      </span>
+    </div>
+    <div class="mt-3 md:mt-0">
+      <p-dropdown
+        [options]="statuses"
+        [(ngModel)]="selectedStatus"
+        (onChange)="onStatusChange()"
+        placeholder="Change status"
+        [showClear]="true"
+        styleClass="w-full md:w-auto"
+      >
+        <ng-template pTemplate="selectedItem">
+          <p-tag
+            *ngIf="selectedStatus"
+            [value]="selectedStatus"
+            [severity]="getSeverity(selectedStatus)"
+          ></p-tag>
+        </ng-template>
+        <ng-template let-status pTemplate="item">
+          <p-tag [value]="status" [severity]="getSeverity(status)"></p-tag>
+        </ng-template>
+      </p-dropdown>
+      <p-button
+        icon="pi pi-refresh"
+        (onClick)="refresh()"
+        class="md:ml-2"
+      ></p-button>
+    </div>
+  </div>
+  <p-table
+    #dt
+    [value]="shunts"
+    [rows]="10"
+    [paginator]="true"
+    [loading]="loading"
+    [globalFilterFields]="['licensePlate', 'driverName', 'telNo', 'status']"
+    [(selection)]="selectedShunt"
+    selectionMode="single"
+    [rowHover]="true"
+    dataKey="id"
+    styleClass="p-datatable-sm p-datatable-gridlines"
+    scrollable="true"
+    scrollHeight="400px"
+  >
+    <ng-template pTemplate="header">
+      <tr>
+        <th style="width: 20%">License Plate</th>
+        <th style="width: 25%">Driver Name</th>
+        <th style="width: 20%">Tel No</th>
+        <th style="width: 15%">Current Location</th>
+        <th class="text-center" style="width: 20%">Shunt Status</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-shunt>
+      <tr [pSelectableRow]="shunt">
+        <td>
+          <div class="flex align-items-center">
+            <i class="pi pi-car mr-2"></i>
+            {{ shunt.licensePlate }}
+          </div>
+        </td>
+        <td>
+          <div class="flex align-items-center">
+            <i class="pi pi-user mr-2"></i>
+            {{ shunt.driverName }}
+          </div>
+        </td>
+        <td>
+          <div class="flex align-items-center">
+            <i class="pi pi-phone mr-2"></i>
+            {{ shunt.telNo }}
+          </div>
+        </td>
+        <td>{{ shunt.locationId }}</td>
+        <td class="text-center">
+          <p-tag
+            [value]="shunt.status"
+            [severity]="getSeverity(shunt.status)"
+          ></p-tag>
+        </td>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td colspan="5" class="text-center p-4">No shunts found.</td>
+      </tr>
+    </ng-template>
+  </p-table>
+  <div class="flex justify-content-end gap-2 mt-3">
+    <p-button
+      label="Select"
+      icon="pi pi-check"
+      (onClick)="selectShunt()"
+      [disabled]="!selectedShunt"
+    ></p-button>
+    <p-button
+      label="Cancel"
+      icon="pi pi-times"
+      (onClick)="cancel()"
+      severity="secondary"
+    ></p-button>
+  </div>
+</div>

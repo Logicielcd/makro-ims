@@ -1,0 +1,15 @@
+export const environment = {
+  production: true,
+  apiDomain: 'bookingqa.siammakro.co.th/ims-api-qa',
+  apiDomainIp: 'bookingqa.siammakro.co.th/ims-api-qa',
+  apiUrl: 'https://bookingqa.siammakro.co.th/ims-api-qa/api',
+  apiUrlIp: 'https://bookingqa.siammakro.co.th/ims-api-qa/api',
+  bookingBefore: '0',
+  webUrl: 'https://bookingqa.siammakro.co.th/ims',
+  // apiDomain: 'qa-booking.siammakro.co.th/ims-api-qa',
+  // apiDomainIp: 'qa-booking.siammakro.co.th/ims-api-qa',
+  // apiUrl: 'https://qa-booking.siammakro.co.th/ims-api-qa/api',
+  // apiUrlIp: 'https://qa-booking.siammakro.co.th/ims-api-qa/api',
+  // bookingBefore: '15',
+  // webUrl: 'https://qa-booking.siammakro.co.th/ims',
+};

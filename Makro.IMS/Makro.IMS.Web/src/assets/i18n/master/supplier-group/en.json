@@ -1,0 +1,84 @@
+{
+  "Title": {
+    "List": "Supplier Group",
+    "Create": "Create Supplier Group",
+    "Detail": "Supplier Group Detail"
+  },
+  "Section": {
+    "Info": "Information",
+    "BookingSetting": "Booking setting",
+    "Capacity": "Capacity",
+    "CapacityCube": "Capacity Cube"
+  },
+  "Label": {   
+    "Supplier": "Internal Group Id",
+    "SupName": "Supplier Name",
+    "SupGroup": "Supplier Group",
+    "ContactName": "Contact Name",
+    "ContactEMail": "e-Mail",
+    "PhoneNumber": "Phone Number",
+    "MobileNumber": "Mobile Number",
+    "FixTime":"Fix Time",
+    "ConfirmGatePass": "Confirm Gate Pass",
+    "FixTimeStart": "Fix Time Start",
+    "FixTimeEnd": "Fix Time End",
+    "LoadingType": "Loading Type",
+    "Postpond": "Postpond",
+    "IsUpCreateBook": "Import Booking",
+    "IsUpPreCheckIn": "Import Truck",
+    "IsVip": "Fix time slot"
+  },
+  "Button": {
+    "Create": "Create",
+    "Upload": "Upload",
+    "Excel": "Excel",
+    "ClearFilter": "Clear Filter",
+    "ChooseColumn": "Choose Column",
+    "Column": "Column",
+    "Refresh": "Refresh",
+    "Save": "Save",
+    "Delete": "Delete",
+    "Back": "Back",
+    "Yes": "Yes",
+    "No": "No",
+    "SelectFile": "Select File",
+    "Cancel": "Cancel"
+  },
+  "History": {
+    "Action": "Action",
+    "Who": "Who",
+    "Timestamp": "Timestamp"
+  },
+  "Message": {
+    "Confirm": {
+      "Delete": {
+        "Title": "Delete",
+        "Message": "Are you sure you want to delete ?"
+      },
+      "Upload": {
+        "Title": "Upload",
+        "Message": "Are you sure you want to upload ?"
+      }
+    },
+    "Notification": {
+      "Upload": "Successfully uploaded",
+      "Create": "Successfully created",
+      "Update": "Successfully edited",
+      "Delete": "Successfully deleted"
+    },
+    "Validation": {
+      "Required": "{{field}} is required"
+    },
+    "FromApi": {
+      "DEPARTMENT_IS_REQUIRED": "Department Is Required",
+      "FUEL_PRICE_IS_REQUIRED": "Fuel Price Is Required",
+      "NAME_IS_REQUIRED": "Fuel Price Name Is Required",
+      "DEPARTMENT_NOT_FOUND": "Department Not Found",
+      "PRICE_NOT_FOUND": "Fuel Price Not Found",
+      "NAME_ALREADY_EXIST": "Fuel Price Name Already Exist"
+    }
+  },
+  "Select": {
+    "WarehouseCode": "Select Warehouse Code"
+  }
+}

@@ -1,0 +1,17 @@
+export const environment = {
+  production: true,
+  apiDomain: '10.84.210.7/ims-api-qa',
+  apiDomainIp: '10.84.210.7/ims-api-qa',
+  hubUrl: 'https://10.84.210.7/ims-api-qa',
+  apiUrl: 'https://10.84.210.7/ims-api-qa/api',
+  apiUrlIp: 'https://10.84.210.7/ims-api-qa/api',
+  bookingBefore: '0',
+  webUrl: 'https://10.84.210.7/ims',
+  titlePage: 'Link สำหรับทดสอบระบบ',
+  // apiDomain: 'bookingqa.siammakro.co.th/ims-api-qa',
+  // apiDomainIp: 'bookingqa.siammakro.co.th/ims-api-qa',
+  // apiUrl: 'https://bookingqa.siammakro.co.th/ims-api-qa/api',
+  // apiUrlIp: 'https://bookingqa.siammakro.co.th/ims-api-qa/api',
+  // bookingBefore: '15',
+  // webUrl: 'https://bookingqa.siammakro.co.th/ims',
+};

@@ -1,0 +1,157 @@
+<div class="card col-12" *ngIf="warehouses">
+  <p-dialog header="Parameter" [(visible)]="visible" [style]="{width: '50vw'}" position="top" >
+    <div class="p-fluid p-formgrid grid mt-4">
+      <div class="col-12 md:col-6">
+        <label>
+            Warehouse WMS
+        </label>
+        <p-dropdown
+          id="warehouseCode"
+          name="warehouseCode"
+          #warehouseCode="ngModel"
+          [options]="warehouseList"
+          [(ngModel)]="warehouseSelected"
+          optionLabel="value"
+          optionValue="value"
+          [placeholder]="'Select Warehouse' | translate"
+          required
+          [ngClass]="{
+            'ng-invalid ng-dirty':
+              warehouseCode.invalid &&
+              (warehouseCode.dirty || warehouseCode.touched)
+          }"
+          appendTo="body"
+        >
+          <!-- <ng-template let-item pTemplate="item">
+            {{item.warehouseCode}}
+          </ng-template>
+              
+          <ng-template let-item pTemplate="selectedItem">
+            {{item.warehouseCode}}
+          </ng-template> -->
+        </p-dropdown>
+        <small
+          class="p-error block"
+          *ngIf="
+            warehouseCode.invalid &&
+            (warehouseCode.dirty || warehouseCode.touched)
+          "
+        >
+          {{
+            "Message.Validation.Required"
+              | translate: { field: "Label.WarehouseCode" | translate }
+          }}
+        </small>
+      </div>
+      <div class="col-12 md:col-6">
+        <label>
+            Dock Door Range
+        </label>
+        <input
+              id="doorrange"
+              pInputText
+              type="text"
+              #contactname="ngModel"
+              [(ngModel)]="doorRange"
+              name="doorrange"
+              placeholder="Input Dock Door Range"
+            />
+      </div>
+      <div class="col-12 md:col-6">
+        <label>
+          Auto Refresh
+        </label>
+        <p-toggleButton [(ngModel)]="autoRefresh" onLabel="Yes" offLabel="No"></p-toggleButton>
+      </div>
+      <div class="col-12 md:col-6">
+        <label>
+          Interval (second)
+        </label>
+        <input
+              id="refreshintervaltime"
+              pInputText
+              type="number"
+              #refreshintervaltime="ngModel"
+              [(ngModel)]="refreshIntervalTime"
+              name="refreshintervaltime"
+              placeholder="Input interval time"
+            />
+      </div>
+    </div>
+    <ng-template pTemplate="footer">
+      <button pButton icon="pi pi-check" (click)="saveParameter();" label="Ok" styleClass="p-button-text"></button>        
+    </ng-template>
+  </p-dialog>
+
+  <div class="grid">
+    <div class="col-2">
+      <p-button type="button" class="mr-2" (click)="visible = true" icon="pi pi-at"></p-button>
+      <!-- <p-button type="button" class="ml-2 mr-2" (click)="exportExcel()" icon="pi pi-file-excel" style="margin-top: 1.75rem;"></p-button> -->
+    </div>
+    <div class="col-4 justify-content-center">
+      <h1><p>Warehouse : {{warehouseSelected}}</p></h1>
+    </div>
+    <div class="col-4 justify-content-center">
+      <h1><p>Dock : {{doorRange}} </p></h1>
+    </div>
+    <div class="col-2 justify-content-right">
+      <p class="text-right ">Last data date </p>
+      <p class="text-right ">{{refreshTime | date : "dd/MM/yyyy HH:mm:ss"}}</p>
+    </div>
+  </div>
+
+  <div class="col-12 md-col-12" *ngIf="dockdoorControls">    
+    <p-table
+    [value]="dockdoorControls"
+    [paginator]="true"
+    [rows]="10"
+    [showCurrentPageReport]="true"
+    [pResizableColumn] = "true"
+    currentPageReportTemplate="{first} to {last} of {totalRecords}"
+    [rowsPerPageOptions]="[5,10, 20, 30]"
+    [columns]="cols"
+    >
+      <ng-template pTemplate="header" let-columns>
+        <tr>
+          <th class="text-left" *ngIf="showIndex">#</th>
+          <th
+            *ngFor="let col of columns"              
+            [style.width]="col.width || defaultWidth"
+            class="text-center"
+          >
+            {{ col.header | translate }}
+          </th>            
+        </tr>
+      </ng-template>        
+      <ng-template pTemplate="body" let-rowData let-columns="columns" >
+        <tr>            
+          <td
+            *ngFor="let col of columns; index as i"
+            [style.width]="col.width || defaultWidth"
+            class="text-center"
+          >
+            <span *ngIf="col.display === 'string'"  style="white-space: pre-line;"
+              [ngStyle]="{'color': col.filter === 'waitingTimeDisplay' ? getWaitingTimeFontColor(rowData[col.field]) : 'var(--text-color)'}">{{
+              rowData[col.field]
+            }}</span>
+            <span *ngIf="col.display === 'datetime'"
+              >{{ rowData[col.field] | date: "dd/MM/yyyy HH:mm:ss" }}
+            </span>
+            <div *ngIf="col.display === 'icon'"
+              style="width: 2.5rem;
+                height: 2.5rem;
+                -webkit-border-radius: 25px;
+                -moz-border-radius: 25px;
+                border-radius: 25px;                
+                "
+              [ngStyle]="{'background': getIcon(rowData[col.field])}"
+              >
+            </div>
+          </td>            
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+  <!-- <div class="col-4 md-col-12" *ngIf="dockdoorControls">   
+  </div>  -->
+</div>

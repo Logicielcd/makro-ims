@@ -1,0 +1,23 @@
+
+<app-table-page-list
+  [columns]="cols"
+  [datasource]="dataSource"
+  [rowCount]="rowCount"
+  [canModify]="canModify"  
+  [createBtn]="false"
+  [uploadBtn]="false"
+  [exportBtn]="true"
+  [showToolbox]="true"
+  [stateKey]="'po-monitor-list'"
+  [lookup]="lookup"
+  [linkDetail]="false"
+  [title]="'PO Monitor'"
+  [remark]="'*ข้อมูล PO สามารถดูย้อนหลังได้ไม่เกิน 90 วัน'"
+  [showRemark]="true"
+>
+<!-- 
+  (uploadEmit)="uploadData()"
+  [export$]="export$" 
+  [stateKey]="'booking-header-list'"
+-->
+</app-table-page-list>

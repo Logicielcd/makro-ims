@@ -1,0 +1,48 @@
+{
+  "Title": {
+    "List": "Yard",
+    "Create": "Create Yard",
+    "Detail": "Yard Detail"
+  },
+  "Section": {
+    "Info": "Information"
+  },
+  "Label": {},
+  "Button": {
+    "Create": "Create",
+    "Upload": "Upload",
+    "Excel": "Excel",
+    "ClearFilter": "Clear Filter",
+    "ChooseColumn": "Choose Column",
+    "Column": "Column",
+    "Refresh": "Refresh",
+    "Save": "Save",
+    "Delete": "Delete",
+    "Back": "Back",
+    "Yes": "Yes",
+    "No": "No",
+    "SelectFile": "Select File",
+    "Cancel": "Cancel"
+  },
+  "Message": {
+    "Confirm": {
+      "Create": {
+        "Title": "Create",
+        "Message": "Are you sure you want to create ?"
+      },
+      "OutDc": {
+        "Title": "Out DC",
+        "Message": "Are you sure you want to out ?"
+      }
+    },
+    "Notification": {
+      "Create": "Successfully created",
+      "OutDc": "Successfully out"
+    },
+    "Validation": {
+      "Required": "{{field}} is required"
+    },
+    "FromApi": {}
+  },
+  "Select": {}
+}

@@ -1,0 +1,127 @@
+
+<div *ngIf="operations">  
+    <div class="col-12 md:col-12">
+      <p-dropdown      
+        id="operationtype"
+        name="operationtype"
+        #operationtype="ngModel"
+        [options]="operations"
+        [(ngModel)]="selectedOperation"
+        optionLabel="description"
+        optionValue="operationName"
+        [placeholder]="'Select Operation type' | translate"      
+        autoWidth="false" 
+        [style]="{'width':'100%'}"
+        (onChange)="onOperationTypeChange()"
+      >
+      </p-dropdown>
+    </div>
+    <!-- <div class="grid col-12"> -->
+    <div class="col-12 md:col-12" style="margin-top: -0.5rem;">
+      <input
+        pInputText
+        type="text"
+        id="operationtype"
+        name="operationtype"
+        [(ngModel)]="selectedOperation"
+        class="text-center text-7xl w-12"
+        [style]="{'height':'10rem'}"
+        [readOnly]="true"
+      />
+    </div>
+    <!-- </div> -->
+    <div class="col-12 md:col-12" style="margin-top: -0.5rem;">
+      <label>
+          ช่วงประตูลงสินค้า
+      </label>      
+    </div>
+    <div class="grid col-12 md:col-12" style="margin-top: -1rem;">
+      <div class="col-12 md:col-6">
+        <input
+          pInputText
+          type="text"
+          id="startdoor"
+          name="startdoor"
+          [(ngModel)] = "startDoor"
+          class="mr-2 w-12"
+          [readOnly]="true"
+        />
+      </div>
+      <div class="col-12 md:col-6">
+        <input
+          pInputText
+          type="text"
+          id="enddoor"
+          name="enddoor"
+          [(ngModel)] = "endDoor"  
+          class="w-12 ml-4"
+          [readOnly]="true"
+        />
+      </div>
+    </div>
+    <div class="col-12 md:col-12" style="margin-top: -1rem;">
+      <label>
+          คิวลงสินค้า
+      </label>      
+    </div>
+    <div class="col-12 md:col-12" style="margin-top: -0.5rem;">
+      <input
+      pInputText
+      type="text"
+      id="lastSequence"
+      name="lastSequence"
+      class="text-center text-7xl	w-12"
+      [style]="{'height':'100px'}"
+      [(ngModel)] = "lastSequence"
+      [readOnly]="!isManual"
+      />
+    </div>
+    
+    <div class="grid col-12" style="margin-top: 0rem;">                
+      <div class="col-12 md:col-5" style="margin-top: -0.5rem">
+          <button
+            pButton
+            type="button"
+            class="p-button-warning w-12"          
+            label="สร้างเอง"
+            (click)="onManualGenerate()"
+            [disabled]="isDisable"
+          ></button>
+      </div> 
+      <div class="col-12 md:col-2"></div>
+      <div class="col-12 md:col-5" style="margin-top: -0.5rem">        
+        <button
+          pButton
+          type="button"
+          class="p-button w-12 ml-5"
+          label="ระบบสร้าง"
+          (click)="onSystemGenerate()"
+          [disabled]="isDisable"
+        ></button>
+      </div>      
+    </div>
+    <div class="col-12 md:col-12" style="margin-top: -1rem">
+      <button
+        pButton
+        type="button"
+        class="p-button-success w-12"
+        icon="pi pi-check"
+        label="ยืนยันลงคิว"
+        [disabled]="!isManual"
+        (click)="confirm()"
+      ></button>
+    </div>
+</div>
+
+<!-- <div class="flex justify-content-center">
+  <button
+    pButton
+    type="button"
+    class="p-button"
+    icon="pi pi-check"
+    label="Confirm"
+    (click)="confirm()"
+  ></button>
+</div>
+-->
+

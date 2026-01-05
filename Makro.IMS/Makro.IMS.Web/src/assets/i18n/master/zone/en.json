@@ -1,0 +1,67 @@
+{
+  "Title": {
+    "List": "Zone",
+    "Create": "Create Zone",
+    "Detail": "Zone Detail",
+    "Upload": "Upload Zone",
+    "History": "History"
+  },
+  "Section": {
+    "CodeName": "Code / Name",
+    "Remark": "Remark"
+  },
+  "Label": {
+    "Code": "Code",
+    "Name": "Name",
+    "Remark": "Remark"
+  },
+  "Button": {
+    "Create": "Create",
+    "Upload": "Upload",
+    "Excel": "Excel",
+    "ClearFilter": "Clear Filter",
+    "ChooseColumn": "Choose Column",
+    "Column": "Column",
+    "Refresh": "Refresh",
+    "Save": "Save",
+    "Delete": "Delete",
+    "Back": "Back",
+    "Yes": "Yes",
+    "No": "No",
+    "SelectFile": "Select File",
+    "Cancel": "Cancel"
+  },
+  "History": {
+    "Action": "Action",
+    "Who": "Who",
+    "Timestamp": "Timestamp"
+  },
+  "Message": {
+    "Confirm": {
+      "Delete": {
+        "Title": "Delete",
+        "Message": "Are you sure you want to delete ?"
+      },
+      "Upload": {
+        "Title": "Upload",
+        "Message": "Are you sure you want to upload ?"
+      }
+    },
+    "Notification": {
+      "Upload": "Successfully uploaded",
+      "Create": "Successfully created",
+      "Update": "Successfully edited",
+      "Delete": "Successfully deleted"
+    },
+    "Validation": {
+      "Required": "{{field}} is required"
+    },
+    "FromApi": {
+      "ZONE_IS_REQUIRED": "Zone Is Required",
+      "ZONE_CODE_IS_REQUIRED": "Zone Code Is Required",
+      "ZONE_NAME_IS_REQUIRED": "Zone Name Is Required",
+      "ZONE_NOT_FOUND": "Zone Not Found",
+      "ZONE_CODE_ALREADY_EXIST": "Zone Code Already Exist"
+    }
+  }
+}

@@ -1,0 +1,62 @@
+<div class="formgrid grid flex-row mt-5">
+  <div class="field col-12 md:col-5 ">
+    <label htmlFor="minbooking" class="text-lg font-bold" >รอบปกติที่เริ่มจองได้ {{minDateStart | date: 'dd/MM/yyyy HH:mm'}} </label>
+    <br>
+    <p class="font-bold text-sm text-red-500">*แดง ตัวอักษรขาว คือ cap เต็ม สามารถเลือกเวลาได้แต่รอการยืนยันจากทีม Booking</p> 
+    <p class="font-bold text-sm text-red-500">*แดง ตัวอักษรดำ คือ จองไม่ทันรอบปกติ สามารถเลือกเวลาได้แต่รอการยืนยันจากทีม Booking</p> 
+  </div>
+  <!-- <div class="justify-content-center col-12"> </div> -->
+  <div class="field col-12 md:col-1 text-center">
+    <label htmlFor="timeStart"> Time Start</label>
+    <p-calendar [(ngModel)]="startTime" [stepMinute]="30" [showTime]="true" [timeOnly]="true" readonlyInput="true" [disabled]="true" (onClose)="onTimeStartChange()"></p-calendar>
+  </div>
+  <div class="field col-12 md:col-1 text-center ">
+    <label htmlFor="timeEnd"> Time End</label> 
+    <p-calendar [(ngModel)]="endTime" [stepMinute]="30" [showTime]="true" [timeOnly]="true" [readonlyInput]="true" [disabled]="true" ></p-calendar>
+  </div>
+  <div class="field col-12 md:col-5 text-center align-items-end ">
+    <label htmlFor="minbooking" class="text-lg font-bold " >รอบงานของวันที่ {{bookingDate | date: 'dd/MM/yyyy'}} </label>
+  </div>
+</div>
+<div class="formgrid grid flex-row justify-content-center"> 
+  <div class="field col-12 md:col-2" *ngIf="startTime">
+    <button
+      pButton
+      type="button"
+      label="ยืนยัน"      
+      class="p-button w-full"
+      [disabled]="canConfirm()"
+      (click)="confirm()"
+    ></button>
+    
+  </div>
+</div>
+<div class="formgrid grid flex-row justify-content-center" *ngIf="operationFixSlotBySub !== undefined && operationFixSlotBySub.length > 0"> 
+  <div class="field col-12 md:col-2 text-center ">
+    <label class="text-4xl font-bold text-red-500 text-center">Fix slot</label>
+  </div>   
+</div>
+<hr />
+<div class="p-fluid p-formgrid grid p-0 m-0">
+  <div class="field col-12 md:col-2 mb-0 border-0" *ngFor="let hour of hours">
+    <div class="p-fluid p-formgrid grid p-0 m-0">
+      <div class="field col-12 md:col-6 p-0 m-0"><h6>{{ hour.capUseValue }} - {{ hour.capValue }}</h6></div>
+      <div class="field col-12 md:col-6 p-0 m-0 text-right"><h6 class="text-yellow-500"><h6>{{ hour.capTruckUseValue }} - {{ hour.capTruckValue }}</h6></h6></div>
+    </div>        
+    <button pButton *ngIf="hour.isLate || hour.isNoCap" type="button" class="text-center bg-gray-100" [label]="hour.label" [disabled]="hour.disabled"></button>
+    <button pButton *ngIf="!hour.isLate && !hour.isNoCap && !hour.isOverCap && !isAllOverCap && !hour.isOverCutoff"  type="button" class="text-center bg-green-400" [label]="hour.label" (click)="onTimeClick(hour.label,false,false)" [disabled]="hour.disabled"></button>
+    <button pButton *ngIf="!isAllOverCap && hour.isOverCap && !hour.isNoCap > 0 && !hour.isLate" type="button" class="text-center bg-surface-500" [label]="hour.label" [disabled]="hour.disabled"></button>
+    <button pButton *ngIf="isAllOverCap && hour.isOverCap && !hour.isNoCap > 0 && !hour.isLate && !hour.isOverCutoff" type="button" class="text-center bg-red-500" [label]="hour.label" [disabled]="!hour.disabled" (click)="onTimeClick(hour.label,true,false)"></button>
+    <button pButton *ngIf="hour.isOverCutoff && !hour.isNoCap &&!hour.isOverCap" type="button" class="text-center text-bluegray-900 bg-red-500" [label]="hour.label" [disabled]="hour.disabled" (click)="onTimeClick(hour.label,false,true)"></button>
+  
+    <div class="p-fluid p-formgrid grid p-0 m-0">
+      <div class="field col-12 md:col-6 p-0 m-0">
+        <label class="w-full font-bold text-center bg-primary p-1 m-0">{{hour.capPercent}} %</label>
+      </div>
+      <div class="field col-12 md:col-6 p-0 m-0">
+        <label class="w-full font-bold text-center bg-yellow-500 p-1">{{hour.capTruckPercent}} %</label>
+      </div>    
+    </div>
+  </div>
+</div>
+

@@ -1,0 +1,501 @@
+<p-toast></p-toast>
+<div class="grid" *ngIf="data">
+  <div class="col-12 p-0 md:p-3">
+    <p-messages [value]="msgs" [enableService]="false"></p-messages>
+    <div class="card">
+      <div class="grid grid-nogutter flex-row justify-content-between">
+        <h3 class="font-bold">
+          {{ (!dataId ? "Title.CreateUser" : "Title.UserDetail") | translate }}
+        </h3>
+      </div>
+      <form #f="ngForm" novalidate>
+        <div class="grid">
+          <div class="col-12">
+            <p-toolbar>
+              <div class="p-toolbar-group-left flex flex-wrap">
+                <!-- [disabled]="!f.form.valid || f.form.pristine" -->
+                <button
+                  id="btnSave"
+                  *ngIf="canModify"
+                  pButton
+                  type="button"
+                  icon="pi pi-check"
+                  [label]="'Button.Save' | translate"
+                  class="p-button-success mr-2"
+                  
+                  (click)="onSubmit()"
+                  [loading]="isLoading"
+                ></button>
+                <button
+                  id="btnRefresh"
+                  *ngIf="dataId && canModify"
+                  pButton
+                  type="button"
+                  icon="pi pi-trash"
+                  [label]="'Button.Delete' | translate"
+                  class="p-button-danger mr-2"
+                  (click)="onDelete()"
+                  [loading]="isLoading"
+                ></button>
+                <button
+                  id="btnResetPassword"
+                  *ngIf="dataId && canModify"
+                  pButton
+                  type="button"
+                  icon="pi pi-wrench"
+                  [label]="'Button.ResetPassword' | translate"
+                  class="p-button-warning mr-2"
+                  (click)="onResetPassword()"
+                  [loading]="isLoading"
+                ></button>
+              </div>
+              <div class="p-toolbar-group-right flex flex-wrap">
+                <button       
+                  id="btnBack"         
+                  pButton
+                  type="button"
+                  icon="pi pi-times"
+                  [pTooltip]="'Button.Back' | translate"
+                  tooltipPosition="bottom"
+                  class="p-button-primary mr-2"
+                  (click)="onBack()"
+                  [loading]="isLoading"
+                ></button>
+              </div>
+            </p-toolbar>
+          </div>
+        </div>
+
+        <div class="grid">
+          <!--- User Info -->
+          <div class="col-12 md:col-3">
+            <p-panel [toggleable]="true" class="p-fluid">
+              <ng-template pTemplate="header">
+                <h6 class="line-height-3 m-0">
+                  {{ "Section.UserInfo" | translate }}
+                </h6>
+              </ng-template>
+              <div class="field">
+                <label for="code">
+                  {{ "Label.UserId" | translate }}
+                  <span class="p-error"> *</span>
+                </label>
+                <input
+                  pInputText
+                  type="text"
+                  id="userid"
+                  name="userid"
+                  #userid="ngModel"
+                  [(ngModel)]="data.userId"
+                  required
+                  [ngClass]="{
+                    'ng-invalid ng-dirty':
+                      userid.invalid && (userid.dirty || userid.touched)
+                  }"
+                  [disabled]="dataId"
+                />
+                <small
+                  class="p-error block"
+                  *ngIf="
+                    userid.invalid && (userid.dirty || userid.touched)
+                  "
+                >
+                  {{
+                    "Message.Validation.Required"
+                      | translate : { field: "Label.UserId" | translate }
+                  }}
+                </small>
+              </div>
+              <div class="field">
+                <label for="code">
+                  {{ "Label.Username" | translate }}
+                  <span class="p-error"> *</span>
+                </label>
+                <input
+                  pInputText
+                  type="text"
+                  id="username"
+                  name="username"
+                  #username="ngModel"
+                  [(ngModel)]="data.userName"
+                  required
+                  [ngClass]="{
+                    'ng-invalid ng-dirty':
+                      username.invalid && (username.dirty || username.touched)
+                  }"
+                />
+                <small
+                  class="p-error block"
+                  *ngIf="
+                    username.invalid && (username.dirty || username.touched)
+                  "
+                >
+                  {{
+                    "Message.Validation.Required"
+                      | translate : { field: "Label.Username" | translate }
+                  }}
+                </small>
+              </div>
+              <div class="field">
+                <label for="lastname">
+                  {{ "Label.Lastname" | translate }}
+                  <span class="p-error"> *</span>
+                </label>
+                <input
+                  pInputText
+                  type="text"
+                  id="lastname"
+                  name="lastname"
+                  #lastname="ngModel"
+                  [(ngModel)]="data.lastname"
+                />
+              </div>
+              <div class="field">
+                <label for="email"> {{ "Label.Email" | translate }} </label>
+                <input
+                  pInputText
+                  type="text"
+                  id="email"
+                  name="email"
+                  #email="ngModel"
+                  [(ngModel)]="data.email"
+                />
+              </div>              
+              <div class="field">
+                <p-checkbox
+                  id="approved"
+                  name="approved"
+                  [label]="'Label.Approved' | translate"
+                  [binary]="true"
+                  [(ngModel)]="data.isApproved"
+                  labelStyleClass="mb-0"
+                ></p-checkbox>
+              </div> 
+            </p-panel>
+          </div>
+          <!--- Password and User Permission -->
+          <div class="col-12 md:col-3">
+            <ng-container *ngIf="!dataId">
+              <p-panel [toggleable]="true" class="p-fluid">
+                <ng-template pTemplate="header">
+                  <h6 class="line-height-3 m-0">
+                    {{ "Section.Password" | translate }}
+                  </h6>
+                </ng-template>
+                <div class="field">
+                  <p-password 
+                    id="password" 
+                    label="password"
+                    #password="ngModel"
+                    [(ngModel)]="data.password"
+                    required 
+                    [inputStyle]="{'width':'100%'}" 
+                    [ngClass]="{
+                      'ng-invalid ng-dirty':
+                        password.invalid && (password.dirty || password.touched)
+                    }"
+                    [style]="{'width':'100%'}"
+                    [toggleMask]="true"
+                    [ngModelOptions] = "{standalone:true}"
+                  >
+                    <ng-template pTemplate="header">
+                        <h6>Pick a password</h6>
+                    </ng-template>
+                    <ng-template pTemplate="footer">
+                        <p-divider></p-divider>
+                        <p class="mt-3">หลักการตั้งรหัสผ่าน</p>
+                        <ul class="pl-3 ml-3 mt-0" style="line-height: 1.5">
+                            <li>ตัวพิมพ์เล็กอย่างน้อย 1 ตัว</li>
+                            <li>ตัวพิมพ์ใหญ่อย่างน้อย 1 ตัว</li>
+                            <li>ตัวเลขอย่างน้อย 1 ตัว</li>
+                            <li>อักขระพิเศษอย่างน้อย 1 ตัว</li>
+                            <li>ขั้นต่ำ 8 ตัวอักษร</li>
+                        </ul>
+                    </ng-template>
+                  </p-password>                           
+                  <small
+                    class="p-error block"
+                    *ngIf="
+                      password.invalid && (password.dirty || password.touched)
+                    "
+                  >
+                    {{
+                      "Message.Validation.Required"
+                        | translate : { field: "Label.Password" | translate }
+                    }}
+                  </small>
+                </div>
+              </p-panel>
+              <br />
+            </ng-container>
+
+            <p-panel [toggleable]="true" class="p-fluid">
+              <ng-template pTemplate="header">
+                <h6 class="line-height-3 m-0">
+                  {{ "Section.Role" | translate }}
+                </h6>
+              </ng-template>
+              <div class="field" *ngIf="userTypes">
+                <label for="usertype">
+                  {{ "Label.UserType" | translate }}
+                </label>
+                <p-dropdown
+                  id="usertype"
+                  name="usertype"
+                  #usertype="ngModel"
+                  [options]="userTypes"
+                  [(ngModel)]="data.userType"
+                  optionLabel="name"
+                  optionValue="id"
+                  [filter]="true"
+                  filterBy="name"
+                  [autoDisplayFirst]="false"
+                  [ngClass]="{
+                    'ng-invalid ng-dirty':
+                    usertype.invalid && (usertype.dirty || usertype.touched)
+                  }"
+                  [placeholder]="'Select.UserType' | translate"
+                  required
+                  appendTo="body"
+                >
+                </p-dropdown>
+                <small
+                  *ngIf="usertype.invalid && (usertype.dirty || usertype.touched)"
+                  class="p-error"
+                >
+                  {{
+                    "Message.Validation.Required"
+                      | translate : { field: "Label.UserType" | translate }
+                  }}
+                </small>
+              </div>
+              <!-- <div class="field" *ngIf="(data.userType === 'SUP' || data.userType === 'SUPTRAN') && supplierGroups"> -->
+              
+              <!-- <div class="field" *ngIf="data.userType !== 'SUP' && data.userType !== 'SUPTRAN'"> -->
+              <div class="field" *ngIf="warehouses">
+                <label for="warehouse">
+                  {{ "Label.Warehouse" | translate }}
+                </label>
+                <p-dropdown
+                  id="warehouse"
+                  name="warehouse"
+                  #warehouse="ngModel"
+                  [options]="warehouses"
+                  [(ngModel)]="data.warehouseCode"
+                  optionLabel="warehouseCode"
+                  optionValue="warehouseCode"
+                  [filter]="true"
+                  filterBy="supName"
+                  [autoDisplayFirst]="false"
+                  [placeholder]="'Select.Warehouse' | translate"
+                  appendTo="body"
+                  (onChange)="onWhseChange()"
+                  [showClear]="true" 
+                >
+                </p-dropdown>
+                <p-listbox
+                  id="warehouselist"
+                  name="warehouselist"
+                  [options]="warehousesAvailable" 
+                  [(ngModel)]="warehouseSelected"
+                  optionLabel="warehouseCode"                   
+                  [multiple]="true" 
+                  [metaKeySelection]="false" 
+                  [listStyle]="{'max-height': '220px'}" 
+                />
+              </div>
+              <!-- <div class="field" *ngIf="data.userType !== 'SUP' && data.userType !== 'SUPTRAN' "> -->
+              <div class="field">
+                <label for="operationtype">
+                  {{ "Label.OperationType" | translate }}
+                </label>
+                <p-dropdown
+                  id="operationtype"
+                  name="operationtype"
+                  #operationtype="ngModel"
+                  [options]="operations"
+                  [(ngModel)]="data.operationType"
+                  optionLabel="description"
+                  optionValue="operationName"
+                  [filter]="true"
+                  filterBy="supName"
+                  [autoDisplayFirst]="false"                  
+                  [placeholder]="'Select.OperationType' | translate"                  
+                  appendTo="body"
+                  [showClear]="true" 
+                >
+                </p-dropdown>               
+              </div>
+            </p-panel>
+          </div>
+          <!--- Supplier setup -->
+          <div class="col-12 md:col-6">
+            <p-panel [toggleable]="true" class="p-fluid">
+              <ng-template pTemplate="header">
+                <h6 class="line-height-3 m-0">
+                  Supplier Group setup
+                </h6>
+              </ng-template>
+              <div class="field">
+                <label for="suppliergroup">
+                  {{ "Label.SupplierGroup" | translate }}
+                </label>
+                <p-dropdown
+                  id="suppliergroup"
+                  name="suppliergroup"
+                  #suppliergroup="ngModel"
+                  [options]="supplierGroups"
+                  [(ngModel)]="data.internalSupGroupId"
+                  optionLabel="supDisplay"
+                  optionValue="internalSupGroupId"
+                  [filter]="true"
+                  filterBy="supDisplay"
+                  [autoDisplayFirst]="false"
+                  [showClear]="true" 
+                  [ngClass]="{
+                    'ng-invalid ng-dirty':
+                    suppliergroup.invalid && (suppliergroup.dirty || suppliergroup.touched)
+                  }"
+                  [placeholder]="'Select.SupplierGroup' | translate"
+                  required
+                  appendTo="body"
+                  (onChange)="onSupplierGroupChange()"
+                >
+                </p-dropdown>
+                <small
+                  *ngIf="suppliergroup.invalid && (suppliergroup.dirty || suppliergroup.touched)"
+                  class="p-error"
+                >
+                  {{
+                    "Message.Validation.Required"
+                      | translate : { field: "Label.SupplierGroup" | translate }
+                  }}
+                </small>                            
+              </div>
+              <div class="field">     
+                <p-pickList 
+                    id="supplierlist"
+                    name="supplierlist"
+                    [source]="supplierGroupsAvailable" 
+                    [target]="supplierSelected" 
+                    sourceHeader="Available" 
+                    targetHeader="Selected" 
+                    [dragdrop]="true" 
+                    [responsive]="true" 
+                    [sourceStyle]="{ height: '30rem' }"
+                    [targetStyle]="{ height: '30rem' }" 
+                    filterBy="supDisplay" 
+                    sourceFilterPlaceholder="Search by name" 
+                    targetFilterPlaceholder="Search by name" 
+                    showSourceControls="false"
+                    showTargetControls="false"
+                    breakpoint="1000px">
+                        <ng-template let-product pTemplate="item">
+                            <div class="flex flex-wrap p-2 align-items-center gap-3">
+                              <span>
+                                {{ product.supDisplay }}
+                              </span>
+                            </div>
+                        </ng-template>
+                </p-pickList>
+              </div>
+            </p-panel>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<p-dialog
+  [(visible)]="deleteDialog"
+  [header]="'Message.Confirm.Delete.Title' | translate"
+  [modal]="true"
+  [style]="{ width: '450px' }"
+>
+  <div class="flex align-items-center justify-content-center">
+    <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
+    <span *ngIf="data">
+      {{ "Message.Confirm.Delete.Message" | translate }}
+      <b>{{ data.username }} </b>
+      ?
+    </span>
+  </div>
+  <ng-template pTemplate="footer">
+    <button
+      pButton
+      pRipple
+      icon="pi pi-times"
+      class="p-button-text"
+      [label]="'Button.No' | translate"
+      (click)="deleteDialog = false"
+    ></button>
+    <button
+      pButton
+      pRipple
+      icon="pi pi-check"
+      [label]="'Button.Yes' | translate"
+      (click)="confirmDelete()"
+    ></button>
+  </ng-template>
+</p-dialog>
+
+<p-dialog
+  [header]="'Section.ResetPassword' | translate"
+  [(visible)]="resetDialog"
+  [style]="{ width: '20vw' }"
+>
+  <form #fd="ngForm" novalidate>
+    <div class="grid p-fluid">
+      <div class="col-12">
+        <div class="field" *ngIf="data">
+          <label for="password">
+            {{ "Label.NewPassword" | translate }}
+            <span class="p-error"> *</span>
+          </label>
+          <input
+            pInputText
+            type="password"
+            id="password"
+            name="password"
+            #password="ngModel"
+            [(ngModel)]="data.password"
+            required
+            [ngClass]="{
+              'ng-invalid ng-dirty':
+                password.invalid && (password.dirty || password.touched)
+            }"
+          />
+          <small
+            class="p-error block"
+            *ngIf="password.invalid && (password.dirty || password.touched)"
+          >
+            {{
+              "Message.Validation.Required"
+                | translate : { field: "Label.NewPassword" | translate }
+            }}
+          </small>
+        </div>
+      </div>
+    </div>
+  </form>
+  <ng-template pTemplate="footer">
+    <p-button
+      icon="pi pi-times"
+      (click)="resetDialog = false"
+      [label]="'Button.No' | translate"
+      styleClass="p-button-text mr-2"
+    ></p-button>
+    <button
+      pButton
+      pRipple
+      type="button"
+      [label]="'Button.Yes' | translate"
+      icon="pi pi-check"
+      class="p-button-primary"
+      [disabled]="!fd.form.valid || fd.form.pristine"
+      (click)="confirmResetPassword()"
+      [loading]="isLoading"
+    ></button>
+  </ng-template>
+</p-dialog>

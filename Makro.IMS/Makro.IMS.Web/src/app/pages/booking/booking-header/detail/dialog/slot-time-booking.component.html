@@ -1,0 +1,28 @@
+<div class="formgrid grid flex-row justify-content-center mt-5">
+  <div class="field col-12 md:col-1">
+    <label htmlFor="timeStart"> Time Start</label>
+    <p-calendar [(ngModel)]="startTime" [stepMinute]="30" [showTime]="true" [timeOnly]="true" (onClose)="onTimeStartChange()"></p-calendar>
+  </div>
+  <div class="field col-12 md:col-1">
+    <label htmlFor="timeEnd"> Time End</label>
+    <p-calendar [(ngModel)]="endTime" [stepMinute]="30" [showTime]="true" [timeOnly]="true"></p-calendar>
+  </div>
+</div>
+<div class="formgrid grid flex-row justify-content-center"> 
+  <div class="field col-12 md:col-2">
+    <button
+      pButton
+      type="button"
+      label="ยืนยัน"      
+      class="p-button w-full"
+      (click)="confirm()"
+    ></button>
+  </div>
+</div>
+<hr />
+<div class="p-fluid p-formgrid grid p-0 m-0">
+  <div class="field col-12 md:col-2" *ngFor="let hour of hours">
+    <h6>{{ hour.label }}</h6>
+    <p-progressBar [value]="hour.value"></p-progressBar>
+  </div>
+</div>

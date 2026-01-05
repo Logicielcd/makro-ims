@@ -1,0 +1,107 @@
+{
+  "Title": {
+    "List": "Warehouse",
+    "Create": "Create Warehouse",
+    "Detail": "Warehouse Detail"
+  },
+  "Section": {
+    "Info": "Information",
+    "BookingSetting": "Booking setting",
+    "Capacity": "Capacity",
+    "CapacityCube": "Capacity Cube"
+  },
+  "Label": {
+    "Address1": "Address1",
+    "Address2": "Address2",
+    "Address3": "Address3",
+    "City": "City",
+    "Country": "Country",
+    "ZipCode": "Zip Code",
+    "ContactEMail": "Contact e-Mail",
+    "ContactName": "Contact Name",
+    "MobileNumber": "Mobile No.",
+    "PhoneNumber": "Phone No.",
+    "Note": "Note",
+    "CompanyCode": "Company Code",
+    "WarehouseCode": "Warehouse Code",    
+    "WarehouseName": "Warehouse Name",
+    "MaxCon": "Max Con Per Hour",
+    "MaxNon": "Max Non Per Hour",
+    "MaxFull": "Max Full Per Hour",
+    "MaxAll": "Max All Per Hour",
+    "MaxCCon": "Max Cube Con Per Hour",
+    "MaxCNon": "Max Cube Non Per Hour",
+    "MaxCFull": "Max Cube Full Per Hour",
+    "MaxCAll": "Max Cube All Per Hour",
+    "BookingIdPrefix": "Booking Id Prefix",
+    "BookingIdRunning": "Booking Id Running",
+    "FirstTimeOfDay": "First time of day",
+    "EndTimeOfDay": "End time of day",
+    "TimeIncreaseStep": "Time increase step",
+    "TimeWidth": "Time width",
+    "OnlineBookingIdPrefix": "Online booking id prefix",
+    "OnlineBookingIdRunning": "Online booking id running",
+    "FixDoor": "Fix Door",
+    "WarehouseLevel": "Booking level (W,C)",
+    "WarehouseMain": "Warehouse Main (For capacity calculation)",
+    "WarehouseWms": "Warehouse WMS",
+    "CapacityType": "Capacity Type",
+    "AdvanceBookingPeriod": "Advance Booking Period (Minute)",
+    "PoBeforePeriod": "Po Before period (day)",
+    "PoAfterPeriod": "Po After period (day)",
+    "AdvanceCheckinTime": "Advance Checkin Time (Minute)",
+    "LateCheckinTime": "Late Checkin Time (Minute)",
+    "CapUom": "Capacity UOM",
+    "AdvanceBookingDay": "Advance Booking Day"
+  },
+  "Button": {
+    "Create": "Create",
+    "Upload": "Upload",
+    "Excel": "Excel",
+    "ClearFilter": "Clear Filter",
+    "ChooseColumn": "Choose Column",
+    "Column": "Column",
+    "Refresh": "Refresh",
+    "Save": "Save",
+    "Delete": "Delete",
+    "Back": "Back",
+    "Yes": "Yes",
+    "No": "No",
+    "SelectFile": "Select File",
+    "Cancel": "Cancel"
+  },
+  "History": {
+    "Action": "Action",
+    "Who": "Who",
+    "Timestamp": "Timestamp"
+  },
+  "Message": {
+    "Confirm": {
+      "Delete": {
+        "Title": "Delete",
+        "Message": "Are you sure you want to delete ?"
+      },
+      "Upload": {
+        "Title": "Upload",
+        "Message": "Are you sure you want to upload ?"
+      }
+    },
+    "Notification": {
+      "Upload": "Successfully uploaded",
+      "Create": "Successfully created",
+      "Update": "Successfully edited",
+      "Delete": "Successfully deleted"
+    },
+    "Validation": {
+      "Required": "{{field}} is required"
+    },
+    "FromApi": {
+      "DEPARTMENT_IS_REQUIRED": "Department Is Required",
+      "FUEL_PRICE_IS_REQUIRED": "Fuel Price Is Required",
+      "NAME_IS_REQUIRED": "Fuel Price Name Is Required",
+      "DEPARTMENT_NOT_FOUND": "Department Not Found",
+      "PRICE_NOT_FOUND": "Fuel Price Not Found",
+      "NAME_ALREADY_EXIST": "Fuel Price Name Already Exist"
+    }
+  }
+}

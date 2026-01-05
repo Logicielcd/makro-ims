@@ -1,0 +1,30 @@
+
+<div *ngIf="queue">  
+  <div class="col-12 md:col-12">
+    <input
+                pInputText
+                type="datetime-local"
+                id="bookingdate"
+                name="bookingdate"
+                #bookingdate="ngModel"
+                [(ngModel)]="submitDocDate"
+                required    
+                [ngClass]="{
+                  'ng-invalid ng-dirty':
+                    bookingdate.invalid &&
+                    (bookingdate.dirty || bookingdate.touched)
+                }"
+              />
+  </div>
+  <div class="col-12 md:col-12" style="margin-top: -10px">
+    <button
+      pButton
+      type="button"
+      class="p-button w-12"
+      icon="pi pi-check"
+      label="ยืนยันส่งเอกสาร"
+      (click)="confirm()"
+    ></button>
+  </div>
+</div>
+

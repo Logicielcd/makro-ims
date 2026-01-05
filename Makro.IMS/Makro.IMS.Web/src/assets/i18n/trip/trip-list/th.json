@@ -1,0 +1,76 @@
+{
+  "Title": {
+    "List": "Trip List",
+    "Create": "Create Trip",
+    "Detail": "Trip Detail",
+    "History": "History"
+  },
+  "Section": {
+    "TripInfo": "Trip Info",
+    "Vehicle": "Vehicle",
+    "Remark": "Remark",
+    "Order": "Order"
+  },
+  "Label": {
+    "TripNo": "Trip No",
+    "StatusName": "Status Name",
+    "MainLicensePlate": "Main License Plate",
+    "SecondaryLicensePlate": "Secondary License Plate",
+    "Remark": "Remark",
+
+    "OrderNo": "Order No",
+    "OriginPlaceName": "Origin Place Name",
+    "DestinationPlaceName": "Destination Place Name",
+    "ProductCode": "Product Code",
+    "Quantity": "Quantity",
+    "LoadQuantity": "Load Quantity",
+    "DeliveryQuantity": "Delivery Quantity"
+  },
+  "Button": {
+    "Create": "Create",
+    "Upload": "Upload",
+    "Excel": "Excel",
+    "Save": "Save",
+    "Delete": "Delete",
+    "Back": "Back",
+    "Yes": "Yes",
+    "No": "No",
+    "Attach": "Attach"
+  },
+  "History": {
+    "Action": "Action",
+    "Who": "Who",
+    "Timestamp": "Timestamp"
+  },
+  "Message": {
+    "Confirm": {
+      "Cancel": {
+        "Title": "Cancel",
+        "Message": "Are you sure you want to cancel ?"
+      },
+      "Confirm": {
+        "Title": "Confirm",
+        "Message": "Are you sure you want to confirm ?"
+      },
+      "LoadItem": {
+        "Title": "Load Item",
+        "Message": "Are you sure you want to load item ?"
+      },
+      "RemoveImage": {
+        "Title": "Remove Image",
+        "Message": "Are you sure you want to remove image ?"
+      }
+    },
+    "Notification": {
+      "Create": "Successfully created",
+      "Update": "Successfully edited",
+      "Delete": "Successfully deleted",
+      "LoadItem": "Successfully loaded",
+      "Delivery": "Successfully delivery"
+    },
+    "Validation": {
+      "Required": "{{field}} is required"
+    },
+    "FromApi": {}
+  }
+}

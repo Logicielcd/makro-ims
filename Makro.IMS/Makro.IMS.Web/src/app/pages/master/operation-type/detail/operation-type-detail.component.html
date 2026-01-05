@@ -1,0 +1,619 @@
+<p-toast></p-toast>
+<p-confirmDialog
+  [baseZIndex]="10000"
+  rejectButtonStyleClass="p-button-text"
+></p-confirmDialog>
+<div class="grid" *ngIf="loadCompleted === true">
+  <div class="col-12 p-0 md:p-3">    
+    <div class="card">
+      <div class="grid grid-nogutter flex-row justify-content-between">
+        <h3 class="font-bold">
+          {{ (!dataId ? "Title.Create" : "Title.Detail") | translate }}
+        </h3>
+      </div>
+      <p-messages [(value)]="msgs" [enableService]="false"> </p-messages>
+      <form #f="ngForm" novalidate>
+        <div class="grid">
+          <div class="col-12">            
+            <p-toolbar>
+              <div class="p-toolbar-group-left flex flex-wrap">
+                <button
+                  *ngIf="canModify"
+                  pButton
+                  type="button"
+                  icon="pi pi-check"
+                  [label]="'Button.Save' | translate"
+                  class="p-button-success mr-2"
+                  [disabled]="!f.form.valid || f.form.pristine"
+                  (click)="onSubmit()"
+                  [loading]="isLoading"
+                ></button>
+                <button
+                  *ngIf="canModify"
+                  pButton
+                  type="button"
+                  icon="pi pi-trash"
+                  [label]="'Button.Delete' | translate"
+                  class="p-button-danger mr-2"
+                  (click)="onDelete()"
+                  [loading]="isLoading"
+                ></button>
+              </div>
+              <div class="p-toolbar-group-right flex flex-wrap">
+                <button
+                  pButton
+                  type="button"
+                  icon="pi pi-refresh"
+                  [pTooltip]="'Button.Refresh' | translate"
+                  tooltipPosition="bottom"
+                  class="p-button-primary mr-2"
+                  (click)="fetchData()"
+                  [loading]="isLoading"
+                ></button>
+                <button
+                  pButton
+                  type="button"
+                  icon="pi pi-times"
+                  [pTooltip]="'Button.Back' | translate"
+                  tooltipPosition="bottom"
+                  class="p-button-primary mr-2"
+                  (click)="onBack()"
+                  [loading]="isLoading"
+                ></button>                
+              </div>
+            </p-toolbar>
+          </div>
+        </div>
+
+        <div class="p-fluid p-formgrid grid">
+          <div class="col-12 md:col-4">
+            <label htmlFor="warehouse">
+              {{ "Label.WarehouseCode" | translate }}
+            </label>
+            <p-dropdown
+              id="warehouse"
+              name="warehouse"
+              #warehouse="ngModel"
+              [options]="warehouses"
+              [(ngModel)]="data.warehouseCode"
+              optionLabel="warehouseName"
+              optionValue="warehouseCode"                            
+              [placeholder]="'Select.WarehouseCode' | translate"
+              (onChange)="onWarehouseChange($event)"
+              required              
+              [ngClass]="{
+                'ng-invalid ng-dirty':
+                warehouse.invalid && (warehouse.dirty || warehouse.touched)
+              }"
+              [virtualScroll]="true"
+              [virtualScrollItemSize]="38"
+            >
+              <ng-template let-item pTemplate="item">
+                {{ item.warehouseCode }} - {{ item.warehouseName }}
+              </ng-template>
+              <ng-template let-item pTemplate="selectedItem">
+                {{ item.warehouseCode }} - {{ item.warehouseName }}
+              </ng-template>
+            </p-dropdown>
+            <small
+              class="p-error block"
+              *ngIf="warehouse.invalid && (warehouse.dirty || warehouse.touched)"
+            >
+              {{
+                "Message.Validation.Required"
+                  | translate : { field: "Label.WarehouseCode" | translate }
+              }}
+            </small>
+          </div>
+          <div class="col-8"></div>
+          <div class="col-12 md:col-4">
+            <label htmlFor="operationName">
+              {{ "Label.OperationName" | translate }}
+            </label>
+            <input
+              pInputText
+              type="text"
+              id="operationname"
+              name="operationname"
+              #operationname="ngModel"
+              [(ngModel)]="data.operationName"
+              required
+              [ngClass]="{
+                'ng-invalid ng-dirty':
+                operationname.invalid && (operationname.dirty || operationname.touched)
+              }"              
+            />
+            <small
+              class="p-error block"
+              *ngIf="operationname.invalid && (operationname.dirty || operationname.touched)"
+            >
+              {{
+                "Message.Validation.Required"
+                  | translate : { field: "Label.OperationName" | translate }
+              }}
+            </small>
+          </div>
+
+          <div class="col-12 md:col-4">
+            <label htmlFor="desc">
+              {{ "Label.Description" | translate }}
+            </label>
+            <input
+              pInputText
+              type="text"
+              id="desc"
+              name="desc"
+              #desc="ngModel"
+              [(ngModel)]="data.description"
+              required
+              [ngClass]="{
+                'ng-invalid ng-dirty':
+                desc.invalid && (desc.dirty || desc.touched)
+              }"              
+            />
+            <small
+              class="p-error block"
+              *ngIf="desc.invalid && (desc.dirty || desc.touched)"
+            >
+              {{
+                "Message.Validation.Required"
+                  | translate : { field: "Label.Description" | translate }
+              }}
+            </small>
+          </div>
+          <div class="col-12 md:col-2" >
+            <label htmlFor="overcap">
+              {{ "Over Capacity" | translate }}
+            </label>
+            <p-toggleButton 
+              id="overcap"
+              name="overcap"
+              [(ngModel)]="data.overcap"
+              onLabel="Yes"
+              offLabel="No"
+              [ngModelOptions]="{standalone: false}"
+              
+            >
+            </p-toggleButton>
+          </div>
+          <div class="col-12 md:col-2" >
+            <label htmlFor="overcutoff">
+              {{ "Over Cutoff" | translate }}
+            </label>
+            <p-toggleButton 
+              id="overcutoff"
+              name="overcutoff"
+              [(ngModel)]="data.overcutoff"
+              onLabel="Yes"
+              offLabel="No"
+              [ngModelOptions]="{standalone: false}"
+              
+            >
+            </p-toggleButton>
+          </div>
+          <div class="col-12 md:col-2"></div>
+          <!-- <div class="col-12 md:col-4">
+            <label htmlFor="capacity">
+              {{ "Label.Capacity" | translate }}
+            </label>
+            <input
+              pInputText
+              type="number"
+              id="capacity"
+              name="capacity"
+              #capacity="ngModel"
+              [(ngModel)]="data.capacity"
+              required
+              [ngClass]="{
+                'ng-invalid ng-dirty':
+                capacity.invalid && (capacity.dirty || capacity.touched)
+              }"              
+            />
+            <small
+              class="p-error block"
+              *ngIf="capacity.invalid && (capacity.dirty || capacity.touched)"
+            >
+              {{
+                "Message.Validation.Required"
+                  | translate : { field: "Label.Capacity" | translate }
+              }}
+            </small>
+          </div>    -->
+          <!-- <div class="col-12 md:col-4">
+            <label htmlFor="capacity">
+              {{ "Label.CapacityLarge" | translate }}
+            </label>
+            <input
+              pInputText
+              type="number"
+              id="capacitylarge"
+              name="capacitylarge"
+              #capacitylarge="ngModel"
+              [(ngModel)]="data.capacityLarge"
+              required
+              [ngClass]="{
+                'ng-invalid ng-dirty':
+                capacitylarge.invalid && (capacitylarge.dirty || capacitylarge.touched)
+              }"              
+            />
+            <small
+              class="p-error block"
+              *ngIf="capacitylarge.invalid && (capacitylarge.dirty || capacitylarge.touched)"
+            >
+              {{
+                "Message.Validation.Required"
+                  | translate : { field: "Label.CapacityLarge" | translate }
+              }}
+            </small>
+          </div>          -->
+        </div>
+      </form>      
+
+      <div class="col-12 md:col-12">
+        <p-tabView [scrollable]="true">
+          <p-tabPanel header="Available time slot">
+            <ng-template pTemplate="content">
+              <div class="col-12 md:col-12 sd:col-12" *ngIf="dataId">                       
+                <p-table
+                  [columns]="cols"
+                  [value]="operationTimes"
+                  responsiveLayout="scroll"
+                >
+                  <ng-template pTemplate="header" let-columns>
+                    <tr>
+                      <th *ngFor="let col of columns">
+                        {{ col.header }}
+                      </th>
+                      <th>                        
+                        <button
+                        pButton
+                        pRipple
+                        icon="pi pi-plus"
+                        class="p-button-rounded p-button-success"
+                        (click)="onAddTime()"
+                        [loading]="isLoading"
+                        ></button>
+                      </th>
+                    </tr>
+                  </ng-template>
+                  <ng-template
+                    pTemplate="body"
+                    let-rowData
+                    let-columns="columns"
+                  >
+                    <tr>
+                      <td *ngFor="let col of columns">                
+                        {{ rowData[col.field] | date : "HH:mm" }} 
+                      </td>
+                      <td>
+                        <button
+                          pButton
+                          pRipple
+                          icon="pi pi-trash"
+                          class="p-button-rounded p-button-warning"
+                          (click)="onDeleteTime(rowData)"
+                        ></button>
+                      </td>
+                    </tr>
+                  </ng-template>
+                </p-table>
+              </div>        
+            </ng-template>
+          </p-tabPanel>
+          <p-tabPanel header="Capacity of the days of week per hour">
+            <ng-template pTemplate="content">
+              <div class="col-12 md:col-12 sd:col-12" *ngIf="dataId">       
+                <p-table
+                  [columns]="capCols"
+                  [value]="capDatas"
+                  responsiveLayout="scroll"
+                  [scrollable]="true" 
+                  scrollHeight="400px" 
+                  editMode="row"
+                  dataKey="time"
+                  [styleClass]="'p-datatable-sm'"
+                >
+                  <ng-template pTemplate="header" let-columns >
+                    <tr>
+                      <ng-container *ngFor="let col of columns">
+                        <th rowspan="2" *ngIf="col.frozen === true" style="width: 5rem;" pFrozenColumn text-center>{{ col.header }}</th>
+                        <th colspan="2" *ngIf="(col.frozen === undefind || col.frozen === false) && col.subHeader == 'Cap'" style="width: 5rem;" pEditableColumn>{{col.header}}</th>
+                      </ng-container>                      
+                      <th>                        
+                      </th>
+                    </tr>
+                    <tr>
+                      <ng-container *ngFor="let col of columns">                        
+                        <th *ngIf="col.frozen === undefind || col.frozen === false" pEditableColumn>{{col.subHeader}}</th>                        
+                      </ng-container> 
+                      <th>
+
+                      </th>
+                    </tr>
+                  </ng-template>
+                  <ng-template
+                    pTemplate="body"
+                    let-rowData
+                    let-columns="columns"
+                    let-editing="editing" 
+                    let-ri="rowIndex"
+                  >                
+                    <tr [pEditableRow]="rowData" >
+                      <ng-container *ngFor="let col of columns">
+                        <td *ngIf="col.frozen === true" pFrozenColumn style="width: 5rem;"> 
+                          {{ rowData[col.field] }} 
+                        </td>
+                        <td *ngIf="col.frozen === undefind || col.frozen === false" pEditableColumn >
+                          <p-cellEditor>
+                            <ng-template pTemplate="input">
+                                <input 
+                                    pInputText 
+                                    type="number" 
+                                    [(ngModel)]="rowData[col.field]"
+                                    style="width: 7rem;"
+                                    min="0"
+                                />                                
+                            </ng-template>
+                            <ng-template pTemplate="output">
+                               <span style="width: 7rem;"> {{ rowData[col.field]}} </span>
+                            </ng-template>
+                          </p-cellEditor>
+                        </td>
+                      </ng-container>                      
+                      <td>
+                        <div class="flex align-items-center justify-content-center gap-2">
+                          <button 
+                              *ngIf="!editing" 
+                              pButton 
+                              pRipple 
+                              type="button" 
+                              pInitEditableRow 
+                              icon="pi pi-pencil" 
+                              (click)="onRowEditInit(rowData)" 
+                              class="p-button-rounded p-button-text">
+                          </button>
+                          <button 
+                              *ngIf="editing" 
+                              pButton 
+                              pRipple 
+                              type="button" 
+                              pSaveEditableRow 
+                              icon="pi pi-check" 
+                              (click)="onRowEditSave(rowData)" 
+                              class="p-button-rounded p-button-text p-button-success mr-2">
+                          </button>
+                          <button 
+                              *ngIf="editing" 
+                              pButton pRipple 
+                              type="button" 
+                              pCancelEditableRow 
+                              icon="pi pi-times" 
+                              (click)="onRowEditCancel(rowData, ri)" 
+                              class="p-button-rounded p-button-text p-button-danger">
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  </ng-template>
+                </p-table>
+              </div> 
+            </ng-template>
+          </p-tabPanel>
+          <p-tabPanel header="Set supplier fix time slot">
+            <ng-template pTemplate="content">
+              <div class="col-12 md:col-12 sd:col-12" *ngIf="operationFixSlots">       
+                <p-table
+                  [columns]="fixCols"
+                  [value]="fixDatas"
+                  responsiveLayout="scroll"
+                  [scrollable]="true" 
+                  scrollHeight="400px" 
+                  editMode="row"
+                  dataKey="time"
+                  [tableStyle]="{ 'min-width': '10%' } "
+                  [breakpoint]="'960px'"                 
+                >
+                  <ng-template pTemplate="header" let-columns >
+                    <tr>
+                      <ng-container *ngFor="let col of columns">
+                        <th *ngIf="col.frozen === true && col.header !== ''" style="width:10%;" pFrozenColumn>{{ col.header }}</th>
+                        <th *ngIf="(col.frozen === undefind || col.frozen === false) && col.header !== ''" style="width:10%;">{{col.header}}</th>
+                      </ng-container>
+                    </tr>
+                  </ng-template>
+                  <ng-template
+                    pTemplate="body"
+                    let-rowData
+                    let-columns="columns"
+                    let-editing="editing" 
+                    let-ri="rowIndex"
+                  >                
+                    <tr [pEditableRow]="rowData" >
+                      <ng-container *ngFor="let col of columns">
+                        <td *ngIf="col.frozen === true && col.header !== ''" pFrozenColumn > 
+                          {{ rowData[col.field] }} 
+                        </td>
+                        <td class="vertical-align-top" *ngIf="(col.frozen === undefind || col.frozen === false) && col.header !== ''" >
+                          <div class="vertical-align-top justify-content-center mt-0">
+                            <span class="text-center"> 
+                            {{rowData[(col.field).substring(0,3) + 'Cap']}} 
+                            </span>
+                          </div>
+                          <br>
+                          <p-button                                                         
+                            [rounded]="false"
+                            (click)="onAddFixTime(rowData,col)"                            
+                            class="multi-line-button"
+                          >
+                          {{rowData[col.field]}}
+                          </p-button>
+                          
+                        </td>
+                      </ng-container>
+                    </tr>
+                  </ng-template>
+                </p-table>
+              </div> 
+            </ng-template>
+          </p-tabPanel>         
+        </p-tabView>
+      </div>      
+    </div>    
+  </div>
+</div>
+
+<p-dialog header="Add time slot" [(visible)]="visible" [style]="{width: '30vw', height:'50%'}" >  
+  <div class="formgrid grid justify-content-center mt-5">    
+      <div class="field col-6">
+        <div class="text-center"><label htmlFor="timestart"> Time Start</label> </div> 
+      </div>
+      <div class="field col-6">
+        <div class="text-center"><label htmlFor="timeend"> Time End</label> </div> 
+      </div>
+      <div class="field col-6">     
+        <div class="text-center">
+          <p-calendar 
+            id="timestart"
+            name="timestart"
+            [(ngModel)]="startTime" 
+            [stepMinute]="30" 
+            [showTime]="true" 
+            [timeOnly]="true"
+          >
+          </p-calendar>
+        </div>
+      </div>
+      <div class="field col-6">
+        <div class="text-center">
+          <p-calendar 
+            id="timeend"
+            name="timeend"
+            [(ngModel)]="endTime" 
+            [stepMinute]="30" 
+            [showTime]="true" 
+            [timeOnly]="true">
+          </p-calendar>
+        </div>
+      </div>
+      <div class="field col-12">
+        <div class="text-center">
+          <button
+            pButton
+            type="button"
+            label="ยืนยัน"      
+            class="p-button w-10"
+            (click)="onTimeSave()"
+          ></button>
+        </div>
+      </div>    
+  </div>
+</p-dialog>
+
+<p-dialog header="Add supplier fix time slot" [(visible)]="visibleFixSlot" [style]="{width: '30vw', height:'50%'}" >  
+  <div *ngIf="supplierGroups" class="formgrid grid justify-content-center mt-5">    
+    <div class="flex flex-row col-12">
+      <div class="col-3">
+        <label htmlFor="supplierGroup">Supplier Group</label>    
+      </div>     
+      <div class="col-9" style="margin-top: -0.75rem;">     
+        <p-dropdown
+          id="supCode"
+          name="supCode"
+          #supCode="ngModel"
+          [options]="supplierGroups"
+          [(ngModel)]="supplierGroupSelected"
+          optionLabel="supDisplay"
+          optionValue="internalSupGroupId"
+          [filter]="true"
+          filterBy="supDisplay"
+          [showClear]="true"
+          placeholder="Select supplier group"
+          styleClass="w-full"
+          required        
+          [ngClass]="{
+            'ng-invalid ng-dirty':
+              supCode.invalid && (supCode.dirty || supCode.touched)
+          }"
+          [virtualScroll]="true"
+          [virtualScrollItemSize]="38"
+        >
+          <!-- <ng-template let-item pTemplate="item">
+            {{ item.internalSupGroupId }} - {{ item.supName }} 
+          </ng-template>
+          <ng-template let-item pTemplate="selectedItem">
+            {{ item.internalSupGroupId }} - {{ item.supName }}
+          </ng-template> -->
+        </p-dropdown>
+        <small
+          class="p-error block"
+          *ngIf="supCode.invalid && (supCode.dirty || supCode.touched)"
+        >
+          {{
+            "Message.Validation.Required"
+              | translate : { field: "Supplier Group" | translate }
+          }}
+        </small>      
+      </div>
+    </div>
+    <!-- <div class="flex flex-row col-12 mt-3">
+      <div class="col-3">
+        <label htmlFor="dayOfWeek">VIP</label> 
+      </div> 
+      <div class="col-9" style="margin-top: -0.5rem;">
+        <p-inputSwitch [(ngModel)]="isVip"></p-inputSwitch>       
+      </div>
+    </div>     -->
+    
+    <div class="field col-12 mt-3">
+      <div class="text-center">
+        <button
+          pButton
+          type="button"
+          label="ยืนยัน"      
+          class="p-button w-10"
+          [disabled]="supplierGroupSelected==null"
+          (click)="onFixTimeSave()"
+        ></button>
+      </div>
+    </div>
+    <div class="field col-12">
+      <p-table
+        [columns]="fixSlotCols"
+        [value]="operationFixSlotAll"
+        responsiveLayout="scroll"
+      >
+        <ng-template pTemplate="header" let-columns>
+          <tr>
+            <th *ngFor="let col of columns">
+              {{ col.header }}
+            </th>
+            <th>
+            </th>
+          </tr>
+        </ng-template>
+        <ng-template
+          pTemplate="body"
+          let-rowData
+          let-columns="columns"
+        >
+          <tr>
+            <ng-container *ngFor="let col of columns">                
+              <td *ngIf="col.display !== 'time'">                
+                {{ rowData[col.field] }} 
+              </td>                                                
+            </ng-container>
+            <td>
+              <button
+                pButton
+                pRipple
+                icon="pi pi-trash"
+                class="p-button-rounded p-button-warning"
+                (click)="onDeleteFixTime(rowData)"
+              ></button>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>  
+  </div>
+</p-dialog>

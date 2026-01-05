@@ -1,0 +1,58 @@
+<div *ngIf="datasource">
+  <div class="text-center col-12 md:col-12">
+    <h4>เรียกรถ เข้าประตู {{doorQueue.doorName}} จากโซน {{doorQueue.doorArea}}</h4>
+  </div>
+  <div class="grid">
+    <div class="absolute left-0 ml-3">
+      <span>โซน : {{doorQueue.doorArea}} - จำนวน {{datasource.length}} คัน</span>
+    </div>
+    <div class="absolute right-0 mr-3">
+      <span>ประเภทรถเข้าประตู : {{doorQueue.truckType}}</span>
+    </div>
+  </div>  
+  <div class="col-12 md:col-12 mt-4">
+    <p-table
+        [value]="datasource"
+        [paginator]="true"
+        [rows]="5"
+        [showCurrentPageReport]="true"
+        [tableStyle]="{ 'min-width': '50rem' }"
+        currentPageReportTemplate="{first} to {last} of {totalRecords}"
+        [rowsPerPageOptions]="[5,10, 20, 30]"
+        [columns]="cols"
+      >
+        <ng-template pTemplate="header" let-columns>
+          <tr>            
+            <th
+              *ngFor="let col of columns"
+              [pSortableColumn]="col.field"
+              [style.width]="col.width || defaultWidth"
+              style="white-space: pre-line;"
+              class="text-center"
+            >
+              {{ col.header | translate }}
+            </th>
+            <th class="text-center">
+              Action
+            </th>
+          </tr>
+        </ng-template>        
+        <ng-template pTemplate="body" let-rowData let-columns="columns" >
+          <tr>            
+            <td
+              *ngFor="let col of columns; index as i"
+              [style.width]="col.width || defaultWidth"
+              class="text-center"
+            >
+              <span *ngIf="col.display === 'string'" style="white-space: pre-line;">{{
+                rowData[col.field]
+              }}</span>
+            </td>
+            <td class="text-center">
+              <button pButton icon="pi pi-check" class="p-button mr-2" (click)="onManageQueue(rowData)" [loading]="isLoading"></button>              
+            </td>
+          </tr>
+      </ng-template>
+    </p-table>
+  </div>
+</div>

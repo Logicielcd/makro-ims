@@ -1,0 +1,63 @@
+﻿Scaffold-DbContext "User Id=ims;Password=ims;Data Source=172.20.10.2:1521/wmos;" Oracle.EntityFrameworkCore -Force -OutputDir Models -ContextDir Context -Context IMSContext -Tables BOOKING_DETAIL,BOOKING_HEADER,BOOKING_KEY,BOOKING_TRUCK,COMPANY,WAREHOUSE,USER_MASTER,USER_ACCESS,USER_WAREHOUSE,SUPPLIER,SUPPLIER_GROUP,SUP_TYPE_MASTER,DOOR,TRUCK_MASTER,EST_TIME,WAREHOUSE_CAPACITY,BOOKING_TRUCK_CHECK_IN,BOOKING_TRUCK_CHECK_IN_DETAIL,WAREHOUSE_OPERATION_CAPACITY,OPERATION,QUEUE_SEQUENCE,PO_CHECK_IN_OUT,BOOKING_TRUCK_LOG,OPERATION_TIME,OPERATION_CAPACITY,OPERATION_FIX_SLOT
+
+Scaffold-DbContext "User Id=bookingdbqa;Password=CDC_booking2024;Data Source=10.84.211.7:1521/CDCBKQA;" Oracle.EntityFrameworkCore -Force -OutputDir Models -ContextDir Context -Context IMSContext -Tables BOOKING_DETAIL,BOOKING_HEADER,BOOKING_KEY,BOOKING_TRUCK,COMPANY,WAREHOUSE,USER_MASTER,USER_ACCESS,USER_WAREHOUSE,SUPPLIER,SUPPLIER_GROUP,SUP_TYPE_MASTER,DOOR,TRUCK_MASTER,EST_TIME,WAREHOUSE_CAPACITY,BOOKING_TRUCK_CHECK_IN,BOOKING_TRUCK_CHECK_IN_DETAIL,WAREHOUSE_OPERATION_CAPACITY,OPERATION,QUEUE_SEQUENCE,PO_CHECK_IN_OUT,BOOKING_TRUCK_LOG,OPERATION_TIME,OPERATION_CAPACITY,OPERATION_FIX_SLOT,TRUCK_CAP,PO_COMMENT,PO_LOG,BOOKING_INTERFACE,TRUCK_RULE,YARD,SHUNT,TRAILER,USER_WAREHOUSE,USER_SUPPLIER_GROUP,JOB
+
+Scaffold-DbContext "User Id=bookingdbprd;Password=CDC_booking2023;Data Source=10.84.215.7:1521/CDCBKPRD;" Oracle.EntityFrameworkCore -Force -OutputDir Models -ContextDir Context -Context IMSContext -Tables BOOKING_DETAIL,BOOKING_HEADER,BOOKING_KEY,BOOKING_TRUCK,COMPANY,WAREHOUSE,USER_MASTER,USER_ACCESS,USER_WAREHOUSE,SUPPLIER,SUPPLIER_GROUP,SUP_TYPE_MASTER,DOOR,TRUCK_MASTER,EST_TIME,WAREHOUSE_CAPACITY,BOOKING_TRUCK_CHECK_IN,BOOKING_TRUCK_CHECK_IN_DETAIL,WAREHOUSE_OPERATION_CAPACITY,OPERATION,QUEUE_SEQUENCE,PO_CHECK_IN_OUT,BOOKING_TRUCK_LOG,OPERATION_TIME,OPERATION_CAPACITY,OPERATION_FIX_SLOT,TRUCK_CAP,PO_COMMENT,PO_LOG,BOOKING_INTERFACE,TRUCK_RULE,YARD,SHUNT,TRAILER,USER_WAREHOUSE,USER_SUPPLIER_GROUP,JOB
+
+
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Configuration;
+using System.Reflection;
+
+    private static readonly ILoggerFactory myLoggerFactory
+          = LoggerFactory.Create(builder =>
+          {
+              //builder.AddConsole();
+              builder.AddFilter((category, level) =>
+                  category == DbLoggerCategory.Database.Command.Name
+                  && level == LogLevel.Information)
+              .AddDebug()
+              .AddConsole();
+
+          });
+
+
+   protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            // set connection string on context
+            // get the configuration from the app settings
+            var config = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json")
+                .Build();
+
+            var connectionString = config.GetConnectionString("DefaultConnection");
+
+            optionsBuilder
+                .UseLoggerFactory(myLoggerFactory)
+                .UseOracle(connectionString,
+                builder =>
+                {
+                    builder.CommandTimeout(600);
+                    builder.MigrationsAssembly(typeof(IMSContext).GetTypeInfo().Assembly.GetName().Name);
+                    builder.UseOracleSQLCompatibility("11");
+                });
+
+        }
+
+OnModelCreating
+    modelBuilder.Entity<PoList>().ToView("PoList").HasNoKey();
+    modelBuilder.Entity<BookingCapacity>().ToView("BookingCapacity").HasNoKey();
+    modelBuilder.Entity<KeyId>().ToView("KeyId").HasNoKey();
+    modelBuilder.Entity<BookingCheckInDto>().ToView("BookingCheckInDto").HasNoKey();
+    modelBuilder.Entity<QueueManageDto>().ToView("QueueManageDto").HasNoKey();
+    modelBuilder.Entity<DoorQueueDto>().ToView("DoorQueueDto").HasNoKey();
+    modelBuilder.Entity<ReportGatePass>().ToView("ReportGatePass").HasNoKey();
+    modelBuilder.Entity<ReportSummaryBooking>().ToView("ReportSummaryBooking").HasNoKey();
+    modelBuilder.Entity<ReportTruckStatus>().ToView("ReportTruckStatus").HasNoKey();
+    modelBuilder.Entity<ReportTransactionTrack>().ToView("ReportTransactionTrack").HasNoKey();
+    modelBuilder.Entity<ReportSlottimeBooking>().ToView("ReportSlottimeBooking").HasNoKey();
+    modelBuilder.Entity<ReportDockDoorControl>().ToView("ReportDockDoorControl").HasNoKey();
+    modelBuilder.Entity<TruckCheckIn>().ToView("TruckCheckIn").HasNoKey();
+    modelBuilder.Entity<SlotCapacity>().ToView("SlotCapacity").HasNoKey();
+    modelBuilder.Entity<PoMonitor>().ToView("PoMonitor").HasNoKey();

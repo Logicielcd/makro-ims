@@ -1,0 +1,370 @@
+<p-toast></p-toast>
+<p-confirmDialog
+  [baseZIndex]="10000"
+  rejectButtonStyleClass="p-button-text"
+></p-confirmDialog>
+<div class="card col-12 p-0 md:p-3">
+  <div class="flex justify-content-between flex-wrap">
+    <div class="flex align-items-center justify-content-center">
+      <h3 class="font-bold">Job List</h3>
+    </div>
+    <div class="flex align-item-center justify-content-center">
+      <div class="align-item-center">
+        <p-button
+          label="Summary Status"
+          icon="pi pi-chart-bar"
+          (onClick)="showStatusDialog()"
+          severity="secondary"
+          class="mr-1"
+        ></p-button>
+        <p-button
+          label="Refresh"
+          icon="pi pi-refresh"
+          (onClick)="fetchData()"
+          [loading]="isLoading"
+        ></p-button>
+      </div>
+    </div>
+  </div>
+  <div class="w-full md:w-12 mx-auto">
+    <p-messages [(value)]="msgs" [enableService]="false"></p-messages>
+  </div>
+  <div class="flex flex-column gap-3 mt-3">
+    <p-table
+      #dt
+      [value]="jobs"
+      [loading]="isLoading"
+      styleClass="p-datatable-sm p-datatable-gridlines"
+      [paginator]="true"
+      [rows]="8"
+      [showCurrentPageReport]="true"
+      [rowHover]="true"
+      [scrollable]="true"
+      scrollHeight="615px"
+      scrollDirection="both"
+      responsiveLayout="scroll"
+      [globalFilterFields]="[
+        'jobId',
+        'jobType',
+        'trailerLicensePlate',
+        'trailerType',
+        'shuntLicensePlate',
+        'shuntDriver',
+        'locationNo',
+        'status'
+      ]"
+      [sortMode]="'single'"
+      [paginator]="true"
+      [rows]="10"
+      [showCurrentPageReport]="true"
+      [rowsPerPageOptions]="[5, 10, 20, 30, 50, 100, 150, 200]"
+      currentPageReportTemplate="{first} to {last} of {totalRecords}"
+    >
+      <ng-template pTemplate="caption">
+        <div class="flex justify-content-start">
+          <p-button
+            label="Clear"
+            icon="pi pi-filter-slash"
+            (onClick)="clear(dt, filterInput)"
+            severity="help"
+            class="mr-2"
+          ></p-button>
+          <span class="p-input-icon-left">
+            <i class="pi pi-search"></i>
+            <input
+              #filterInput
+              pInputText
+              type="text"
+              (input)="dt.filterGlobal($event.target.value, 'contains')"
+              placeholder="Search..."
+            />
+          </span>
+        </div>
+      </ng-template>
+      <ng-template pTemplate="header">
+        <tr>
+          <th
+            pSortableColumn="status"
+            style="min-width: 120px"
+            class="text-center"
+          >
+            Job Status <p-sortIcon field="status"></p-sortIcon>
+          </th>
+          <th pSortableColumn="jobId" style="min-width: 150px">
+            Job ID <p-sortIcon field="jobId"></p-sortIcon>
+          </th>
+          <th pSortableColumn="jobDate" style="min-width: 150px">
+            Job Date <p-sortIcon field="jobDate"></p-sortIcon>
+          </th>
+          <th pSortableColumn="jobType" style="min-width: 120px">
+            Job Type <p-sortIcon field="jobType"></p-sortIcon>
+          </th>
+          <th pSortableColumn="shuntLicensePlate" style="min-width: 120px">
+            Shunt <p-sortIcon field="shuntLicensePlate"></p-sortIcon>
+          </th>
+          <th pSortableColumn="trailerLicensePlate" style="min-width: 120px">
+            Trailer <p-sortIcon field="trailerLicensePlate"></p-sortIcon>
+          </th>
+          <th pSortableColumn="fromYardNo" style="min-width: 140px">
+            From Location <p-sortIcon field="fromYardNo"></p-sortIcon>
+          </th>
+          <th pSortableColumn="yardNo" style="min-width: 120px">
+            To Location <p-sortIcon field="yardNo"></p-sortIcon>
+          </th>
+          <th pSortableColumn="createDate" style="min-width: 150px">
+            Created <p-sortIcon field="createDate"></p-sortIcon>
+          </th>
+          <th pSortableColumn="modDate" style="min-width: 150px">
+            Modified <p-sortIcon field="modDate"></p-sortIcon>
+          </th>
+          <th
+            style="min-width: 150px"
+            class="text-center"
+            alignFrozen="right"
+            pFrozenColumn
+            [frozen]="true"
+          >
+            Actions
+          </th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-job>
+        <tr>
+          <td style="min-width: 120px" class="text-center">
+            <p-badge
+              [value]="job.status"
+              [style]="{
+                background: getSeverity(job.status),
+                color: '#ffffff'
+              }"
+            ></p-badge>
+          </td>
+          <td style="min-width: 100px">{{ job.jobId }}</td>
+          <td style="min-width: 150px">
+            {{ job.jobDate | date : "dd/MM/yyyy HH:mm:ss" }}
+          </td>
+          <td style="min-width: 120px">{{ job.jobType }}</td>
+          <td style="min-width: 120px">
+            <div>{{ job.shuntLicensePlate }}</div>
+            <div class="text-sm text-gray-600">
+              {{ job.shuntDriver }} ({{ job.shuntTel }})
+            </div>
+          </td>
+          <td style="min-width: 120px">
+            <div>{{ job.trailerLicensePlate }}</div>
+            <div class="text-sm text-gray-600">{{ job.trailerType }}</div>
+          </td>
+          <td style="min-width: 140px">
+            @if (job.status == "New" || job.status == "Assigned" || job.status
+            == "In-Process"){
+            <div>{{ job.fromYardNo }}</div>
+            <div class="text-sm text-gray-600">{{ job.fromYardType }}</div>
+            }
+          </td>
+          <td style="min-width: 120px">
+            <div>{{ job.yardNo }}</div>
+            <div class="text-sm text-gray-600">{{ job.yardType }}</div>
+          </td>
+          <td style="min-width: 150px">
+            {{ job.createDate | date : "dd/MM/yyyy HH:mm:ss" }}
+          </td>
+          <td style="min-width: 150px">
+            {{ job.modDate | date : "dd/MM/yyyy HH:mm:ss" }}
+          </td>
+          <td
+            style="min-width: 200px"
+            class="text-center"
+            alignFrozen="right"
+            pFrozenColumn
+            [frozen]="true"
+          >
+            @if (job.status == "New"){
+            <p-button
+              icon="pi pi-check"
+              label="Confirm"
+              styleClass="p-button-sm p-button-warning mr-2"
+              [disabled]="!canModify"
+              (onClick)="onConfirmAssignJob(job)"
+            ></p-button>
+            } @if (job.status == "Assigned"){
+            <p-button
+              icon="pi pi-check"
+              label="Release Job"
+              styleClass="p-button-sm mr-2"
+              [disabled]="!canModify"
+              (onClick)="onConfirmStartJob(job)"
+            ></p-button>
+            } @if (job.status == "In-Process"){
+            <p-button
+              icon="pi pi-check"
+              label="Job Completed"
+              styleClass="p-button-sm mr-2"
+              [disabled]="!canModify"
+              (onClick)="onConfirmCompleteJob(job)"
+            ></p-button>
+            } @if (job.status == "New"){
+            <p-button
+              icon="pi pi-times"
+              styleClass="p-button-sm p-button-danger"
+              [disabled]="!canModify && job.status != 'New'"
+              (onClick)="onCancelJob(job)"
+            ></p-button>
+            } @if(job.status == "On-Dock" || job.status == "Loading" ||
+            job.status == "Loaded"){
+            {{ "อยู่ในกระบวนการ Dock Management" }}
+            }
+          </td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="emptymessage">
+        <tr>
+          <td colspan="11" class="text-center">No jobs found</td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+</div>
+
+<p-dialog
+  header="Job Status Summary"
+  [(visible)]="statusDialogVisible"
+  [style]="{ width: '60vw' }"
+  [modal]="true"
+>
+  <div class="grid grid-cols-12 gap-4 mt-3">
+    <div
+      style="
+        background-color: rgba(40, 167, 69, 0.1);
+        border-color: #28a745;
+        border-radius: 12px;
+      "
+      class="rounded-lg border-2 p-3 transition-all hover:shadow-lg"
+    >
+      <p style="color: #28a745" class="text-center font-bold">
+        {{ "ใหม่" }} <br />
+        New <br />
+        {{ count_status?.new?.toString() || "0" }} งาน
+      </p>
+    </div>
+
+    <div
+      style="
+        background-color: rgba(13, 202, 240, 0.1);
+        border-color: #0dcaf0;
+        border-radius: 20px;
+      "
+      class="flex-1 rounded-lg border-2 p-2 transition-all hover:shadow-lg"
+    >
+      <p style="color: #0dcaf0" class="text-center font-bold">
+        {{ "จัดสรรแล้ว" }} <br />
+        Assigned <br />
+        {{ count_status?.assigned?.toString() || "0" }} งาน
+      </p>
+    </div>
+
+    <div
+      style="
+        background-color: rgba(255, 193, 7, 0.1);
+        border-color: #ffc107;
+        border-radius: 20px;
+      "
+      class="flex-1 rounded-lg border-2 p-2 transition-all hover:shadow-lg"
+    >
+      <p style="color: #ffc107" class="text-center font-bold">
+        {{ "กำลังดำเนินการ" }} <br />
+        In-Process <br />
+        {{ count_status?.inprocess?.toString() || "0" }} งาน
+      </p>
+    </div>
+
+    <div
+      style="
+        background-color: rgba(255, 152, 0, 0.1);
+        border-color: #ff9800;
+        border-radius: 20px;
+      "
+      class="flex-1 rounded-lg border-2 p-2 transition-all hover:shadow-lg"
+    >
+      <p style="color: #ff9800" class="text-center font-bold">
+        {{ "อยู่ประตู" }} <br />
+        On-Dock <br />
+        {{ count_status?.ondock?.toString() || "0" }} งาน
+      </p>
+    </div>
+
+    <div
+      style="
+        background-color: rgba(233, 30, 99, 0.1);
+        border-color: #e91e63;
+        border-radius: 20px;
+      "
+      class="flex-1 rounded-lg border-2 p-2 transition-all hover:shadow-lg"
+    >
+      <p style="color: #e91e63" class="text-center font-bold">
+        {{ "กำลังโหลด" }} <br />
+        Loading <br />
+        {{ count_status?.loading?.toString() || "0" }} งาน
+      </p>
+    </div>
+
+    <div
+      style="
+        background-color: rgba(156, 39, 176, 0.1);
+        border-color: #9c27b0;
+        border-radius: 20px;
+      "
+      class="flex-1 rounded-lg border-2 p-2 transition-all hover:shadow-lg"
+    >
+      <p style="color: #9c27b0" class="text-center font-bold">
+        {{ "โหลดแล้ว" }} <br />
+        Loaded <br />
+        {{ count_status?.loaded?.toString() || "0" }} งาน
+      </p>
+    </div>
+
+    <div
+      style="
+        background-color: rgba(0, 0, 0, 0.1);
+        border-color: #000000;
+        border-radius: 20px;
+      "
+      class="flex-1 rounded-lg border-2 p-2 transition-all hover:shadow-lg"
+    >
+      <p style="color: #000000" class="text-center font-bold">
+        {{ "เสร็จสิ้น" }} <br />
+        Completed <br />
+        {{ count_status?.completed?.toString() || "0" }} งาน
+      </p>
+    </div>
+
+    <div
+      style="
+        background-color: rgba(108, 117, 125, 0.1);
+        border-color: #6c757d;
+        border-radius: 20px;
+      "
+      class="flex-1 rounded-lg border-2 p-2 transition-all hover:shadow-lg"
+    >
+      <p style="color: #6c757d" class="text-center font-bold">
+        {{ "ยกเลิก" }} <br />
+        Cancelled <br />
+        {{ count_status?.cancelled?.toString() || "0" }} งาน
+      </p>
+    </div>
+
+    <div
+      style="
+        background-color: rgba(108, 117, 125, 0.1);
+        border-color: #6c757d;
+        border-radius: 20px;
+      "
+      class="flex-1 rounded-lg border-2 p-2 transition-all hover:shadow-lg"
+    >
+      <p style="color: #6c757d" class="text-center font-bold">
+        {{ "ทั้งหมด" }} <br />
+        Total <br />
+        {{ count_status?.total?.toString() || "0" }} งาน
+      </p>
+    </div>
+  </div>
+</p-dialog>

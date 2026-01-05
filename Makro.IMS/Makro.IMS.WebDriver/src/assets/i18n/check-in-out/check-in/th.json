@@ -1,0 +1,70 @@
+{
+  "Title": {
+    "List": "ค่าเชื้อเพลิง",
+    "Create": "สร้างราคาค่าเชื้อเพลิง",
+    "Detail": "รายละเอียดราคาค่าเชื้อเพลิง",
+    "Upload": "อัพโหลดค่าเชื้อเพลิง",
+    "History": "ประวัติ"
+  },
+  "Section": {
+    "Name": "ชื่อ",
+    "Price": "ราคา",
+    "Period": "ระยะเวลา"
+  },
+  "Label": {
+    "Name": "ชื่อ",
+    "Price": "ราคา",
+    "StartPeriod": "เวลาเริ่มต้น",
+    "EndPeriod": "เวลาสิ้นสุด"
+  },
+  "Button": {
+    "Create": "สร้าง",
+    "Upload": "อัพโหลด",
+    "Excel": "เอ็กซ์เซล",
+    "ClearFilter": "ล้างตัวกรอง",
+    "ChooseColumn": "เลือกคอลัมน์",
+    "Column": "คอลัมน์",
+    "Refresh": "รีเฟรช",
+    "Save": "บันทึก",
+    "Delete": "ลบ",
+    "Back": "ย้อนกลับ",
+    "Yes": "ตกลง",
+    "No": "ยกเลิก",
+    "SelectFile": "เลือกไฟล์",
+    "Cancel": "ยกเลิก"
+  },
+  "History": {
+    "Action": "การดำเนินการ",
+    "Who": "บุคคล",
+    "Timestamp": "ตราเวลา"
+  },
+  "Message": {
+    "Confirm": {
+      "Delete": {
+        "Title": "ลบข้อมูล",
+        "Message": "ยืนยันการลบข้อมูล ?"
+      },
+      "Upload": {
+        "Title": "อัปโหลดข้อมูล",
+        "Message": "ยืนยันการอัพโหลดข้อมูล ?"
+      }
+    },
+    "Notification": {
+      "Upload": "อัพโหลดข้อมูลสำเร็จ",
+      "Create": "เพิ่มข้อมูลสำเร็จ",
+      "Update": "แก้ไขข้อมูลสำเร็จ",
+      "Delete": "ลบข้อมูลสำเร็จ"
+    },
+    "Validation": {
+      "Required": "{{field}} ไม่สามารถเป็นค่าว่าง"
+    },
+    "FromApi": {
+      "DEPARTMENT_IS_REQUIRED": "แผนกไม่สามารถเป็นค่าว่าง",
+      "FUEL_PRICE_IS_REQUIRED": "ราคาค่าเชื้อเพลิงไม่สามารถเป็นค่าว่าง",
+      "NAME_IS_REQUIRED": "ชื่อไม่สามารถเป็นค่าว่าง",
+      "DEPARTMENT_NOT_FOUND": "ไม่พบแผนก",
+      "FUEL_PRICE_NOT_FOUND": "ไม่พบราคาค่าเชื้อเพลิง",
+      "NAME_ALREADY_EXIST": "ชื่อไม่สามารถซ้ำได้"
+    }
+  }
+}

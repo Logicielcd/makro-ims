@@ -1,0 +1,51 @@
+<p-toast></p-toast>
+<p-confirmDialog
+  [baseZIndex]="10000"
+  rejectButtonStyleClass="p-button-text"
+></p-confirmDialog>
+<div class="surface-card shadow-3 p-4 mt-3">
+  <p-messages [(value)]="msgs" [enableService]="false"></p-messages>
+  <div class="flex flex-column gap-4">
+    <div class="field mt-4">
+      <label for="door" class="font-bold">Select Location For Trailer</label>
+      <p-dropdown
+        id="locationId"
+        name="locationId"
+        #locationId="ngModel"
+        [options]="yards"
+        [(ngModel)]="selectedYard"
+        optionLabel="yardNo"
+        [placeholder]="'Location' | translate"
+        styleClass="w-full"
+        filter="true"
+        appendTo="body"
+        required
+        [ngClass]="{
+          'ng-invalid ng-dirty':
+            locationId.invalid && (locationId.dirty || locationId.touched)
+        }"
+        [virtualScroll]="true"
+        [virtualScrollItemSize]="38"
+      >
+        <ng-template let-item pTemplate="item">
+          {{ item.yardType }} - {{ item.yardNo }}
+        </ng-template>
+        <ng-template let-item pTemplate="selectedItem">
+          {{ item.yardType }} - {{ item.yardNo }}
+        </ng-template>
+      </p-dropdown>
+    </div>
+    <div class="flex justify-content-end gap-2">
+      <p-button
+        label="Cancel"
+        (onClick)="cancel()"
+        styleClass="p-button-outlined"
+      ></p-button>
+      <p-button
+        label="Save"
+        (onClick)="save()"
+        [disabled]="!selectedYard"
+      ></p-button>
+    </div>
+  </div>
+</div>

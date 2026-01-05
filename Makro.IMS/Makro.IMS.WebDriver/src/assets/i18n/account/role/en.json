@@ -1,0 +1,108 @@
+{
+  "Title": {
+    "List": "Manage Roles",
+    "Create": "Create Role",
+    "Detail": "Role Detail",
+    "History": "History"
+  },
+  "Section": {
+    "RoleInfo": "Role Info"
+  },
+  "Label": {
+    "Name": "Name",
+
+    "Page": "Page",
+    "View": "View",
+    "Modify": "Modify",
+    "Disable": "Disable",
+
+    "Dashboard": "Dashboard",
+    "Overview": "Overview",
+
+    "Master": "Master",
+    "Department": "Department",
+    "Place": "Place",
+    "PlaceType": "PlaceType",
+    "Zone": "Zone",
+    "WindowsTime": "WindowsTime",
+    "Product": "Product",
+    "ProductType": "ProductType",
+    "PackageType": "PackageType",
+    "PlaceProductTypeMatch": "PlaceProductTypeMatch",
+    "Transporter": "Transporter",
+    "TransporterType": "TransporterType",
+    "Vehicle": "Vehicle",
+    "VehicleType": "VehicleType",
+    "VehicleStatus": "VehicleStatus",
+    "VehicleTypeProductCapacity": "VehicleTypeProductCapacity",
+    "VehicleTypeProductTypeMatch": "VehicleTypeProductTypeMatch",
+    "OriginDestinationMatrix": "OriginDestinationMatrix",
+    "Route": "Route",
+    "VehicleRoute": "VehicleRoute",
+    "FixedTrip": "FixedTrip",
+    "FuelPrice": "FuelPrice",
+    "TripRate": "TripRate",
+    "CostType": "CostType",
+
+    "Document": "Document",
+    "UploadFeedMillOrder": "Upload FeedMill Order",
+    "UploadChickenOrder": "Upload Chicken Order",
+    "CreateDeliveryOrder": "Create Delivery Order",
+    "DeliveryOrder": "Delivery Order",
+
+    "Trip": "Trip",
+    "CheckInList": "Check In List",
+    "CheckIn": "Check In",
+    "CreateTrip": "Create Trip",
+    "TripList": "Trip List",
+    "TripInfo": "Trip Info",
+    "TripCalculator": "Trip Calculator",
+
+    "Tracking": "Tracking",
+    "TrackingVehicle": "Tracking Vehicle",
+    "TrackingTrip": "Tracking Trip",
+
+    "Billing": "Billing",
+
+    "Report": "Report",
+
+    "UserAccount": "User Account",
+    "ManageUsers": "Manage Users",
+    "ManageAnimalHusbandmans": "Manage AnimalHusbandmans",
+    "ManageDrivers": "Manage Drivers",
+    "ManageRoles": "Manage Roles"
+  },
+  "Select": {},
+  "Button": {
+    "Create": "Create",
+    "Upload": "Upload",
+    "Excel": "Excel",
+    "Save": "Save",
+    "Delete": "Delete",
+    "Back": "Back",
+    "Yes": "Yes",
+    "No": "No"
+  },
+  "History": {
+    "Action": "Action",
+    "Who": "Who",
+    "Timestamp": "Timestamp"
+  },
+  "Message": {
+    "Confirm": {
+      "Delete": {
+        "Title": "Delete",
+        "Message": "Are you sure you want to delete ?"
+      }
+    },
+    "Notification": {
+      "Create": "Successfully created",
+      "Update": "Successfully edited",
+      "Delete": "Successfully deleted"
+    },
+    "Validation": {
+      "Required": "{{field}} is required"
+    },
+    "FromApi": {}
+  }
+}

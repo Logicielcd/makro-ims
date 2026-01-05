@@ -1,0 +1,396 @@
+<div style="right:0cm; position:absolute;">
+  <button 
+    pButton
+    class="pi pi-file-pdf" 
+    (click)="exportToPDF()">
+  </button>  
+</div>
+<div style="right:0cm; top:2.5cm; position:absolute;">
+  <button 
+    pButton
+    class="pi pi-print" 
+    (click)="printReport()">
+  </button>  
+</div>
+<div id="contentToExport" *ngIf="dataSource"> 
+  <div *ngFor="let truck of truckLists">
+    <!-- <div class="page -ml-1" *ngFor="let page of truck.pageInfo"> -->
+    <div style="font: 10pt 'Tahoma';
+    color: black;
+    position: relative;
+    width: 21.2cm;
+    min-height: 29.68cm;
+    padding: 0.2cm;
+    margin: 0cm 0cm 0cm 0cm;
+    border: 1px #D3D3D3 solid;
+    border-radius: 5px;
+    background: white;
+    box-shadow: 0 0 1px rgba(0, 0, 0, 0.1);" 
+    *ngFor="let page of truck.pageInfo"
+    >
+      <div>
+      <!-- <table class="main"> -->
+      <table style="width: 100%;
+      margin: 0cm;
+      padding: 0cm;      
+      border-style: none;
+      border-width: 0px;
+      " >
+        <tr>
+          <td style="font-size: 8pt; width: 5cm;" >Print date <br> {{printDate | date : "dd/MM/yyyy HH:mm"}}</td>
+          <td align="center">
+            <h1 class="h1">Gate Pass Report</h1>
+          </td>
+          <!-- <td align="center" style="width: -cm; font-size: 10pt; font-weight: bold;"><p *ngIf="1==0"> ไม่ปรับ </p></td> -->
+          <td align="right" style="font-size: 8pt; width: 2cm;" >{{page.pageNo}}/{{truck.pageInfo.length}}</td>
+        </tr>
+        <tr>
+          <td colspan="4">
+            <!-- <table class="header"> -->
+            <table style="width: 100%; font-size: 9pt;" >
+              <tr>
+                <td style="width: 3.25cm;">
+                  <p>วันเวลาที่จัดส่ง :</p>
+                </td>
+                <td style="width: 4.5cm;">
+                  <p>{{page.pageInfo[0].bookingStart | date : "dd/MM/yyyy HH:mm"}}</p>
+                </td>
+                <td style="width: 3cm;">
+                  <p>ประเภทรถ : {{page.pageInfo[0].truckCode}}</p>
+                </td>
+                <td style="width: 3cm;">
+                  <p>Group Truck : {{page.pageInfo[0].backHaulDisplay}}</p>
+                </td>                     
+                <td colspan="2" rowspan="3" align="right" style="width: 4.5cm;">
+                  <ngx-barcode 
+                    [bc-value]="page.pageInfo[0].bookingId" 
+                    [bc-display-value]="false"
+                    [bc-height]="50"
+                    [bc-width]="1"
+                    [bc-margin-top]="-2"
+                  ></ngx-barcode>                  
+                </td>
+                <!-- <td>
+                  <p>หมายเลข Booking :</p>
+                  <p>{{page.pageInfo[0].bookingId}}</p>
+                </td>    -->
+              </tr>
+              <tr>
+                <td>
+                  <p>รหัส Supplier :</p>
+                </td>
+                <td>
+                  <p> {{page.pageInfo[0].supCode}} </p>
+                </td>
+                <td style="width: 2.5cm;">
+                  <p>ทะเบียนหัว </p>
+                </td>
+                <td style="width: 2.5cm;" [align]="'right'">
+                  <p>ทะเบียนหาง </p>
+                </td>
+                <td rowspan="1" colspan="2" [vAlign]="'top'" [align]="'right'" >                  
+                </td>     
+              </tr>
+              <tr>
+                <td>
+                  <p>ชื่อ Supplier :</p>
+                </td>
+                <td>
+                  <p>{{page.pageInfo[0].supName}} </p>
+                </td>     
+                <td style="width: 2.5cm;">
+                  <p>{{truck.licensePlate}}</p>
+                </td>
+                <td style="width: 2.5cm;" [align]="'right'">
+                  <p> {{page.pageInfo[0].licensePlate2}} </p>
+                </td>                
+              </tr>
+              <tr [vAlign]="'top'">
+                <td>
+                  <p>เบอร์ติดต่อ Supplier :</p>
+                </td>
+                <td>
+                  <p>{{page.pageInfo[0].contactTel}}</p>
+                </td>
+                <td rowspan="3">
+                  <qrcode
+                      [qrdata]="truck.licensePlate"
+                      [allowEmptyString]="true"
+                      [ariaLabel]="'QR Code image with the following content...'"
+                      [cssClass]="'justify-content-center'"
+                      [colorDark]="'#000000ff'"
+                      [colorLight]="'#ffffffff'"
+                      [elementType]="'svg'"
+                      [errorCorrectionLevel]="'M'"                        
+                      [margin]="0"
+                      [scale]="1"
+                      [title]="'Gate Pass'"
+                      width="60"
+                      height="60"
+                  ></qrcode>
+                </td>     
+                <td rowspan="3" [align]="'right'">
+                  <qrcode *ngIf="page.pageInfo[0].licensePlate2"
+                      [qrdata]="page.pageInfo[0].licensePlate2"
+                      [allowEmptyString]="false"
+                      [ariaLabel]="'QR Code image with the following content...'"
+                      [cssClass]="'justify-content-center'"
+                      [colorDark]="'#000000ff'"
+                      [colorLight]="'#ffffffff'"
+                      [elementType]="'svg'"
+                      [errorCorrectionLevel]="'M'"                        
+                      [margin]="0"
+                      [scale]="1"
+                      [title]="'Gate Pass'"
+                      width="60"
+                      height="60"
+                  ></qrcode>
+                </td>       
+                <td rowspan="3" align="right">
+                  <p>หมายเลข Booking </p>
+                  <p>{{page.pageInfo[0].bookingId}}</p>                
+                </td>
+                <td rowspan="3" [align]="'right'"  style="padding-right: 1rem;">
+                  <qrcode
+                      [qrdata]="page.pageInfo[0].bookingId"
+                      [allowEmptyString]="true"
+                      [ariaLabel]="'QR Code image with the following content...'"
+                      [cssClass]="'justify-content-center'"
+                      [colorDark]="'#000000ff'"
+                      [colorLight]="'#ffffffff'"
+                      [elementType]="'svg'"
+                      [errorCorrectionLevel]="'M'"                        
+                      [margin]="0"
+                      [scale]="1"
+                      [title]="'Gate Pass'"
+                      width="60"
+                      height="60"
+                  ></qrcode>
+                </td>       
+              </tr>
+              <tr>
+                <td>
+                  <p>ชื่อคนขับ :</p>
+                </td>
+                <td>
+                  <p>{{page.pageInfo[0].driverName}}</p>
+                </td>                
+              </tr>
+              <tr>
+                <td>
+                  <p>เบอร์คนขับ :</p>
+                </td>
+                <td>
+                  <p>{{page.pageInfo[0].telNo}}</p>
+                </td>
+              </tr>
+            </table>
+          </td>
+          
+        </tr>
+        <tr>
+          <td colspan="4">
+            <!-- <table class="header"> -->
+            <table style="width: 100%; font-size: 9pt; border: 1px solid black;">
+              <tr>
+                <td style="width: 3cm;">
+                  <p>รหัส Whse :</p>
+                </td>
+                <td style="width: 3cm;">
+                  <p> {{page.pageInfo[0].warehouseWms}} </p>
+                </td>
+                <td style="width: 1cm;">
+                  <p>โซน :</p>
+                </td>
+                <td style="width: 3cm;" [vAlign]="left">
+                  <p> {{page.pageInfo[0].merchType}} </p>
+                </td>
+                <td style="width: 4cm;">
+                  <p>วันเวลาที่อนุญาติเข้าคลัง :</p>
+                </td>
+                <td colspan="2">
+                  <p>{{page.pageInfo[0].warehouseArrived | date : "dd/MM/yyyy HH:mm"}}</p>
+                </td>                 
+              </tr>
+              <tr>
+                <td>
+                  <p>รหัส BU :</p>
+                </td>
+                <td colspan="3">
+                  <p>{{page.pageInfo[0].companyCode}}</p>
+                </td>
+                <td>
+                  <p>ติดต่อ :</p>
+                </td>
+                <td>
+                  <p>{{page.pageInfo[0].contactName}}</p>
+                </td>          
+              </tr>
+              <tr>
+                <td>
+                  <p>ชื่อบริษัท :</p>
+                </td>
+                <td colspan="3">
+                  <p>บริษัท ซีพี แอ็กซ์ตร้า จำกัด (มหาชน)</p>
+                </td>
+                <td>
+                  <p>อีเมลล์ติดต่อ :</p>
+                </td>
+                <td>
+                  <p>{{page.pageInfo[0].contactEmail}}</p>
+                </td>          
+              </tr>
+              <tr>
+                <td>
+                  <p>สถานที่จัดส่ง :</p>
+                </td>
+                <td colspan="3">
+                  <p>{{page.pageInfo[0].warehouseName}}</p>
+                </td>
+                <td>
+                  <p>เบอร์โทรติดต่อ :</p>
+                </td>
+                <td>
+                  <p>{{page.pageInfo[0].phoneNumber}}</p>
+                </td>          
+              </tr>
+              <tr>
+                <td>
+                  <p>ที่อยู่ :</p>
+                </td>
+                <td colspan="6">
+                  <p>{{page.pageInfo[0].address1}} {{page.pageInfo[0].address2}} {{page.pageInfo[0].address3}} {{page.pageInfo[0].city}} {{page.pageInfo[0].zipCode}} </p>
+                </td>                  
+              </tr>
+              <tr>
+                <td>
+                  <p>หมายเหตุ :</p>
+                </td>
+                <td colspan="6">
+                  <p>____________________________________________________________________________________________</p>
+                </td>                  
+              </tr>
+            </table>
+          </td>
+        </tr>
+        <tr>
+          <td colspan="4" style="height: 0.5cm;"></td>
+        </tr>
+        <tr>
+          <td colspan="4">
+            <!-- <table class="tbgrid"> -->
+            <table style="width: 100%;
+            border: 1px solid black;
+            border-collapse: collapse;">
+              <tr>
+                <!-- <th class="tbgrid-hdr">Barcode PO</th> -->
+                <th style="font: 8pt 'Tahoma' bold;
+                border-collapse: collapse;
+                border: 1px solid black;
+                padding: 0.1cm;">No</th>
+                <th style="font: 8pt 'Tahoma' bold;
+                border-collapse: collapse;
+                border: 1px solid black;
+                padding: 0.1cm;">Barcode PO</th>
+                <th style="font: 8pt 'Tahoma' bold;
+                border-collapse: collapse;
+                border: 1px solid black;
+                padding: 0.1cm;">PO Number</th>
+                <th style="font: 8pt 'Tahoma' bold;
+                border-collapse: collapse;
+                border: 1px solid black;
+                padding: 0.1cm;">Delivery Date</th>                
+                <th style="font: 8pt 'Tahoma' bold;
+                border-collapse: collapse;
+                border: 1px solid black;
+                padding: 0.1cm;">QTY</th>
+                <th style="font: 8pt 'Tahoma' bold;
+                border-collapse: collapse;
+                border: 1px solid black;
+                padding: 0.1cm;">FULL</th>
+                <th style="font: 8pt 'Tahoma' bold;
+                border-collapse: collapse;
+                border: 1px solid black;
+                padding: 0.1cm;">HALF</th>
+                <th style="font: 8pt 'Tahoma' bold;
+                border-collapse: collapse;
+                border: 1px solid black;
+                padding: 0.1cm;">Loose</th>
+                <th style="font: 8pt 'Tahoma' bold;
+                border-collapse: collapse;
+                border: 1px solid black;
+                padding: 0.1cm;">Status</th>
+              </tr>          
+              <tr *ngFor="let po of page.pageInfo">
+                <!-- <td class="tbgrid-row">  -->
+                <td style="border-collapse: collapse;
+                border: 1px solid black;" align="center" ><p *ngIf="po.poNbr !== null" >{{po.no}}</p></td>                
+                <td style="border-collapse: collapse;
+                border: 1px solid black;"> 
+                  <ngx-barcode 
+                    [bc-value]="po.poNbr" 
+                    [bc-display-value]="false"
+                    [bc-height]="40"
+                    [bc-width]="1"
+                    [bc-margin-top]="0"
+                  ></ngx-barcode> 
+                </td>
+                <!-- <td class="tbgrid-row">  -->                
+                <td style="border-collapse: collapse;
+                border: 1px solid black;" align="center"> <p> {{po.poNbr}} </p> </td>
+                <td style="border-collapse: collapse;
+                border: 1px solid black;" align="center"> <p> {{po.orderDate | date : "dd/MM/yyyy"}} </p> </td>                
+                <td style="border-collapse: collapse;
+                border: 1px solid black; padding-right: 0.20cm;" align="right"> <p> {{po.totalQty | number }} </p></td>
+                <td style="border-collapse: collapse;
+                border: 1px solid black; padding-right: 0.20cm;" align="right"> <p> {{po.fullPl | number }} </p></td>
+                <td style="border-collapse: collapse;
+                border: 1px solid black; padding-right: 0.20cm;" align="right"> <p> {{po.halfPl | number }} </p></td>
+                <td style="border-collapse: collapse;
+                border: 1px solid black; padding-right: 0.20cm;" align="right"> <p> {{po.looseQty | number }} </p></td>
+                <td style="border-collapse: collapse;
+                border: 1px solid black;" align="center"> 
+                  <p *ngIf="po.poNbr !== null && po.isLate !== 'Late'" style="margin: 0;">{{po.isLate}}</p> 
+                  <p style="margin: 0; color: red;" text-orange-500 *ngIf="po.isLate === 'Late' && po.reasonDisplay === '(ปรับ)'" >{{po.isLate}}<br>{{po.reasonDisplay}}</p> 
+                  <p style="margin: 0;" *ngIf="po.isLate === 'Late' && po.reasonDisplay === '(ไม่ปรับ)'" >{{po.isLate}}<br>{{po.reasonDisplay}}</p> 
+                </td>  
+              </tr>          
+              <tr *ngIf="page.pageNo === truck.pageInfo.length">
+                <td colspan="4"></td>
+                <td style="border-collapse: collapse;
+                border: 1px solid black; padding-right: 0.20cm;" align="right"> <p> {{truck.pageGroup.totalQty | number }} </p></td>
+                <td style="border-collapse: collapse;
+                border: 1px solid black; padding-right: 0.20cm;" align="right"> <p> {{truck.pageGroup.fullPl | number }} </p></td>
+                <td style="border-collapse: collapse;
+                border: 1px solid black; padding-right: 0.20cm;" align="right"> <p> {{truck.pageGroup.halfPl | number }} </p></td>
+                <td style="border-collapse: collapse;
+                border: 1px solid black; padding-right: 0.20cm;" align="right"> <p> {{truck.pageGroup.looseQty | number }} </p></td>
+                <td></td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+      </table>
+      {{page.pageGroup}}
+      </div>
+      <!-- <div class="footer"> -->
+      <div style="font: 8pt 'Tahoma';
+      position: absolute;
+      width: 20cm;
+      min-height: 3cm;
+      padding: 0.2cm;    
+      bottom: 0cm;">
+        <!-- <p class="ph"> -->
+        <p style="font-weight: 1000;
+        padding: 0;">
+          ข้อกำหนดการป้องกันโรคโควิด 2019
+        </p>
+        <!-- <p class="pd">  -->
+        <p style="margin: 0;" > 
+          1. พนักงานขนส่งและพนักงานลงสินค้าต้องเตรียมหน้ากากอนามัยหรือผ้าปิดจมูกและสวมใส่ก่อนเข้าคลังสินค้าทุกครั้งตลอดจนระยะเวลาที่ปฏิบัติงานในคลังสินค้า <br>
+          2. จะทำการตรวจวัดอุณภูมิพนักงานขนส่งและพนักงานลงสินค้าพร้อมให้ใช้เจลแอลกอฮอล์ทำความสะอาดมือทุกครั้งก่อนเข้าคลังสินค้าโดยจุดตรวจอยู่ที่ป้อมเจ้าหน้าที่ที่รักษาความปลอดภัยที่ประตูทางเข้าทุกประตู หากตรวจพบอุณภูมิสูงเกิน 37.5 องศา ขึ้นไป จะระงับการเข้าปฎิบัติหน้าที่ภายในคลังสินค้าและให้รีบไปพบแพทย์โดยเร็วทั้งนี้รายชื่อของพนักงานขนส่งและพนักงานลงสินค้าที่ตรวจพบที่อุณหภูมิร่างกายสูงจะรายงานให้ทางสยามแม็คโครเพื่อทราบต่อไป 
+        </p>
+      </div> 
+    </div>    
+  </div>
+</div>

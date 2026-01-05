@@ -1,0 +1,283 @@
+
+<div class="card col-12" *ngIf="slottimeResult">
+  <p-dialog header="Parameter" [(visible)]="visible" [style]="{width: '50vw'}" position="top" >
+    <div class="p-fluid p-formgrid grid mt-4">
+      <div class="col-12 md:col-4">
+        <label>
+            Warehouse WMS
+        </label>
+        <p-dropdown
+          id="warehouseCode"
+          name="warehouseCode"
+          #warehouseCode="ngModel"
+          [options]="warehouseList"
+          [(ngModel)]="warehouseSelected"
+          optionLabel="value"
+          optionValue="value"
+          [placeholder]="'Select Warehouse' | translate"
+          required
+          [ngClass]="{
+            'ng-invalid ng-dirty':
+              warehouseCode.invalid &&
+              (warehouseCode.dirty || warehouseCode.touched)
+          }"
+          appendTo="body"
+          (onChange)="onWarehouseSelected($event)"
+        >
+        </p-dropdown>
+        <small
+          class="p-error block"
+          *ngIf="
+            warehouseCode.invalid &&
+            (warehouseCode.dirty || warehouseCode.touched)
+          "
+        >
+          {{
+            "Message.Validation.Required"
+              | translate: { field: "Label.WarehouseCode" | translate }
+          }}
+        </small>
+      </div>
+      <div class="col-12 md:col-4">
+        <label>
+            Company
+        </label>
+        <p-dropdown
+          id="companyCode"
+          name="companyCode"
+          #companyCode="ngModel"
+          [options]="companies"
+          [(ngModel)]="companySelected"
+          optionLabel="companyCode"
+          optionValue="companyCode"
+          [placeholder]="'Select Company' | translate"
+          required
+          [ngClass]="{
+            'ng-invalid ng-dirty':
+            companyCode.invalid &&
+              (companyCode.dirty || companyCode.touched)
+          }"
+          appendTo="body"
+        >
+          <ng-template let-item pTemplate="item">
+            {{item.companyCode}}
+          </ng-template>
+              
+          <ng-template let-item pTemplate="selectedItem">
+            {{item.companyCode}}
+          </ng-template>
+        </p-dropdown>
+        <small
+          class="p-error block"
+          *ngIf="
+            companyCode.invalid &&
+            (companyCode.dirty || companyCode.touched)
+          "
+        >
+          {{
+            "Message.Validation.Required"
+              | translate: { field: "Label.CompanyCode" | translate }
+          }}
+        </small>
+      </div>
+      <div class="col-12 md:col-4">
+        <label>
+            Booking date
+        </label>
+        <p-calendar 
+                [(ngModel)]="reportDate"  
+                [readonlyInput]="true" 
+                dateFormat="dd/mm/yy"
+                appendTo="body"    
+                required="true"     
+                inputId="float-label-transaction-date" 
+                [placeholder]="'Select.TransactionDate' | translate"              
+                class="m-2"></p-calendar>      
+      </div>
+    </div>
+    
+    <ng-template pTemplate="footer">
+      <button pButton icon="pi pi-check" (click)="getBookingData();" label="Ok" styleClass="p-button-text"></button>
+    </ng-template>
+  </p-dialog>
+
+  <div class="grid">
+    <div class="col-2">
+      <p-button type="button" class="mr-2" (click)="visible = true" icon="pi pi-at"></p-button>
+      <p-button type="button" class="mr-2" (click)="exportExcel()" icon="pi pi-file-excel"></p-button>
+    </div>
+    <div class="col-5 justify-content-center">
+      <h1><p>Warehouse WMS : {{warehouseSelected}}</p></h1>
+    </div>
+    <div class="col-5 justify-content-center">
+      <h1><p>Company : {{companySelected}} </p></h1>
+    </div>    
+  </div>
+  <div #report>
+    <div class="grid">
+      <div class="text-center col-12 md-col-12">
+        <table style="width: 100%;">
+          <tr>
+            <th align="center">
+              <h3><p>Booking Date : {{reportDate | date : 'dd/MM/yyyy' }} </p></h3>
+            </th>
+          </tr>
+        </table>
+        
+      </div>
+
+      <div class="grid col-12 md-col-12" style="margin-top: 0; margin-left: 0.1cm;">
+        <div style="overflow: auto; position: relative;">
+          <table [border]="'solid 0px'" style="border-collapse: collapse;" [width]="'100%'" >
+            <tr [bgColor]="'#7adca6'">              
+              <th *ngIf="slottimeHeader" [attr.colspan]="colspan">
+                <p>Plan Booking</p>
+              </th>
+              <th style="width: 4cm;"><p>Total : Day</p> </th> <th style="width: 4cm;"> <p> UOM </p> </th>
+            </tr>            
+            <tr >
+              <th style="width: 4cm;"> </th> <th style="width: 4cm;"> </th>
+              <th *ngFor="let col of slottimeHeader; let i = index" style="width: 4cm;"> {{col.headerText }} </th>
+            </tr>
+            
+            <tr *ngFor="let merch of slottimeResult; let i = index">
+              <td align="center" rowspan="3" *ngIf="merch.dataType == 'Capacity'">
+                {{ merch.merchType }}
+                
+                <!-- <br> {{ merch.cap | number }} -->
+              </td>
+              <td> {{ merch.dataType }} </td>
+              <td *ngFor="let slot of merch.details; let j = index" style="text-align: right;"> 
+                <div *ngIf="merch.dataType == 'Booking'"> {{slot.quantity | number : '1.0-0'}} </div> 
+                <div *ngIf="merch.dataType == 'Capacity'" class="bg-green-100"> {{slot.quantity | number : '1.0-0'}} </div>
+                <div *ngIf="merch.dataType !== 'Booking' && merch.dataType !== 'Capacity'"> {{slot.quantity | number : '1.0-0'}} </div>
+              </td>
+              <td style="text-align: right;" >
+                <p *ngIf="merch.dataType == 'Booking'"> {{merch.totalQty | number : '1.0-0'}} </p> 
+                <p *ngIf="merch.dataType !== 'Booking'"> {{merch.totalQty | number : '1.0-0'}} </p> 
+              </td>
+              <td>{{merch.uom}}</td>
+            </tr>
+            <tr>
+              <td colspan="2">Total Truck</td>
+              <td *ngFor="let sum of summaryData; let i = index" style="text-align: right;"> 
+                {{sum.quantity | number : '1.0-0'}}
+              </td>
+            </tr>
+          </table>
+        </div>
+      </div>
+      <div class="grid col-12 md-col-12" style="margin-top: 0.2cm; margin-left: 0.1cm;">
+        <div style="overflow: auto; position: relative;">
+          <table [border]="'solid 0px'" style="border-collapse: collapse;" [width]="'100%'" >
+            <tr [bgColor]="'#87dee6'">
+              <th *ngIf="slottimeHeader" [attr.colspan]="colspan">
+                <p>Actual Booking</p>
+              </th>
+              <th style="width: 4cm;"><p>Total : Day</p> </th> <th style="width: 4cm;"> <p> UOM </p> </th>              
+            </tr>
+            <tr>
+              <th style="width: 4cm;"> </th> <th style="width: 4cm;"> </th>
+              <th *ngFor="let col of slottimeHeader; let i = index" style="width: 4cm;"> {{col.headerText }} </th>
+            </tr>       
+            <tr *ngFor="let merch of slottimeActualResult; let i = index">
+              <td align="center" rowspan="3" *ngIf="merch.dataType == 'Capacity'">
+                {{ merch.merchType }}
+                <!-- {{ merch.cap | number}} -->
+              </td>
+              <td> {{ merch.dataType }} </td>
+              <td *ngFor="let slot of merch.details; let j = index" style="text-align: right;"> 
+                <div *ngIf="merch.dataType == 'Booking'"> {{slot.quantity | number : '1.0-0'}} </div> 
+                <div *ngIf="merch.dataType == 'Capacity'" class="bg-blue-100"> {{slot.quantity | number : '1.0-0'}} </div>
+                <div *ngIf="merch.dataType !== 'Booking' && merch.dataType !== 'Capacity'"> {{slot.quantity | number : '1.0-0'}} </div> 
+              </td>
+              <td style="text-align: right;">
+                <p *ngIf="merch.dataType == 'Booking'"> {{merch.totalQty | number : '1.0-0'}} </p> 
+                <p *ngIf="merch.dataType !== 'Booking'"> {{merch.totalQty | number : '1.0-0'}} </p>                 
+              </td>
+              <td>{{merch.uom}}</td>
+            </tr>
+            <tr>
+              <td colspan="2">Total Truck</td>
+              <td *ngFor="let sum of summaryActualData; let i = index" style="text-align: right;"> 
+                {{sum.quantity | number : '1.0-0'}}
+              </td>
+            </tr>
+          </table>
+        </div>
+      </div>
+      <div class="grid col-12 md-col-12" style="margin-top: 0.2cm; margin-left: 0.1cm;">
+        <div style="overflow: auto; position: relative;">
+          <table [border]="'solid 0px'" style="border-collapse: collapse;" [width]="'100%'" >
+            <tr [bgColor]="'tomato'">
+              <th *ngIf="slottimeHeader" [attr.colspan]="colspan">
+                <p>Pending Booking</p>
+              </th>
+              <!-- <th *ngIf="timeSlot <= 24" colspan="26">
+                <p>Pending Booking</p>
+              </th>
+              <th *ngIf="timeSlot > 24" colspan="50">
+                <p>Pending Booking</p>
+              </th>
+               -->
+              <th style="width: 4cm; color: white;"><p>Total : Day</p> </th> <th style="width: 4cm; color: white;"> <p> UOM </p> </th>
+            </tr>
+            <tr>
+              <th style="width: 4cm;"> </th> <th style="width: 4cm;"> </th>
+              <th *ngFor="let col of slottimeHeader; let i = index" style="width: 4cm;"> {{col.headerText }} </th>
+            </tr>  
+            <!-- <tr *ngIf="timeSlot <= 24">
+              <th style="width: 4cm;"> </th> <th style="width: 4cm;"> </th>
+              <th style="width: 4cm;"> 00:00 </th> <th style="width: 4cm;"> 01:00 </th> <th style="width: 4cm;"> 02:00 </th> <th style="width: 4cm;"> 03:00 </th>
+              <th style="width: 4cm;"> 04:00 </th> <th style="width: 4cm;"> 05:00 </th> <th style="width: 4cm;"> 06:00 </th> <th style="width: 4cm;"> 07:00 </th> 
+              <th style="width: 4cm;"> 08:00 </th> <th style="width: 4cm;"> 09:00 </th> <th style="width: 4cm;"> 10:00 </th> <th style="width: 4cm;"> 11:00 </th>
+              <th style="width: 4cm;"> 12:00 </th> <th style="width: 4cm;"> 13:00 </th> <th style="width: 4cm;"> 14:00 </th> <th style="width: 4cm;"> 15:00 </th>
+              <th style="width: 4cm;"> 16:00 </th> <th style="width: 4cm;"> 17:00 </th> <th style="width: 4cm;"> 18:00 </th> <th style="width: 4cm;"> 19:00 </th> 
+              <th style="width: 4cm;"> 20:00 </th> <th style="width: 4cm;"> 21:00 </th> <th style="width: 4cm;"> 22:00 </th> <th style="width: 4cm;"> 23:00 </th>
+            </tr>    
+            <tr *ngIf="timeSlot > 24">
+              <th style="width: 4cm;"> </th> <th style="width: 4cm;"> </th>
+              <th style="width: 4cm;"> 00:00 </th> <th style="width: 4cm;"> 00:30 </th> <th style="width: 4cm;"> 01:00 </th> <th style="width: 4cm;"> 01:30 </th> 
+              <th style="width: 4cm;"> 02:00 </th> <th style="width: 4cm;"> 02:30 </th> <th style="width: 4cm;"> 03:00 </th> <th style="width: 4cm;"> 03:30 </th>  
+              <th style="width: 4cm;"> 04:00 </th> <th style="width: 4cm;"> 04:30 </th> <th style="width: 4cm;"> 05:00 </th> <th style="width: 4cm;"> 05:30 </th> 
+              <th style="width: 4cm;"> 06:00 </th> <th style="width: 4cm;"> 06:30 </th> <th style="width: 4cm;"> 07:00 </th> <th style="width: 4cm;"> 07:30 </th>
+              <th style="width: 4cm;"> 08:00 </th> <th style="width: 4cm;"> 08:30 </th> <th style="width: 4cm;"> 09:00 </th> <th style="width: 4cm;"> 09:30 </th> 
+              <th style="width: 4cm;"> 10:00 </th> <th style="width: 4cm;"> 10:30 </th> <th style="width: 4cm;"> 11:00 </th> <th style="width: 4cm;"> 11:30 </th>  
+              <th style="width: 4cm;"> 12:00 </th> <th style="width: 4cm;"> 12:30 </th> <th style="width: 4cm;"> 13:00 </th> <th style="width: 4cm;"> 13:30 </th>  
+              <th style="width: 4cm;"> 14:00 </th> <th style="width: 4cm;"> 14:30 </th> <th style="width: 4cm;"> 15:00 </th> <th style="width: 4cm;"> 15:30 </th>  
+              <th style="width: 4cm;"> 16:00 </th> <th style="width: 4cm;"> 16:30 </th> <th style="width: 4cm;"> 17:00 </th> <th style="width: 4cm;"> 17:30 </th> 
+              <th style="width: 4cm;"> 18:00 </th> <th style="width: 4cm;"> 18:30 </th> <th style="width: 4cm;"> 19:00 </th> <th style="width: 4cm;"> 19:30 </th> 
+              <th style="width: 4cm;"> 20:00 </th> <th style="width: 4cm;"> 20:30 </th> <th style="width: 4cm;"> 21:00 </th> <th style="width: 4cm;"> 21:30 </th> 
+              <th style="width: 4cm;"> 22:00 </th> <th style="width: 4cm;"> 22:30 </th> <th style="width: 4cm;"> 23:00 </th> <th style="width: 4cm;"> 23:30 </th> 
+            </tr>             -->
+            <tr *ngFor="let merch of slottimePendingResult; let i = index">
+              <td align="center" rowspan="3" *ngIf="merch.dataType == 'Capacity'">
+                {{ merch.merchType }}
+                <!-- {{ merch.cap | number}} -->
+              </td>
+              <td> {{ merch.dataType }} </td>
+              <td *ngFor="let slot of merch.details; let j = index" style="text-align: right;"> 
+                <div *ngIf="merch.dataType == 'Booking'"> {{slot.quantity | number : '1.0-0'}} </div> 
+                <div *ngIf="merch.dataType == 'Capacity'" class="bg-orange-100"> {{slot.quantity | number : '1.0-0'}} </div>
+                <div *ngIf="merch.dataType !== 'Booking' && merch.dataType !== 'Capacity'"> {{slot.quantity | number : '1.0-0'}} </div>
+              </td>
+              <td style="text-align: right;">
+                <p *ngIf="merch.dataType == 'Booking'"> {{merch.totalQty | number : '1.0-0'}} </p> 
+                <p *ngIf="merch.dataType !== 'Booking'"> {{merch.totalQty | number : '1.0-0'}} </p>                 
+              </td>
+              <td>{{merch.uom}}</td>
+            </tr>
+            <tr>
+              <td colspan="2">Total Truck</td>
+              <td *ngFor="let sum of summaryPendingData; let i = index" style="text-align: right;"> 
+                {{sum.quantity | number : '1.0-0'}}
+              </td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </div>
+
+   
+  </div>
+</div>

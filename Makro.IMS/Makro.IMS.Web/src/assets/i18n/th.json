@@ -1,0 +1,93 @@
+{
+  "Label": {
+    "Username": "ชื่อผู้ใช้",
+    "Role": "บทบาท",
+    "Department": "แผนก",
+    "Transporter": "ขนส่ง",
+    "MainVehicle": "ยานพาหนะหลัก",
+    "SecondaryVehicle": "ยานพาหนะรอง",
+    "Language": "ภาษา",
+    "Scale": "มาตราส่วน"
+  },
+  "Menus": {
+    "Dashboard": {
+      "Title": "หน้าหลัก"
+    },
+    "Master": {
+      "Title": "ข้อมูลหลัก",
+      "Department": "แผนก",
+      "Place": "สถานที่",
+      "PlaceType": "ประเภทของสถานที่",
+      "Zone": "โซน",
+      "Product": "สินค้า",
+      "ProductType": "ประเภทสินค้า",
+      "PackageType": "ประเภทบรรจุภัณฑ์",
+      "PlaceProductTypeMatch": "การจับคู่สถานที่กับประเภทสินค้า",
+      "Transporter": "ขนส่ง",
+      "TransporterType": "ประเภทขนส่ง",
+      "Vehicle": "รถ",
+      "VehicleType": "ประเภทรถ",
+      "VehicleStatus": "สถานะรถ",
+      "VehicleTypeProductCapacity": "ประเภทรถความจุสินค้า",
+      "VehicleTypeProductTypeMatch": "การจับคู่รถกับประเภทสินค้า",
+      "ODMatrix": "ความสัมพันธ์ต้นทางปลายทาง",
+      "Route": "เส้นทาง",
+      "VehicleRoute": "เส้นทางเดินรถ",
+      "FixedTrip": "เส้นทางประจำ",
+      "FuelPrice": "ค่าเชื้อเพลิง",
+      "TripRate": "อัตราค่าเดินทาง",
+      "WindowsTime": "เวลาทำการ",
+      "CostType": "ประเภทค่าใช้จ่าย"
+    },
+    "Document": {
+      "Title": "เอกสาร",
+      "UploadFeedMillOrder": "อัพโหลดออเดอร์อาหารสัตว์",
+      "UploadChickenOrder": "อัพโหลดออเดอร์ไก่",
+      "CreateDeliveryOrder": "สร้างรายการส่งสินค้า",
+      "DeliveryOrder": "รายการส่งสินค้า"
+    },
+    "Trip": {
+      "Title": "เที่ยวรถ",
+      "CheckInList": "รายการเช็คอินสินค้า",
+      "CheckIn": "การเช็คอินสินค้า",
+      "CreateTrip": "สร้างเที่ยวรถ",
+      "TripList": "รายการเที่ยวรถ",
+      "TripInfo": "ข้อมูลเที่ยวรถ",
+      "TripCalculator": "การคำนวนเที่ยวรถ"
+    },
+    "Tracking": {
+      "Title": "การติดตาม",
+      "TrackingVehicle": "การติดตามรถ",
+      "TrackingTrip": "การติดตามเที่ยวรถ"
+    },
+    "Billing": {
+      "Title": "การวางบิล"
+    },
+    "Report": {
+      "Title": "รายงาน"
+    },
+    "YardMaster": {
+      "Title": "Yard Master",
+      "Yard": "Yard",
+      "Trailer": "Trailer",
+      "Shunt": "Shunt"
+    },
+    "Transfer": {
+      "Title": "Yard Management",
+      "YardMonitor": "Yard Monitor",
+      "TrailerMonitor": "Trailer Monitor",
+      "TransferTrailerEmpty": "Transfer Trailer Empty",
+      "TransferTrailerFull": "Transfer Trailer Full",
+      "JobList": "Job List",
+      "JobDockDoor": "Dock Management",
+      "TransferReport": "Transfer Report"
+    },
+    "Account": {
+      "Title": "บัญชี",
+      "ManageUsers": "จัดการผู้ใช้",
+      "ManageAnimalHusbandmans": "จัดการสัตวบาล",
+      "ManageDrivers": "จัดการคนขับรถ",
+      "ManageRoles": "จัดการบทบาท"
+    }
+  }
+}

@@ -1,0 +1,124 @@
+<div class="card mt-4" *ngIf="suppliers" >
+  <div class="w-full md:w-12 mx-auto">
+    <p-messages [(value)]="msgs" [enableService]="false"></p-messages>
+  </div>
+  <form #supForm="ngForm">
+    <div class="formgrid grid p-fluid">
+      <div class="field col-12 md:col-4">
+        <label>
+          Supplier
+          <span class="p-error"> *</span>
+        </label>
+        <p-dropdown
+          id="supCode"
+          name="supCode"
+          #supCode="ngModel"
+          [options]="suppliers"
+          [(ngModel)]="supplierSelected"
+          optionLabel="supName"
+          optionValue="supCode"
+          [filter]="!isSelect"
+          filterBy="supCode"
+          [showClear]="!isSelect"
+          [placeholder]="'Select.SupplierCode' | translate"
+          required
+          [readonly]="isSelect"
+          [ngClass]="{
+            'ng-invalid ng-dirty':
+              supCode.invalid && (supCode.dirty || supCode.touched)
+          }"
+          [virtualScroll]="true"
+          [virtualScrollItemSize]="38"
+          (onChange)="getSupplierValue()"
+        >
+          <ng-template let-item pTemplate="item">
+            {{ item.supCode }} - {{ item.supName }}
+          </ng-template>
+          <ng-template let-item pTemplate="selectedItem">
+            {{ item.supCode }} - {{ item.supName }}
+          </ng-template>
+        </p-dropdown>
+        <small
+          class="p-error block"
+          *ngIf="supCode.invalid && (supCode.dirty || supCode.touched)"
+        >
+          {{
+            "Message.Validation.Required"
+              | translate : { field: "Label.SupplierCode" | translate }
+          }}
+        </small>
+      </div>
+      <div class="field col-12 md:col-3">
+        <input
+          hidden
+          type="file"
+          accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
+          #uploader
+          [(ngModel)]="fileName"
+          (change)="importfile($event)"
+          [ngModelOptions]="{standalone: true}"
+        />
+        <button 
+          pButton class="p-button" 
+          type="button" 
+          name="btnupload" 
+          id="btnupload" 
+          style="margin-top:26px" 
+          icon="pi pi-file-excel" 
+          label="Upload excel file"
+          icon="pi pi-upload" 
+          [disabled]="!isSelect"
+          (click)="uploader.click()"
+          [loading]="isLoading"
+        >
+        </button>
+      </div>
+      <div class="field col-12 md:col-3">
+        <button pButton class="p-button" 
+          type="button" 
+          name="btnsave" 
+          id="btnsave" 
+          style="margin-top:26px;" 
+          icon="pi pi-save"
+          label="Import data"
+          (click)="importPreCheckIn()"
+          [disabled]="!isCompleted"
+          [loading]="isLoading"
+        >
+        </button>
+      </div>
+      <div class="field col-12 md:col-2">
+        <button pButton type="button" name="btnrefresh" id="btnrefresh" style="margin-top:26px;" class="p-button" icon="pi pi-refresh" (click)="refresh()"></button>
+      </div>
+      <div class="field col-12 md:col-12">
+        <span class="text-l text-red-500">
+          รูปแบบทะเบียนรถ 88-8888, 888-8888, 8กก-8888, 8ก-8888, กก-8888
+        </span>
+      </div>
+      <div class="field col-12 md:col-12">
+        <p-table
+          [columns]="cols"
+          [value]="dataSourcePreCheckIn"
+          responsiveLayout="scroll"
+        >
+          <ng-template pTemplate="header" let-columns>
+            <tr>
+              <th *ngFor="let col of columns">
+                {{ col.header }}
+              </th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-rowData let-columns="columns">
+            <tr>
+              <td *ngFor="let col of columns">
+                <span  style="white-space: pre-line;">
+                  {{ rowData[col.field] }}
+                </span>                
+              </td>              
+            </tr>
+          </ng-template>
+        </p-table>
+      </div>
+</div>
+</form>
+</div> 

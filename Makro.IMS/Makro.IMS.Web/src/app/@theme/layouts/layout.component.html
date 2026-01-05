@@ -1,0 +1,17 @@
+<!-- <div class="layout-wrapper" [ngClass]="containerClass" *ngIf="deps$ | async"> -->
+  <div class="layout-wrapper" [ngClass]="containerClass" >
+  <app-topbar></app-topbar>
+  <div class="layout-sidebar bg-blue-100">
+    <app-sidebar></app-sidebar>
+  </div>
+  <div class="layout-main-container">
+    <div class="layout-main">
+      <div class="w-full md:w-12 mx-auto">
+        <p-messages [(value)]="msgs" [enableService]="false"></p-messages>
+      </div>
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+  <!-- <app-config></app-config> -->
+  <div class="layout-mask"></div>
+</div>

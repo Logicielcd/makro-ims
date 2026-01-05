@@ -1,0 +1,457 @@
+<p-toast></p-toast>
+<div class="grid">
+  <div class="col-12 p-0 md:p-3">
+    <p-messages [value]="msgs" [enableService]="false"></p-messages>
+    <div class="card">
+      <h3 class="font-bold"  *ngIf="showTitle">{{ title | translate }}</h3>
+      <p *ngIf="showRemark" class="text-lg text-red-500">{{ remark | translate }}</p>
+      <p-table
+        #dt
+        [columns]="selectedColumns"
+        [value]="datasource"
+        [lazy]="true"
+        (onLazyLoad)="loadData($event)"
+        [totalRecords]="rowCount"
+        [paginator]="true"
+        [rows]="rows"        
+        [rowsPerPageOptions]="[5,10,20,30,50,100,150,200]"
+        currentPageReportTemplate="{first} to {last} of {totalRecords}"
+        [showCurrentPageReport]="true"
+        [loading]="isLoading$ | async"
+        styleClass="p-datatable-gridlines"
+        [rowHover]="true"
+        stateStorage="local"        
+        [stateKey]="stateKey"
+        [scrollDirection]="'both'"
+        [(selection)]="selectedValues"
+        [dataKey]="dataKey"
+        autoLayout="true"
+        [first]="first"        
+        resizableColumns="true"
+        columnResizeMode="expand"
+        scrollable="true"
+      >
+      <!-- 
+        [tableStyle]="{'min-width': '100rem'}"
+        [resizableColumns]="true"
+        [scrollable]="true"
+        columnResizeMode="expand"
+       -->
+        <ng-template pTemplate="caption"  *ngIf="showToolbox">
+          <div
+            class="grid grid-nogutter flex-column md:flex-row justify-content-between"
+          >
+            <div>
+              <ng-content select="[customExportBtn]"></ng-content>
+              <ng-content select="[customUploadBtn]"></ng-content>
+              <button
+                *ngIf="uploadBtn && canModify"
+                type="button"
+                pButton
+                pRipple
+                icon="pi pi-upload"
+                [pTooltip]="'Button.Upload' | translate"
+                tooltipPosition="bottom"
+                class="m-1"
+                (click)="uploadEmit.emit()"
+              ></button>
+              <button
+                *ngIf="exportBtn && canModify"
+                type="button"
+                pButton
+                pRipple
+                icon="pi pi-file"
+                [pTooltip]="'Button.Excel' | translate"
+                tooltipPosition="bottom"
+                class="m-1"
+                (click)="exportAll()"
+              ></button>
+              <p-multiSelect
+                *ngIf="selectColumnBtn"
+                [options]="columns"
+                [(ngModel)]="selectedColumns"
+                [defaultLabel]="'Select.Column' | translate"
+                optionLabel="header"
+                styleClass="m-1"
+                appendTo="body"
+              >
+                <ng-template let-value pTemplate="selectedItems">
+                  <div *ngIf="selectedColumns.length > 0">
+                    {{ selectedColumns.length }}
+                    {{ "Button.Column" | translate }}
+                  </div>
+                  <div *ngIf="!selectedColumns || selectedColumns.length === 0">
+                    {{ "Button.ChooseColumn" | translate }}
+                  </div>
+                </ng-template>
+                <ng-template let-column pTemplate="item">
+                  <div>{{ column.header | translate }}</div>
+                </ng-template>
+              </p-multiSelect>
+
+              <button
+                pButton
+                pRipple
+                icon="pi pi-filter-slash"
+                [pTooltip]="'Button.ClearFilter' | translate"
+                tooltipPosition="bottom"
+                class="m-1"
+                (click)="clearFilter(dt)"
+                *ngIf="showFilterBtn"
+              ></button>
+              <button
+                *ngIf="refreshBtn"
+                type="button"
+                pButton
+                pRipple
+                icon="pi pi-refresh"
+                [pTooltip]="'Button.Refresh' | translate"
+                tooltipPosition="bottom"
+                class="m-1"
+                (click)="loadData(null)"
+              ></button>
+              
+            </div>
+            <div>
+              <button
+                pButton
+                pRipple
+                type="button"
+                icon="pi pi-plus"
+                [pTooltip]="'Button.Create' | translate"
+                tooltipPosition="bottom"
+                class="p-button-primary m-1"
+                routerLink="create"
+                *ngIf="createBtn && canModify"
+              ></button>                            
+            </div>
+          </div>
+        </ng-template>
+        <ng-template pTemplate="header" let-columns>
+          <tr>
+            <th pResizableColumn class="text-left" *ngIf="showIndex">#</th>
+            <th pResizableColumn
+              *ngFor="let col of columns"
+              [pSortableColumn]="col.field"
+              [style.width]="col.width || defaultWidth"
+            >
+              {{ col.header | translate }}
+            </th>
+          </tr>
+          <tr *ngIf="showFilter">
+            <th *ngIf="showIndex"></th>
+            <th
+              *ngFor="let col of columns"
+              [style.width]="col.width || defaultWidth"
+              style="margin: 0; padding: 0"
+            >
+              <p-columnFilter
+                *ngIf="col.filter === 'string'"
+                type="text"
+                matchMode="contains"
+                [field]="col.field"
+                [style.width]="'100%'"
+                [showMenu]="false"
+                class="p-inputtext-sm m-0 p-0"
+              ></p-columnFilter>
+              <p-columnFilter
+                *ngIf="col.filter === 'number'"
+                type="text"
+                matchMode="equals"
+                [field]="col.field"
+                [style.width]="'100%'"
+                [showMenu]="false"
+                class="p-inputtext-sm"
+              ></p-columnFilter>
+              <p-columnFilter
+                *ngIf="col.filter === 'bool'"
+                type="boolean"
+                [field]="col.field"
+                [style.width]="'100%'"
+                matchMode="equals"
+                [showMenu]="false"
+              ></p-columnFilter>
+              <p-columnFilter
+                *ngIf="col.filter === 'date'"
+                type="date"
+                [field]="col.field"
+                [style.width]="'100%'"
+                matchMode="dateIs"
+                [matchModeOptions]="matchModeOptions"
+                [dateFormat]="'dd/mm/yy'"
+              >
+                <ng-template
+                  pTemplate="filter"
+                  let-value
+                  let-filter="filterCallback"
+                >
+                  <input
+                    #calendar
+                    type="date"
+                    pInputText                    
+                    [ngModel]="value"
+                    (change)="filter($event.target.value)"
+                    class="p-inputtext-sm"
+                  />
+                </ng-template>
+              </p-columnFilter>
+              <p-columnFilter
+                *ngIf="col.filter === 'dropdown'"
+                [field]="col.field"
+                [style.width]="'100%'"
+                matchMode="equals"
+                [showMenu]="false"
+              >
+                <ng-template
+                  pTemplate="filter"
+                  let-value
+                  let-filter="filterCallback"
+                >
+                  <p-dropdown
+                    [ngModel]="value"
+                    [options]="lookup[col.field]"
+                    (onChange)="filter($event.value)"
+                    [filter]="true"
+                    filterBy="value"
+                    appendTo="body"
+                  >
+                    <ng-template let-selected pTemplate="selectedItem">
+                      <span
+                        [class]="'status-badge ' + selected.label | lowercase"
+                      >
+                        {{  selected.label  }}
+                        <!-- {{ "Status." + selected.label | translate }} -->
+                      </span>
+                    </ng-template>
+                    <ng-template let-option pTemplate="item">
+                      <span
+                        [class]="'status-badge ' + option.label | lowercase"
+                      >
+                        <!-- {{ "Status." + option.label | translate }} -->
+                        {{ option.label }}
+                      </span>
+                    </ng-template>
+                  </p-dropdown>
+                </ng-template>
+              </p-columnFilter>
+              <p-columnFilter
+                *ngIf="col.filter === 'dropdownlabel'"
+                [field]="col.field"
+                [style.width]="'100%'"
+                matchMode="equals"
+                [showMenu]="false"
+              >
+                <ng-template
+                  pTemplate="filter"
+                  let-value
+                  let-filter="filterCallback"
+                >
+                  <p-dropdown
+                    [ngModel]="value"
+                    [options]="lookup[col.field]"
+                    (onChange)="filter($event.value)"
+                    [filter]="true"
+                    filterBy="value"
+                    appendTo="body"
+                  >
+                    <ng-template let-selected pTemplate="selectedItem">
+                      <span
+                        [class]="'status-badge ' + selected.label | lowercase"
+                      >
+                        {{ "Label." + selected.label | translate }}
+                      </span>
+                    </ng-template>
+                    <ng-template let-option pTemplate="item">
+                      <span
+                        [class]="'status-badge ' + option.label | lowercase"
+                      >
+                        {{ "Label." + option.label | translate }}
+                      </span>
+                    </ng-template>
+                  </p-dropdown>
+                </ng-template>
+              </p-columnFilter>
+              <p-columnFilter
+                *ngIf="col.filter === 'dropdownstring'"
+                [field]="col.field"
+                [style.width]="'100%'"
+                matchMode="equals"
+                [showMenu]="false"
+              >
+                <ng-template
+                  pTemplate="filter"
+                  let-value
+                  let-filter="filterCallback"
+                >
+                  <p-dropdown
+                    [ngModel]="value"
+                    [options]="lookup[col.field]"
+                    (onChange)="filter($event.value)"
+                    [filter]="true"
+                    filterBy="value"
+                    appendTo="body"
+                  >
+                    <ng-template let-selected pTemplate="selectedItem">
+                      <span
+                        [class]="'status-badge ' + selected.label | lowercase"
+                      >
+                        {{ selected.label | translate }}
+                      </span>
+                    </ng-template>
+                    <ng-template let-option pTemplate="item">
+                      <span
+                        [class]="'status-badge ' + option.label | lowercase"
+                      >
+                        {{ option.label | translate }}
+                      </span>
+                    </ng-template>
+                  </p-dropdown>
+                </ng-template>
+              </p-columnFilter>
+              <p-columnFilter
+                *ngIf="col.filter === 'slider'"
+                [field]="col.field"
+                [style.width]="'100%'"
+                matchMode="between"
+                [showMenu]="false"
+              >
+                <ng-template pTemplate="filter" let-filter="filterCallback">
+                  <input
+                    type="number"
+                    class="p-inputtext-sm"
+                    style="width: 50%"
+                    pInputText
+                    [(ngModel)]="slideValues[0]"
+                    disabled
+                  />
+                  <input
+                    type="number"
+                    class="p-inputtext-sm"
+                    style="width: 50%"
+                    pInputText
+                    [(ngModel)]="slideValues[1]"
+                    disabled
+                  />
+                  <p-slider
+                    [(ngModel)]="slideValues"
+                    [range]="true"
+                    (onChange)="filter($event.values)"
+                    styleClass="p-m-3"
+                    [min]="1"
+                    [max]="maxSlideValue"
+                  ></p-slider>
+                </ng-template>
+              </p-columnFilter>
+            </th>
+          </tr>
+        </ng-template>
+        <ng-template
+          pTemplate="body"
+          let-rowData
+          let-columns="columns"
+          let-rowIndex="rowIndex"
+        >
+          <tr>
+            <td class="text-left" *ngIf="showIndex">{{ rowIndex + 1 }}</td>
+            <td
+              *ngFor="let col of columns; index as i"
+              
+              style="width: auto;"
+            >            
+            <!-- [style.width]="col.width || defaultWidth" -->
+              <span *ngIf="i === fieldDetail && hasDetail; else displayCol" style="text-decoration: underline;">          
+                <a 
+                  *ngIf="col.display === 'string' && dataKey === undefined "                 
+                  [routerLink]="linkDetail + encry(rowData.id)"
+                  >{{ rowData[col.field] | translate }}
+                </a>                
+                <a
+                  *ngIf="col.display === 'string' && dataKey !== undefined" 
+                  [routerLink]="linkDetail + encry(rowData[dataKey])"
+                  >{{ rowData[col.field] | translate }}
+                </a>                
+                <a
+                  *ngIf="col.display === 'date' && dataKey === undefined "
+                  [routerLink]="linkDetail + encry(rowData.id)"
+                  >{{ rowData[col.field] | date: "dd/MM/yyyy" }}
+                </a>
+                <a
+                  *ngIf="col.display === 'date' && dataKey !== undefined "
+                  [routerLink]="linkDetail + encry(rowData[dataKey])"
+                  >{{ rowData[col.field] | date: "dd/MM/yyyy" }}
+                </a>
+                <a
+                  *ngIf="col.display === 'stringtranslate' && dataKey === undefined"
+                  [routerLink]="linkDetail + encry(rowData.id)"
+                  >{{ "Label." + rowData[col.field] | translate }}
+                </a>
+                <a
+                  *ngIf="col.display === 'stringtranslate' && dataKey !== undefined"
+                  [routerLink]="linkDetail + encry(rowData[dataKey])"
+                  >{{ "Label." + rowData[col.field] | translate }}
+                </a>
+              </span>
+              <ng-template #displayCol>
+                <!-- Type : string -->
+                <span *ngIf="col.display === 'string'">{{
+                  rowData[col.field]
+                }}</span>
+                <!-- Type : string translate -->
+                <span *ngIf="col.display === 'stringtranslate'">{{
+                  "Label." + rowData[col.field] | translate
+                }}</span>
+                <!-- Type : date  -->
+                <span *ngIf="col.display === 'date'">
+                  {{ rowData[col.field] | date: "dd/MM/yyyy" }}
+                </span>
+                <!-- Type : datetime -->
+                <span *ngIf="col.display === 'datetime'"
+                  >{{ rowData[col.field] | date: "dd/MM/yyyy HH:mm:ss" }}
+                </span>
+                <!-- Type : status -->
+                <span
+                  *ngIf="col.display === 'status'"
+                  [class]="'status-badge ' + rowData[col.field] | lowercase"
+                >
+                  {{ "Status." + rowData[col.field] | translate }}
+                </span>
+                <!-- Type : custom-status -->
+                <div *ngIf="col.display === 'custom-status'" class="text-center text-sm w-full">
+                <p
+                  *ngIf="col.display === 'custom-status'"
+                  size="tiny"
+                  class="status-badge col-12 text-sm w-full"
+                  [style.color]="rowData?.fontColor"
+                  [style.backgroundColor]="rowData.backgroundColor"                  
+                >
+                  {{ rowData[col.field] | translate }}
+                  {{ rowData[col.field].fontColor}}
+                </p>
+                </div>
+                <!-- Type : bool -->
+                <i
+                  *ngIf="col.display === 'bool'"
+                  class="pi"
+                  [ngClass]="{
+                    'true-icon pi-check-circle': rowData[col.field],
+                    'false-icon pi-times-circle': !rowData[col.field]
+                  }"
+                ></i>
+                <!-- Type : custom-status -->
+                <div *ngIf="col.display === 'print'" class="text-center text-base">
+                  <button
+                    pButton
+                    type="button"                    
+                    class="p-button-sm"
+                    icon="pi pi-file-pdf"                      
+                    (click)="onPrintData.emit(rowData[col.field])"                
+                  ></button>
+                </div>
+              </ng-template>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+  </div>
+</div>

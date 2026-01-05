@@ -1,0 +1,36 @@
+<div class="field col-12 md:col-6 justify-content-center border-1 p-3">
+    <p class="text-2xl text-primary font-bold underline text-center">Booking Team</p>
+    <p class="text-2xl text-primary font-bold underline">Fresh 920</p>
+    <p class="text-xl font-bold">Tel: <a href="tel:0935845027">093-584-5027</a>
+    <p class="text-xl font-bold">Tel: <a href="tel:0657249708">065-724-9708</a>
+    <p class="text-xl font-bold">e-mail: <a href="mailto:siri-luk.burapuk@dhl.com" >siri-luk.burapuk&#64;dhl.com</a> </p>
+    <p class="text-xl font-bold">e-mail: <a href="mailto:jarunee.chaynuvm@dhl.com" >jarunee.chaynuvm&#64;dhl.com</a> </p>
+    <p class="text-xl font-bold">e-mail: <a href="mailto:sunisa.pukin@dhl.com">sunisa.pukin&#64;dhl.com</a> </p>
+ 
+    <p class="text-2xl text-primary font-bold underline">Dry: CDC,MKD,MKB</p>
+    <p class="text-xl font-bold">Tel: <a href="tel:021361482">02-1361482 ต่อ 142</a>    
+    <p class="text-xl font-bold">Tel: <a href="tel:021361484">02-1361484</a>    
+    <p class="text-xl font-bold">Tel: <a href="tel:021361485">02-1361485</a>    
+    <p class="text-xl font-bold">Tel: <a href="tel:021361486">02-1361486</a>    
+    <p class="text-xl font-bold">Tel: <a href="tel:0935845026">093-584-5026</a>   
+    <p class="text-xl font-bold">Tel: <a href="tel:0863347945">086-334-7945</a>
+    <p class="text-xl font-bold">Tel: <a href="tel:0636038275">063-603-8275</a> 
+    <p class="text-xl font-bold">e-mail: <a href="mailto:EDGTH-DSC-MKD-BOOKING@dhl.com">EDGTH-DSC-MKD-BOOKING&#64;dhl.com</a> </p>
+
+</div> 
+<div class="field col-12 md:col-6 justify-content-center border-1 p-3"> 
+    <p class="text-2xl text-primary font-bold underline text-center">Data Entry CDC</p> 
+    <p class="text-2xl text-primary font-bold underline">Fresh 920</p> 
+    <p class="text-xl font-bold">Tel: <a href="tel:035905199"> 035-905-199 </a></p> 
+    <p class="text-xl font-bold">FV ต่อ 4501, 4510 </p> 
+    <p class="text-xl font-bold">FD,FT ต่อ 4502, 4505 </p> 
+    <p class="text-xl font-bold">SF ต่อ 4527 </p> 
+    <p class="text-xl font-bold">e-mail: <a href="mailto:cdc_data_ff@cpaxtra.co.th">cdc_data_ff&#64;cpaxtra.co.th</a></p> 
+    <p class="text-2xl text-primary font-bold underline">Dry 890</p> 
+    <p class="text-xl font-bold">Tel: <a href="tel:035905199"> 035-905-199 </a> </p> 
+    <p class="text-xl font-bold">ต่อ 4201, 4202, 4203 </p> 
+    <p class="text-xl font-bold">e-mail: <a href="mailto:cdc_data_dry@cpaxtra.co.th">cdc_data_dry&#64;cpaxtra.co.th</a></p> 
+    
+    <p class="text-xl font-bold text-red-500 mt-4">Link แจ้งปัญหา IMS : <a class="text-red-500" href="https://forms.gle/Ufd5pKZ45NLpfjVE6" target="_blank">https://forms.gle/Ufd5pKZ45NLpfjVE6</a></p> 
+    <img src="../ims/assets/images/forms.jpg" style="display: block; margin-left: auto; margin-right: auto; width: 40%; padding: 0px;" class="-mt-2 mb-0">
+</div>

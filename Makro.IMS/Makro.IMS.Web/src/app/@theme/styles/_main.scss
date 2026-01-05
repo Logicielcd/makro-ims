@@ -1,0 +1,64 @@
+* {
+    box-sizing: border-box;
+}
+
+html {
+    height: 100%;
+    font-size: $fontSize;
+}
+
+body {
+    font-family: var(--font-family);
+    color: var(--text-color);
+    background-color: var(--surface-ground);
+    margin: 0;
+    padding: 0;
+    min-height: 100%;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+    text-decoration: none;
+    color: var(--primary-color);
+}
+
+.layout-wrapper {
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+// /* Adjust font size for medium-sized screens */
+// @media (min-width: 300px) {
+//     body {
+//       font-size: 1.25rem;
+//     }
+// }
+
+// /* Adjust font size for medium-sized screens */
+// @media (min-width: 768px) {
+//     body {
+//         font-size: 1.50rem;
+//     }
+// }
+  
+// /* Adjust font size for larger screens */
+// @media (min-width: 1024px) {
+//     body {
+//         font-size: 1.75rem;
+//     }
+// }
+
+// /* Adjust font size for larger screens */
+// @media (min-width: 1500px) {
+//     body {
+//         font-size: 2rem;
+//     }
+// }
+
+// /* Adjust font size for larger screens */
+// @media (min-width: 1800px) {
+//     body {
+//         font-size: 1rem;
+//     }
+// }

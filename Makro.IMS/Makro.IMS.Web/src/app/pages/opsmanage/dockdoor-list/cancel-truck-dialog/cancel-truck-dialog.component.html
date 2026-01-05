@@ -1,0 +1,57 @@
+<form #f="ngForm" novalidate>
+  <div *ngIf="doorQueue">
+    <div class="text-center col-12 md:col-12">
+      <h4>เปลี่ยนรถ</h4>
+    </div>
+    <div class="formgrid grid p-fluid justify-content-start">
+      <div class="col-12 md:col-12">
+        <label htmlFor="remarktext">
+          {{ "Label.Remark" | translate }}
+        </label>
+        <input
+          pInputText
+          type="text"
+          id="remarktext"
+          name="remarktext"
+          #remarktext="ngModel"
+          [(ngModel)]="remark"
+          required
+          [ngClass]="{
+            'ng-invalid ng-dirty':
+            remarktext.invalid && (remarktext.dirty || remarktext.touched)
+          }"              
+        />
+        <small
+          class="p-error block"
+          *ngIf="remarktext.invalid && (remarktext.dirty || remarktext.touched)"
+        >
+          {{
+            "Message.Validation.Required"
+              | translate : { field: "Label.Remark" | translate }
+          }}
+        </small>
+      </div>
+      <div class="field col-12 md:col-12"></div>
+      <div class="field col-12 md:col-5">
+        <button
+          pButton
+          type="button"
+          class="p-button w-12"          
+          label="OK"
+          [disabled]="!f.form.valid || f.form.pristine"
+          (click)="onConfirm()"
+        ></button>
+      </div>
+      <div class="field col-12 md:col-2"></div>
+      <div class="field col-12 md:col-5">
+        <button
+          pButton
+          type="button"
+          class="p-button-warning w-12"          
+          label="CANCEL"
+          (click)="onCancel()"
+        ></button>
+      </div>
+    </div>
+  </div>
+</form>

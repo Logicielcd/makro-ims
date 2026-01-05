@@ -1,0 +1,42 @@
+interface ReportGatePass{
+    bookingId: string;
+    warehouseCode: string;
+    warehouseWms: string;
+    companyCode: string;
+    warehouseName: string;
+    contactName: string;
+    contactEmail: string;
+    phoneNumber: string;
+    address1: string;
+    address2: string;
+    address3: string;
+    city: string;
+    zipCode: string;
+    poNbr: string;
+    supCode: string;
+    supName: string;
+    contactTel: string;
+    bookingStart: Date;
+    licensePlate: string;
+    driverName: string;
+    telNo: string;
+    truckCode: string;
+    totalQty: number;
+    merchType: string;
+    warehouseArrived: Date;
+    originalMerchType: string;
+    fullPl: number;
+    halfPl: number;
+    looseQty: number;
+    isLate: string;
+    orderDate: Date;
+    licensePlate2: string;
+    id: number;
+    no: number;
+    reason: string;
+    reasonDisplay: string;
+    backHaul: boolean;
+    backHaulDisplay: string;
+}
+
+export {ReportGatePass};

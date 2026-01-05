@@ -1,0 +1,27 @@
+.lightning {
+  animation: lightning 6s infinite;
+}
+
+@keyframes lightning {
+  0% {
+    opacity: 1;
+  }
+  70% {
+    opacity: 1;
+  }
+  75% {
+    opacity: 0;
+  }
+  80% {
+    opacity: 1;
+  }
+  85% {
+    opacity: 0;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 1;
+  }
+}

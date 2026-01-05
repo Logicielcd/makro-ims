@@ -1,0 +1,53 @@
+{
+  "Title": {
+    "List": "Manage Animal Husbandmans",
+    "Create": "Create Animal Husbandman",
+    "Detail": "Animal Husbandman Detail",
+    "History": "History"
+  },
+  "Section": {
+    "UserInfo": "User Info",
+    "Password": "Password",
+    "Role": "Role"
+  },
+  "Label": {
+    "Username": "Username",
+    "Name": "Name",
+    "Email": "Email",
+    "IsActive": "Active"
+  },
+  "Select": {
+    "Role": "Select Role"
+  },
+  "Button": {
+    "Create": "Create",
+    "Excel": "Excel",
+    "Save": "Save",
+    "Delete": "Delete",
+    "Back": "Back",
+    "Yes": "Yes",
+    "No": "No"
+  },
+  "History": {
+    "Action": "Action",
+    "Who": "Who",
+    "Timestamp": "Timestamp"
+  },
+  "Message": {
+    "Confirm": {
+      "Delete": {
+        "Title": "Delete",
+        "Message": "Are you sure you want to delete ?"
+      }
+    },
+    "Notification": {
+      "Create": "Successfully created",
+      "Update": "Successfully edited",
+      "Delete": "Successfully deleted"
+    },
+    "Validation": {
+      "Required": "{{field}} is required"
+    },
+    "FromApi": {}
+  }
+}

@@ -1,0 +1,86 @@
+<div
+  class="flex align-items-center justify-content-center min-h-screen min-w-screen overflow-hidden"
+  style="background-color: rgba(252, 191, 29, 0.904);"
+>
+  <div class="grid justify-content-center p-2 lg:p-0" style="min-width: 80%;">
+    <div
+      class="col-12 xl:col-6"
+      style="
+        border-radius: 56px;
+        padding: 0.3rem;
+        background: linear-gradient(
+          180deg,
+          var(--primary-color) 15%,
+          rgba(33, 150, 243, 0) 30%
+        );
+      "
+    >
+    <div
+      class="h-full w-full m-0 py- px-4"
+      style="
+        border-radius: 53px;
+        background: linear-gradient(
+          180deg,
+          var(--surface-50) 38.9%,
+          var(--surface-0)
+        );
+      "
+    >
+    <form #f="ngForm" novalidate>
+        <div class="text-center mb-5">
+          <img
+            src="assets/images/logo.png"
+            alt="IMS"
+            style="width: 70%; height: 70%"
+          />
+          <div class="text-900 text-3xl font-medium mb-3">Welcome</div>
+          <span class="text-600 font-medium">Sign in to continue</span>
+        </div>
+
+        <div class="w-full md:w-10 mx-auto">
+          <p-messages [(value)]="msgs" [enableService]="false"></p-messages>
+        </div>
+
+        <div class="w-full md:w-10 mx-auto">
+          <label
+            for="username"
+            class="block text-900 text-xl font-medium mb-2"
+          >
+            เบอร์โทรศัพท์
+          </label>
+          <input
+            type="text"
+            id="username"
+            name="username"
+            #username="ngModel"
+            [(ngModel)]="login.username"
+            type="text"
+            placeholder="Username"
+            pInputText
+            class="w-full mb-3"
+            style="padding: 1rem"
+            required
+            
+          />
+
+
+          <button
+            pButton
+            pRipple
+            label="Sign In"
+            class="w-full p-3 text-xl"
+            [disabled]="!f.form.valid || f.form.pristine"
+            (click)="userLogin()"
+            [loading]="isLoading"
+          ></button>
+            
+        </div>
+        
+        <div class="text-center mb-5" style="padding: 2rem;">
+              
+        </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

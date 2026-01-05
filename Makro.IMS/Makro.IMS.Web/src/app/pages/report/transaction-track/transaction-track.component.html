@@ -1,0 +1,173 @@
+<div class="card col-12">
+  <div class="formgrid grid p-fluid">   
+    <div class="field col-12 md:col-2">
+      <label>
+        Warehouse WMS
+    </label>
+    <p-dropdown
+      id="warehouseCode"
+      name="warehouseCode"
+      #warehouseCode="ngModel"
+      [options]="warehouses"
+      [(ngModel)]="warehouseSelected"
+      optionLabel="warehouseWms"
+      optionValue="warehouseWms"
+      [placeholder]="'Select Warehouse' | translate"
+      required
+      [ngClass]="{
+        'ng-invalid ng-dirty':
+          warehouseCode.invalid &&
+          (warehouseCode.dirty || warehouseCode.touched)
+      }"
+      appendTo="body"
+    >
+      <ng-template let-item pTemplate="item">
+        {{item.warehouseWms}}
+      </ng-template>
+          
+      <ng-template let-item pTemplate="selectedItem">
+        {{item.warehouseWms}}
+      </ng-template>
+    </p-dropdown>
+    <small
+      class="p-error block"
+      *ngIf="
+        warehouseCode.invalid &&
+        (warehouseCode.dirty || warehouseCode.touched)
+      "
+    >
+      {{
+        "Message.Validation.Required"
+          | translate: { field: "Label.WarehouseCode" | translate }
+      }}
+    </small>
+    </div>
+    <div class="field col-12 md:col-2">
+      <label>
+          Company
+      </label>
+      <p-dropdown
+        id="companyCode"
+        name="companyCode"
+        #companyCode="ngModel"
+        [options]="companies"
+        [(ngModel)]="companySelected"
+        optionLabel="companyCode"
+        optionValue="companyCode"
+        [placeholder]="'Select Company' | translate"
+        required
+        [ngClass]="{
+          'ng-invalid ng-dirty':
+          companyCode.invalid &&
+            (companyCode.dirty || companyCode.touched)
+        }"
+        appendTo="body"
+      >
+        <ng-template let-item pTemplate="item">
+          {{item.companyCode}}
+        </ng-template>
+            
+        <ng-template let-item pTemplate="selectedItem">
+          {{item.companyCode}}
+        </ng-template>
+      </p-dropdown>
+      <small
+        class="p-error block"
+        *ngIf="
+          companyCode.invalid &&
+          (companyCode.dirty || companyCode.touched)
+        "
+      >
+        {{
+          "Message.Validation.Required"
+            | translate: { field: "Label.CompanyCode" | translate }
+        }}
+      </small>
+    </div>
+    <div class="field col-12 md:col-3">
+      <label>
+          Booking date range
+      </label>
+      <p-calendar 
+              [(ngModel)]="rangeDates" selectionMode="range" [readonlyInput]="true" [numberOfMonths]="2"  
+              dateFormat="dd/mm/yy"     
+              required="true"     
+              inputId="float-label-transaction-date" 
+              [placeholder]="'Select.TransactionDate' | translate"              
+              class="m-2"></p-calendar>      
+    </div>
+    <div class="field col-12 md:col-4" *ngIf="rangeDates">
+      <button pButton icon="pi pi-check" (click)="getReport();" label="Ok" class="w-3" styleClass="p-button-text" style="margin-top: 1.75rem;" ></button>
+      
+      <p-button type="button" class="ml-2 mr-2" (click)="exportExcel()" icon="pi pi-file-excel" style="margin-top: 1.75rem;"></p-button>
+    </div>
+  </div>
+  <div class="col-12" #report>    
+    <p-table
+      #dt1
+      [value]="transactionTrackings"
+      [paginator]="true"
+      [rows]="10"
+      [showCurrentPageReport]="true"
+      [resizableColumns]="true"
+      currentPageReportTemplate="{first} to {last} of {totalRecords}"
+      [rowsPerPageOptions]="[5,10, 20, 30,50,100]"
+      [columns]="cols"
+      columnResizeMode="expand" 
+      styleClass="p-datatable-gridlines"
+      [globalFilterFields]="['bookingId', 'poBooking', 'poCheckin','poConfirm','licensePlate','licensePlate2','role','driverName','userId']"
+    >
+      <ng-template pTemplate="caption">
+        <div class="flex">
+            <button pButton label="Clear" class="p-button-outlined" icon="pi pi-filter-slash" (click)="clear(dt1)"></button>
+            <span class="p-input-icon-left ml-auto">
+                <i class="pi pi-search"></i>
+                <input pInputText type="text" (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Search keyword" />
+            </span>
+        </div>
+      </ng-template>
+      <ng-template pTemplate="header" let-columns>
+        <tr>
+          <th class="text-left" *ngIf="showIndex">#</th>
+          <th
+            *ngFor="let col of columns"              
+            [style.width]="col.width || defaultWidth"
+            class="text-center"
+          >
+            {{ col.header | translate }}
+          </th>            
+        </tr>
+      </ng-template>        
+      <ng-template pTemplate="body" let-rowData let-columns="columns" >
+        <tr>            
+          <td
+            *ngFor="let col of columns; index as i"
+            [style.width]="col.width || defaultWidth"
+          >
+            <span *ngIf="col.display === 'string'"
+              [ngStyle]="{'color': col.colorcheck === 'Y' ? getWaitingTimeFontColor(rowData[col.field]) : 'var(--text-color)'}">
+              {{rowData[col.field]}}
+            </span>
+            <!-- <span *ngIf="col.display === 'string' && col.width === underfind" style="white-space: pre-line;"
+              [ngStyle]="{'color': col.colorcheck === 'Y' ? getWaitingTimeFontColor(rowData[col.field]) : 'var(--text-color)'}">
+              {{rowData[col.field]}}
+            </span>
+            <span *ngIf="col.display === 'string' && col.width !== undefind"
+              [ngStyle]="{'color': col.colorcheck === 'Y' ? getWaitingTimeFontColor(rowData[col.field]) : 'var(--text-color)'}">
+              {{rowData[col.field]}}
+            </span> -->
+            <span *ngIf="col.display === 'date'"
+            >{{ rowData[col.field] | date: "dd/MM/yyyy" }}
+            </span>
+            <span *ngIf="col.display === 'decimal'"
+            >{{ rowData[col.field] | number: '1.2-2' }}
+            </span>
+            <span *ngIf="col.display === 'datetime'"
+              >{{ rowData[col.field] | date: "dd/MM/yyyy HH:mm:ss" }}
+            </span>
+          </td>            
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+</div>

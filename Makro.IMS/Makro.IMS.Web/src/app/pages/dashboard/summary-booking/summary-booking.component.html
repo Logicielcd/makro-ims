@@ -1,0 +1,229 @@
+
+<div class="card col-12" *ngIf="warehouses">
+  <p-dialog header="Parameter" [(visible)]="visible" [style]="{width: '50vw'}" position="top" >
+    <div class="p-fluid p-formgrid grid mt-4">
+      <div class="col-12 md:col-6">
+        <label>
+            Warehouse WMS
+        </label>
+        <p-dropdown
+          id="warehouseCode"
+          name="warehouseCode"
+          #warehouseCode="ngModel"
+          [options]="warehouseList"
+          [(ngModel)]="warehouseSelected"
+          optionLabel="value"
+          optionValue="value"
+          [placeholder]="'Select Warehouse' | translate"
+          required
+          [ngClass]="{
+            'ng-invalid ng-dirty':
+              warehouseCode.invalid &&
+              (warehouseCode.dirty || warehouseCode.touched)
+          }"
+          appendTo="body"
+          (onChange)="onWarehouseSelected($event)"
+        >
+          <!-- <ng-template let-item pTemplate="item">
+            {{item.warehouseWms}} - {{item.companyCode}}
+          </ng-template>
+              
+          <ng-template let-item pTemplate="selectedItem">
+            {{item.warehouseWms}} - {{item.companyCode}}
+          </ng-template> -->
+        </p-dropdown>
+        <small
+          class="p-error block"
+          *ngIf="
+            warehouseCode.invalid &&
+            (warehouseCode.dirty || warehouseCode.touched)
+          "
+        >
+          {{
+            "Message.Validation.Required"
+              | translate: { field: "Label.WarehouseCode" | translate }
+          }}
+        </small>
+      </div>
+      <div class="col-12 md:col-6">
+        <label>
+            Company
+        </label>
+        <p-dropdown
+          id="companyCode"
+          name="companyCode"
+          #companyCode="ngModel"
+          [options]="companies"
+          [(ngModel)]="companySelected"
+          optionLabel="companyCode"
+          optionValue="companyCode"
+          [placeholder]="'Select Company' | translate"
+          required
+          [ngClass]="{
+            'ng-invalid ng-dirty':
+            companyCode.invalid &&
+              (companyCode.dirty || companyCode.touched)
+          }"
+          appendTo="body"
+        >
+          <ng-template let-item pTemplate="item">
+            {{item.companyCode}}
+          </ng-template>
+              
+          <ng-template let-item pTemplate="selectedItem">
+            {{item.companyCode}}
+          </ng-template>
+        </p-dropdown>
+        <small
+          class="p-error block"
+          *ngIf="
+            companyCode.invalid &&
+            (companyCode.dirty || companyCode.touched)
+          "
+        >
+          {{
+            "Message.Validation.Required"
+              | translate: { field: "Label.CompanyCode" | translate }
+          }}
+        </small>
+      </div>
+      <div class="col-12 md:col-6">
+        <label>
+          Auto Refresh
+        </label>
+        <p-toggleButton [(ngModel)]="autoRefresh" onLabel="Yes" offLabel="No"></p-toggleButton>
+      </div>
+      <div class="col-12 md:col-6">
+        <label>
+          Interval (second)
+        </label>
+        <input
+              id="refreshintervaltime"
+              pInputText
+              type="number"
+              #refreshintervaltime="ngModel"
+              [(ngModel)]="refreshIntervalTime"
+              name="refreshintervaltime"
+              placeholder="Input interval time"
+            />
+      </div>
+    </div>
+    <ng-template pTemplate="footer">
+      <button pButton icon="pi pi-check" (click)="saveParameter();" label="Ok" styleClass="p-button-text"></button>
+    </ng-template>
+  </p-dialog>
+
+  <div class="grid">
+    <div class="col-2">
+      <p-button type="button" class="mr-2" (click)="visible = true" icon="pi pi-at"></p-button>
+    </div>
+    <div class="col-4 justify-content-center">
+      <h1><p>Whse WMS : {{warehouseSelected}}</p></h1>
+    </div>
+    <div class="col-4 justify-content-center">
+      <h1><p>Company : {{companySelected}} </p></h1>
+    </div>
+    <div class="col-2 justify-content-right">
+      <p class="text-right ">Last data date </p>
+      <p class="text-right ">{{refreshTime | date : "dd/MM/yyyy HH:mm:ss"}}</p>
+    </div>
+    <div class="col-8 col-offset-2">
+      <div class="border-2 border-round-lg border-solid bg-teal-600 border-teal-800
+                  text-center text-6xl font-bold 
+                  p-5 "
+      >
+        <p class="text-black-alpha-90">{{summaryBooking.totalInWhse}}  คัน</p>
+        <p class="text-3xl text-white-alpha-90">Total in warehouse : {{reportDate | date : 'dd-MMM-yyyy'}}</p>
+      </div>
+    </div>
+  </div>
+  <div class="grid">
+    <div class="col-4">
+      <div class="border-2 border-round-lg border-solid bg-primary-50
+                  text-center text-4xl text-primary font-bold 
+                  p-4 "
+      >
+        <p>{{summaryBooking.totalBooking}}  คัน</p>
+        <p class="text-left text-xl">Booking : นัดหมาย</p>
+      </div>
+    </div>
+    <div class="col-4">
+      <div class="border-2 border-round-lg border-solid bg-yellow-50
+                  text-center text-4xl font-bold text-yellow-700
+                  p-4 "
+            
+      >  
+      <!-- style="color:var(--highlight-bg);" -->
+          <p>{{summaryBooking.totalQueue}}  คัน</p>
+          <p class="text-left text-xl">Assign Queue : รอเรียกเข้าประตู</p>
+      </div>
+    </div>
+    <div class="col-4">
+      <div class="border-2 border-round-lg border-solid bg-pink-50
+                  text-center text-4xl text-pink-500 font-bold 
+                  p-4 "
+      >
+        <p>{{summaryBooking.totalWaitingDoc}}  คัน</p>
+        <p class="text-left text-xl">Waiting Document : รอรับเอกสารคืน</p>
+      </div>
+    </div>
+  </div>
+  <div class="grid">
+    <div class="col-4">
+      <div class="border-2 border-round-lg border-solid bg-teal-50
+                  text-center text-4xl text-teal-400 font-bold 
+                  p-4 "
+      >      
+        <p>{{summaryBooking.totalCheckIn}}  คัน</p>
+        <p class="text-left text-xl">Check in : มาถึงคลังแล้ว</p>
+      </div>
+    </div>
+    <div class="col-4">
+      <div class="border-2 border-round-lg border-solid bg-purple-50
+                  text-center text-4xl text-purple-600 font-bold 
+                  p-4 "
+      >
+        <p>{{summaryBooking.totalUnloading}} คัน</p>
+        <p class="text-left text-xl">Unloading : กำลังลงสินค้า</p>
+      </div>
+    </div>
+    <div class="col-4">
+      <div class="border-2 border-round-lg border-solid bg-red-50
+                  text-center text-4xl text-red-800 font-bold 
+                  p-4 "
+      >  
+        <p>{{summaryBooking.totalWaitingCheckOut}}  คัน</p>
+        <p class="text-left text-xl">Waiting Check out : กำลังรอออกจากคลัง</p>
+      </div>
+    </div>
+  </div>
+  <div class="grid">
+    <div class="col-4">
+      <div class="border-2 border-round-lg border-solid bg-red-50
+                  text-center text-4xl text-red-500 font-bold 
+                  p-4 "
+      >        
+        <p>{{summaryBooking.totalPending}}  คัน</p>
+        <p class="text-left text-xl">Pending : ยังไม่ถึงคลัง</p>
+      </div>
+    </div>
+    <div class="col-4">
+      <div class="border-2 border-round-lg border-solid bg-orange-50
+                  text-center text-4xl text-orange-600 font-bold 
+                  p-4 "
+      >
+        <p>{{summaryBooking.totalUnloaded}}  คัน</p>
+        <p class="text-left text-xl">End Unload : เพิ่งลงสินค้าเสร็จ</p>
+      </div>
+    </div>
+    <div class="col-4">
+      <div class="border-2 border-round-lg border-solid bg-bluegray-50
+                  text-center text-4xl text-bluegray-900 font-bold 
+                  p-4 "
+      >
+        <p>{{summaryBooking.totalCheckOut}}  คัน</p>
+        <p class="text-left text-xl">Check out : ออกจากคลังแล้ว</p>
+      </div>
+    </div>
+  </div>
+</div>

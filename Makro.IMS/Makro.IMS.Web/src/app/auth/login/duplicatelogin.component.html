@@ -1,0 +1,54 @@
+<div
+  class="flex align-items-center justify-content-center min-h-screen min-w-screen overflow-hidden"
+  style="background-color: rgba(35, 112, 185, 0.853);"
+>
+  <div class="grid justify-content-center p-2 lg:p-0" style="min-width: 80%;">
+    <div
+      class="col-12 xl:col-6"
+      style="
+        border-radius: 56px;
+        padding: 0.3rem;
+        background: linear-gradient(
+          180deg,
+          var(--primary-color) 15%,
+          rgba(33, 150, 243, 0) 30%
+        );
+      "
+    >
+      <div
+        class="h-full w-full m-0 py- px-4 my-5"
+        style="
+          border-radius: 53px;
+          background: linear-gradient(
+            180deg,
+            var(--surface-50) 38.9%,
+            var(--surface-0)
+          );
+        "
+      >
+        
+          <div class="text-center mb-5">
+            <img
+              src="assets/images/logo.png"
+              alt="IMS"
+              style="width: 70%; height: 70%"
+            />
+            <div class="text-900 text-3xl font-medium mb-3">Duplicate Login</div>            
+          </div>
+
+          <div class="w-full md:w-10 mx-auto">          
+            <button
+              pButton
+              pRipple
+              label="Back to Login"
+              class="w-full p-3 text-xl"              
+              (click)="back()"              
+            >              
+            </button>
+          </div>
+               
+      </div>
+    </div>
+  </div>
+</div> 
+

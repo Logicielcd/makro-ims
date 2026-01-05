@@ -1,0 +1,88 @@
+<p-toast></p-toast>
+<p-confirmDialog
+  [baseZIndex]="10000"
+  rejectButtonStyleClass="p-button-text"
+></p-confirmDialog>
+<p-toolbar>
+    <div class="p-toolbar-group-left">
+        <h5>Supplier Contact</h5>
+    </div>
+</p-toolbar>
+
+
+<form #f="ngForm" novalidate>
+<div class="card" *ngIf="supplier">
+    <div class="formgrid grid p-fluid">    
+        <div class="field col-12 md:col-4">
+            <label>
+                Contact name                
+            </label>       
+            <input
+                pInputText
+                type="text"
+                id="contactname"
+                name="contactname"
+                #contactname="ngModel"
+                [(ngModel)]="supplier.contactName"                
+                placeholder="Contact Name"
+            />             
+        </div>        
+        <div class="field col-12 md:col-8">
+            <label>
+                Contact e-Mail            
+            </label>       
+            <textarea
+                pInputTextarea      
+                rows="1"          
+                id="contactemail"
+                name="contactemail"
+                #contactemail="ngModel"
+                [(ngModel)]="supplier.contactEMail"                
+                placeholder="contact e-mail"
+            >
+            </textarea>                
+        </div>
+        <div class="field col-12 md:col-4">
+            <label>
+                Phone No.            
+            </label>       
+            <input
+                pInputText
+                type="text"
+                id="phoneno"
+                name="phoneno"
+                #phoneno="ngModel"
+                [(ngModel)]="supplier.phoneNumber"                
+                placeholder="Phone no."
+            />             
+        </div>
+        <div class="field col-12 md:col-4">
+            <label>
+                Mobile No.            
+            </label>       
+            <input
+                pInputText
+                type="text"
+                id="mobileno"
+                name="mobileno"
+                #mobileno="ngModel"
+                [(ngModel)]="supplier.mobileNumber"                
+                placeholder="Mobile no."
+            />             
+        </div>
+        <div class="col-12 md:col-4">
+
+        </div>
+        <div class="col-12 md:col-4">
+            <button 
+            pButton
+            
+            type="button" 
+            class="w-full p-3 text-xl text-center"            
+            label="Update"
+            (click)="updateContact()">
+          </button>
+        </div>
+    </div> 
+</div>  
+</form>

@@ -1,0 +1,296 @@
+<p-toast></p-toast>
+<p-confirmDialog
+  [baseZIndex]="10000"
+  rejectButtonStyleClass="p-button-text"
+></p-confirmDialog>
+<div class="grid">
+  <div class="col-12 p-0 md:p-3">
+    <div class="card">
+      <div class="grid grid-nogutter flex-row justify-content-between">
+        <h3 class="font-bold">
+          {{ (!dataId ? "Title.Create" : "Title.Detail") | translate }}
+        </h3>
+      </div>
+      <p-messages [(value)]="msgs" [enableService]="false"> </p-messages>
+      <form #f="ngForm" novalidate>
+        <div class="grid">
+          <div class="col-12">
+            <p-toolbar>
+              <div class="p-toolbar-group-left flex flex-wrap">
+                <button
+                  *ngIf="canModify"
+                  pButton
+                  type="button"
+                  icon="pi pi-check"
+                  [label]="'Button.Save' | translate"
+                  class="p-button-success mr-2"
+                  [disabled]="!f.form.valid || f.form.pristine"
+                  (click)="onSubmit()"
+                  [loading]="isLoading"
+                ></button>
+                <button
+                  *ngIf="canModify"
+                  pButton
+                  type="button"
+                  icon="pi pi-trash"
+                  [label]="'Button.Delete' | translate"
+                  class="p-button-danger mr-2"
+                  (click)="onDelete()"
+                  [loading]="isLoading"
+                ></button>
+              </div>
+              <div class="p-toolbar-group-right flex flex-wrap">
+                <button
+                  pButton
+                  type="button"
+                  icon="pi pi-refresh"
+                  [pTooltip]="'Button.Refresh' | translate"
+                  tooltipPosition="bottom"
+                  class="p-button-primary mr-2"
+                  (click)="fetchData()"
+                  [loading]="isLoading"
+                ></button>
+                <button
+                  pButton
+                  type="button"
+                  icon="pi pi-times"
+                  [pTooltip]="'Button.Back' | translate"
+                  tooltipPosition="bottom"
+                  class="p-button-primary mr-2"
+                  (click)="onBack()"
+                  [loading]="isLoading"
+                ></button>
+              </div>
+            </p-toolbar>
+          </div>
+        </div>
+
+        <div class="grid">
+          
+          <div class="col-12 md:col-4">
+            <p-panel [toggleable]="true" class="p-fluid">
+              <ng-template pTemplate="header">
+                <h6 class="line-height-3 m-0">
+                  {{ "Section.Info" | translate }}
+                </h6>
+              </ng-template>
+
+              <div class="field">
+                <label>
+                  {{ "Label.WarehouseCode" | translate }}
+                  <span class="p-error"> *</span>
+                </label>
+                <p-dropdown
+                  id="warehouseCode"
+                  name="warehouseCode"
+                  #warehouseCode="ngModel"
+                  [options]="warehouse$ | async"
+                  [(ngModel)]="data.warehouseCode"
+                  optionLabel="warehouseCode"
+                  optionValue="warehouseCode"
+                  [filter]="true"
+                  filterBy="warehouseCode"
+                  [showClear]="true"
+                  [placeholder]="'Select.WarehouseCode' | translate"
+                  required
+                  [ngClass]="{
+                    'ng-invalid ng-dirty':
+                      warehouseCode.invalid &&
+                      (warehouseCode.dirty || warehouseCode.touched)
+                  }"
+                >
+                <ng-template let-item pTemplate="item">
+                  {{item.warehouseCode}} - {{item.warehouseName}}
+              </ng-template>
+          
+              <ng-template let-item pTemplate="selectedItem">
+                {{item.warehouseCode}} - {{item.warehouseName}}
+              </ng-template>
+                </p-dropdown>
+                <small
+                  class="p-error block"
+                  *ngIf="
+                    warehouseCode.invalid &&
+                    (warehouseCode.dirty || warehouseCode.touched)
+                  "
+                >
+                  {{
+                    "Message.Validation.Required"
+                      | translate: { field: "Label.WarehouseCode" | translate }
+                  }}
+                </small>
+              </div>
+
+              <div class="field">
+                <label for="companyCode1">
+                  {{ "Label.CompanyCode" | translate }}
+                  <span class="p-error"> *</span>
+                </label>
+                <input
+                  pInputText
+                  type="text"
+                  id="companycode"
+                  name="companycode"
+                  #companycode="ngModel"
+                  [(ngModel)]="data.companyCode"
+                  required
+                  [ngClass]="{
+                    'ng-invalid ng-dirty':
+                    companycode.invalid && (companycode.dirty || companycode.touched)
+                  }"
+                />
+                <small
+                  class="p-error block"
+                  *ngIf="companycode.invalid && (companycode.dirty || companycode.touched)"
+                >
+                  {{
+                    "Message.Validation.Required"
+                      | translate: { field: "Label.CompanyCode" | translate }
+                  }}
+                </small>
+              </div>
+
+              <div class="field">
+                <label for="name1">
+                  {{ "Label.BookingDate" | translate }}
+                  <span class="p-error"> *</span>
+                </label>
+                <input
+                  pInputText
+                  type="datetime-local"
+                  id="bookingdate"
+                  name="bookingdate"
+                  #bookingdate="ngModel"
+                  [(ngModel)]="data.bookingDate"
+                  required    
+                  [ngClass]="{
+                    'ng-invalid ng-dirty':
+                      bookingdate.invalid &&
+                      (bookingdate.dirty || bookingdate.touched)
+                  }"
+                />
+                <small
+                  class="p-error block"
+                  *ngIf="
+                    bookingdate.invalid &&
+                    (bookingdate.dirty || bookingdate.touched)
+                  "
+                >
+                  {{
+                    "Message.Validation.Required"
+                      | translate: { field: "Label.BookingDate" | translate }
+                  }}
+                </small>
+              </div>
+
+            </p-panel>
+          </div>
+          
+          <div class="col-12 md:col-4">
+            <p-panel [toggleable]="true" class="p-fluid">
+              <ng-template pTemplate="header">
+                <h6 class="line-height-3 m-0">
+                  {{ "Section.Capacity" | translate }}
+                </h6>
+              </ng-template>
+
+              <div class="field">
+                <label for="name1">
+                  {{ "Label.MaxCon" | translate }}
+                </label>
+                <input
+                  pInputText
+                  type="number"
+                  id="maxcon"
+                  name="maxcon"
+                  #maxcon="ngModel"
+                  [(ngModel)]="data.maxConPerHour"
+                />
+              </div>
+
+              <div class="field">
+                <label for="name1">
+                  {{ "Label.MaxNon" | translate }}
+                </label>
+                <input
+                  pInputText
+                  type="number"
+                  id="maxnon"
+                  name="maxnon"
+                  #maxnon="ngModel"
+                  [(ngModel)]="data.maxNonPerHour"
+                />
+              </div>
+
+              <div class="field">
+                <label for="name1">
+                  {{ "Label.MaxFull" | translate }}
+                </label>
+                <input
+                  pInputText
+                  type="number"
+                  id="maxfull"
+                  name="maxfull"
+                  #maxfull="ngModel"
+                  [(ngModel)]="data.maxFullPerHour"
+                />
+              </div>
+            </p-panel>
+          </div>
+
+          <div class="col-12 md:col-4">
+            <p-panel [toggleable]="true" class="p-fluid">
+              <ng-template pTemplate="header">
+                <h6 class="line-height-3 m-0">
+                  {{ "Section.CapacityCube" | translate }}
+                </h6>
+              </ng-template>
+
+              <div class="field">
+                <label for="name1">
+                  {{ "Label.MaxCCon" | translate }}
+                </label>
+                <input
+                  pInputText
+                  type="number"
+                  id="maxccon"
+                  name="maxccon"
+                  #maxccon="ngModel"
+                  [(ngModel)]="data.maxCConPerHour"
+                />
+              </div>
+
+              <div class="field">
+                <label for="name1">
+                  {{ "Label.MaxCNon" | translate }}
+                </label>
+                <input
+                  pInputText
+                  type="number"
+                  id="maxcnon"
+                  name="maxcnon"
+                  #maxcnon="ngModel"
+                  [(ngModel)]="data.maxCNonPerHour"
+                />
+              </div>
+
+              <div class="field">
+                <label for="name1">
+                  {{ "Label.MaxCFull" | translate }}
+                </label>
+                <input
+                  pInputText
+                  type="number"
+                  id="maxcfull"
+                  name="maxcfull"
+                  #maxcfull="ngModel"
+                  [(ngModel)]="data.maxCFullPerHour"
+                />
+              </div>
+            </p-panel>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

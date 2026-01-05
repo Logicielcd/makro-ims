@@ -1,0 +1,442 @@
+<p-toast></p-toast>
+<p-confirmDialog
+  [baseZIndex]="10000"
+  rejectButtonStyleClass="p-button-text"
+></p-confirmDialog>
+<div class="card col-12 p-0 md:p-3">
+  <div class="flex justify-content-between flex-wrap">
+    <div class="flex align-item-center justify-content-center">
+      <h3 class="font-bold">Create Manual Booking</h3>
+    </div>
+    <div class="flex align-item-center justify-content-center">
+      <div class="align-item-center mr-2 ">
+        <p-button icon="pi pi-refresh" (click)="refresh()"></p-button>
+      </div>
+      <div class="align-item-center mr-2 ">
+        <button
+          pButton
+          type="button"
+          class="p-button"
+          (click)="onSaveBooking()"
+          [disabled]="isCompleted()"
+          name="btnsave"
+          id="btnsave"
+          icon="pi pi-save"
+          label="Save Booking"
+          style="margin-top: 0px"
+          [loading]="isLoading"
+        >
+        </button>
+      </div>
+    </div>    
+  </div>
+  <div class="w-full md:w-12 mx-auto">
+    <p-messages [(value)]="msgs" [enableService]="false"></p-messages>
+  </div>
+
+  <div class="flex flex-row justify-content-between">
+    <div *ngIf="suppliers" class="pt-2">
+      <form #supForm="ngForm">
+        <div class="formgrid grid p-fluid justify-content-start">
+
+          <div class="field col-12 md:col-4">
+            <label htmlFor="warehouse">
+              {{ "Label.WarehouseCode" | translate }}
+            </label>
+            <p-dropdown
+              id="warehouse"
+              name="warehouse"
+              #warehouse="ngModel"
+              [options]="warehouses"
+              [(ngModel)]="warehouseSelected"
+              optionLabel="warehouseName"
+              optionValue="warehouseCode"                            
+              [placeholder]="'Select.WarehouseCode' | translate"
+              required              
+              [ngClass]="{
+                'ng-invalid ng-dirty':
+                warehouse.invalid && (warehouse.dirty || warehouse.touched)
+              }"
+              [virtualScroll]="true"
+              [virtualScrollItemSize]="38"
+              (onChange)="onWarehouseChange($event)"
+            >            
+              <ng-template let-item pTemplate="item">
+                {{ item.warehouseCode }} - {{ item.warehouseName }}
+              </ng-template>
+              <ng-template let-item pTemplate="selectedItem">
+                {{ item.warehouseCode }} - {{ item.warehouseName }}
+              </ng-template>
+            </p-dropdown>
+            <small
+              class="p-error block"
+              *ngIf="warehouse.invalid && (warehouse.dirty || warehouse.touched)"
+            >
+              {{
+                "Message.Validation.Required"
+                  | translate : { field: "Label.WarehouseCode" | translate }
+              }}
+            </small>
+
+          </div>
+          
+          <div class="field col-12 md:col-4">
+            <label htmlFor="operation">
+              {{ "Operation" | translate }}
+            </label>
+            <p-dropdown
+            id="supCode"
+            name="supCode"
+            #operation="ngModel"
+            [options]="operations"
+            [(ngModel)]="operationSelected"
+            optionLabel="operationName"
+            optionValue="operationName"
+            [placeholder]="'Select.Operation' | translate"
+            required
+            [ngClass]="{
+              'ng-invalid ng-dirty':
+                operation.invalid && (operation.dirty || operation.touched)
+            }"
+            [virtualScroll]="true"
+            [virtualScrollItemSize]="38"
+          >
+          <ng-template let-item pTemplate="item">
+            {{ item.operationName }} - {{ item.description }}
+          </ng-template>
+          <ng-template let-item pTemplate="selectedItem">
+            {{ item.operationName }} - {{ item.description }}
+          </ng-template>
+        </p-dropdown>
+            <small
+              class="p-error block"
+              *ngIf="operation.invalid && (operation.dirty || operation.touched)"
+            >
+              {{
+                "Message.Validation.Required"
+                  | translate : { field: "Label.Operation" | translate }
+              }}
+            </small>          
+          </div>
+          
+          <div class="field col-12 md:col-4">
+
+          </div>
+
+          <div class="field col-12 md:col-4">
+            <label>
+              Supplier
+              <span class="p-error"> *</span>
+            </label>
+            <p-dropdown
+              id="supCode"
+              name="supCode"
+              #supCode="ngModel"
+              [options]="suppliers"
+              [(ngModel)]="supplierSelected"
+              optionLabel="supName"
+              optionValue="supCode"
+              [filter]="!isSelect"
+              filterBy="supCode"
+              [showClear]="!isSelect"
+              [placeholder]="'Select.SupplierCode' | translate"
+              required
+              [readonly]="isSelect"
+              [ngClass]="{
+                'ng-invalid ng-dirty':
+                  supCode.invalid && (supCode.dirty || supCode.touched)
+              }"
+              [virtualScroll]="true"
+              [virtualScrollItemSize]="38"
+              (onChange)="getSupplierValue()"
+            >
+              <ng-template let-item pTemplate="item">
+                {{ item.supCode }} - {{ item.supName }}
+              </ng-template>
+              <ng-template let-item pTemplate="selectedItem">
+                {{ item.supCode }} - {{ item.supName }}
+              </ng-template>
+            </p-dropdown>
+            <small
+              class="p-error block"
+              *ngIf="supCode.invalid && (supCode.dirty || supCode.touched)"
+            >
+              {{
+                "Message.Validation.Required"
+                  | translate : { field: "Label.SupplierCode" | translate }
+              }}
+            </small>
+          </div>
+    
+          <div class="field col-12 md:col-3">
+            <label for="bookingDate">Delivery Date</label>
+            <p-calendar
+              [(ngModel)]="bookingDate"
+              dateFormat="dd/mm/yy"
+              inputId="bookingDate"              
+              name="bookingdate"
+              #bookingdate="ngModel"
+              [minDate]="minDate"
+              showOn="none"
+              disabled="true"
+            >
+            </p-calendar>
+          </div>
+          <div class="field col-12 md:col-4"></div>
+          <div class="field col-12 md:col-4">
+            <label for="contactName"
+              >Contact name
+              <span class="p-error"> *</span>
+            </label>
+            <input
+              id="contactName"
+              pInputText
+              type="text"
+              #contactname="ngModel"
+              [(ngModel)]="contactName"
+              name="contactname"
+              placeholder="Input contact name"
+              required
+              autocomplete="off"
+            />
+            <small
+              class="p-error block"
+              *ngIf="
+                contactname.invalid &&
+                (contactname.dirty || contactname.touched)
+              "
+            >
+              {{
+                "Message.Validation.Required"
+                  | translate
+                    : { field: "Contact name" | translate }
+              }}
+            </small>
+          </div>    
+          <div class="field col-12 md:col-3">
+            <label for="telNo"
+              >Tel No.
+              <span class="p-error"> *</span>
+            </label>
+            <input
+              id="contactphone"
+              pInputText
+              type="text"
+              name="contactphone"
+              #contactphone="ngModel"
+              required
+              [(ngModel)]="contactPhone"
+              placeholder="Input tel no."
+              autocomplete="off"
+            />
+            <small
+              class="p-error block"
+              *ngIf="
+                contactphone.invalid &&
+                (contactphone.dirty || contactphone.touched)
+              "
+            >
+              {{
+                "Message.Validation.Required"
+                  | translate
+                    : { field: "Contact Tel no." | translate }
+              }}
+            </small>
+          </div>
+          <div class="field col-12 md:col-5">
+            <label for="email"
+              >e-Mail
+              <span class="p-error"> *</span>
+            </label>
+            <textarea
+              rows="1"
+              id="email"
+              name="email"
+              #email="ngModel"
+              pInputTextarea
+              [(ngModel)]="contactEmail"
+              placeholder="Input email"
+              required
+              autocomplete="off"
+            ></textarea>
+            <small
+              class="p-error block"
+              *ngIf="
+                email.invalid &&
+                (email.dirty || email.touched)
+              "
+            >
+              {{
+                "Message.Validation.Required"
+                  | translate
+                    : { field: "Contact e-Mail" | translate }
+              }}
+            </small>
+          </div>          
+          
+          <div class="field col-12 md:col-4">
+            <label for="truckType">Truck Type</label>
+            <p-dropdown
+              id="trucktype"
+              name="trucktype"
+              #trucktype="ngModel"
+              [options]="trucks"
+              [(ngModel)]="truckSelected"
+              optionLabel="truckName"
+              optionValue="internalTruckId"
+              placeholder="Select Truck Type"
+              required
+              [ngClass]="{
+                'ng-invalid ng-dirty':
+                trucktype.invalid &&
+                  (trucktype.dirty || trucktype.touched)
+              }"              
+            >
+            </p-dropdown>
+            <small
+              class="p-error block"
+              *ngIf="
+                trucktype.invalid &&
+                (trucktype.dirty || trucktype.touched)
+              "
+            >
+              {{
+                "Message.Validation.Required"
+                  | translate
+                    : { field: "Truck Type" | translate }
+              }}
+            </small>
+          </div>
+          <div class="field col-12 md:col-3">
+            <label for="trucklicenseplate"
+              >License Plate Head
+              <span class="p-error"> *</span>
+            </label>
+            <div class="grid col-12 md:col-12 -ml-3 mt-0">
+              <div class="col-12 md:col-4">
+                <input
+                  id="prelicense"
+                  pInputText
+                  type="text"
+                  #prelicense="ngModel"
+                  [(ngModel)]="preLicense"
+                  name="prelicense"
+                  placeholder="0กก"
+                  required
+                  maxlength="3"
+                  autocomplete="off"
+                />
+              </div>
+              <div class="col-0 md:col-0 mt-3 ml-0 mr-0 pl-0 pr-0">-</div>
+              <div class="col-12 md:col-5">
+                <input
+                  id="licenseplate"
+                  pInputText
+                  type="number"
+                  #licenseplate="ngModel"
+                  [(ngModel)]="licensePlate"
+                  name="licenseplate"
+                  placeholder="0000"                  
+                  maxlength="4"
+                  required
+                  oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                  autocomplete="off"
+                />
+              </div>              
+            </div>
+          </div>
+          <div class="field col-12 md:col-3">
+            <label for="trucklicenseplate2"
+              >License Plate Trail              
+            </label>
+            <div class="grid col-12 md:col-12 -ml-3 mt-0">
+              <div class="col-12 md:col-4">
+                <input
+                  id="prelicense2"
+                  pInputText
+                  type="text"
+                  #prelicense2="ngModel"
+                  [(ngModel)]="preLicense2"
+                  name="prelicense2"
+                  placeholder="0กก"
+                  required
+                  maxlength="3"
+                  autocomplete="off"
+                />
+              </div>
+              <div class="col-0 md:col-0 mt-3 ml-0 mr-0 pl-0 pr-0">-</div>
+              <div class="col-12 md:col-5">
+                <input
+                  id="licenseplate2"
+                  pInputText
+                  type="number"
+                  #licenseplate2="ngModel"
+                  [(ngModel)]="licensePlate2"
+                  name="licenseplate2"
+                  placeholder="0000"                  
+                  maxlength="4"
+                  required
+                  oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                  autocomplete="off"
+                />
+              </div>              
+            </div>
+          </div>          
+          <div class="field col-12 md:col-4">
+            <label for="driverName"
+              >Driver name
+              <span class="p-error"> *</span>
+            </label>
+            <input
+              id="drivername"
+              pInputText
+              type="text"
+              #drivername="ngModel"
+              [(ngModel)]="driverName"
+              required
+              name="drivername"
+              placeholder="Input driver name"
+              autocomplete="off"
+            />
+          </div>
+    
+          <div class="field col-12 md:col-3">
+            <label for="telNo"
+              >Tel No.
+              <span class="p-error"> *</span>
+            </label>
+            <input
+              id="telNo"
+              pInputText
+              type="text"
+              name="telno"
+              #telno="ngModel"
+              required
+              [(ngModel)]="telNo"
+              placeholder="Input tel no."
+              autocomplete="off"
+            />
+          </div>
+          <div class="field col-12 md:col-3">
+            <label for="lineid"
+              >Line Id
+              <span class="p-error"> *</span>
+            </label>
+            <input
+              pInputText
+              type="text"              
+              id="lineNo"
+              name="lineno"
+              #lineid="ngModel"              
+              [(ngModel)]="lineNo"
+              placeholder="Input Line id"
+              autocomplete="off"
+            />
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  
+</div>

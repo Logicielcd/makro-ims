@@ -1,0 +1,179 @@
+<p-toast></p-toast>
+<p-confirmDialog
+  [baseZIndex]="10000"
+  rejectButtonStyleClass="p-button-text"
+></p-confirmDialog>
+<div class="card col-12 p-0 md:p-3">
+    <div class="flex justify-content-between flex-wrap">
+      <div class="flex align-item-center justify-content-center">
+        <h3 class="font-bold">Document Confirmation</h3>
+      </div>
+      <div class="flex align-item-center justify-content-center">
+        <div class="align-item-center mr-2 ">
+          <p-button icon="pi pi-refresh" (click)="refresh()"></p-button>
+        </div>
+      </div>    
+    </div>
+    <div class="w-full md:w-12 mx-auto">
+      <p-messages [(value)]="msgs" [enableService]="false"></p-messages>
+    </div>
+
+    <div class="flex flex-row justify-content-between">
+        <div class="formgrid grid p-fluid justify-content-start col-12">
+            <div class="field col-12 md:col-3">
+                <label>
+                    Warehouse
+                </label>
+                <p-dropdown
+                  id="warehouseCode"
+                  name="warehouseCode"
+                  #warehouseCode="ngModel"
+                  [options]="warehouses"
+                  [(ngModel)]="selectedWhse"
+                  optionLabel="warehouseCode"
+                  optionValue="warehouseCode"
+                  [filter]="true"
+                  filterBy="warehouseCode"
+                  [showClear]="true"
+                  [placeholder]="'Select Warehouse' | translate"
+                  required
+                  [ngClass]="{
+                    'ng-invalid ng-dirty':
+                      warehouseCode.invalid &&
+                      (warehouseCode.dirty || warehouseCode.touched)
+                  }"                  
+                >
+                  <ng-template let-item pTemplate="item">
+                    {{item.warehouseCode}} - {{item.warehouseName}}
+                  </ng-template>
+                      
+                  <ng-template let-item pTemplate="selectedItem">
+                    {{item.warehouseCode}} - {{item.warehouseName}}
+                  </ng-template>
+                </p-dropdown>
+                <small
+                  class="p-error block"
+                  *ngIf="
+                    warehouseCode.invalid &&
+                    (warehouseCode.dirty || warehouseCode.touched)
+                  "
+                >
+                  {{
+                    "Message.Validation.Required"
+                      | translate: { field: "Label.WarehouseCode" | translate }
+                  }}
+                </small>
+            </div>
+            <div class="field col-12 md:col-4">
+                <label>
+                    Supplier
+                    <span class="p-error"> *</span>
+                </label>
+                <p-dropdown
+                    id="supCode"
+                    name="supCode"
+                    #supCode="ngModel"
+                    [options]="suppliers"
+                    [(ngModel)]="supplierSelected"
+                    optionLabel="supName"
+                    optionValue="supCode"
+                    [filter]="!supReadonly"
+                    filterBy="supCode"
+                    [showClear]="!supReadonly"
+                    [placeholder]="'Select.SupplierCode' | translate"
+                    required
+                    [ngClass]="{
+                    'ng-invalid ng-dirty':
+                        supCode.invalid &&
+                        (supCode.dirty || supCode.touched)
+                    }
+                    "
+                    (onChange)="getSupplierValue()"
+                >
+                <ng-template let-item pTemplate="item">
+                    {{item.supCode}} - {{item.supName}}
+                </ng-template>
+            
+                <ng-template let-item pTemplate="selectedItem">
+                {{item.supCode}} - {{item.supName}}
+                </ng-template>
+                </p-dropdown>
+                <small
+                    class="p-error block"
+                    *ngIf="
+                    supCode.invalid &&
+                    (supCode.dirty || supCode.touched)
+                    "
+                >
+                    {{
+                    "Message.Validation.Required"
+                        | translate: { field: "Label.SupplierCode" | translate }
+                    }}
+                </small>
+            </div>
+            <div class="col-12 md:col-8">
+
+            </div>
+            <div class="col-12 md:col-12">
+                <p-panel class="field col-12 md:col-12" header="Scan PO for check out">
+                    <div class="field col-12 md:col-12">   
+                        <div class="field col-12 md:col-4">
+                            <label for="poNo1">
+                                PO Nbr <span class="p-error"> *</span>
+                            </label>
+                            <input
+                                #poFocus
+                                pInputText
+                                type="text"
+                                id="pono1"
+                                name="pono1"
+                                #pono="ngModel"
+                                [(ngModel)]="poNo"
+                                required
+                                [ngClass]="{
+                                    'ng-invalid ng-dirty':
+                                    pono.invalid && (pono.dirty || pono.touched)
+                                }"
+                                (keydown.enter)="checkPo()"
+                                placeholder="input po"
+                            />                
+                        </div>
+                       
+                        <div class="field col-12 md:col-9">
+        
+                        </div>
+                        <div class="field col-12 md:col-12">
+                            <p-table [columns]="cols" [value]="bookingHeader.bookingDetails" responsiveLayout="scroll">
+                                <ng-template pTemplate="header" let-columns>
+                                    <tr>
+                                        <th *ngFor="let col of columns">
+                                            {{col.header}}
+                                        </th>
+                                    </tr>
+                                </ng-template>
+                                <ng-template pTemplate="body" let-rowData let-columns="columns">
+                                    <tr>
+                                        <td *ngFor="let col of columns">
+                                            {{rowData[col.field]}}
+                                        </td>
+                                        <!-- <td>
+                                            <button 
+                                            pButton pRipple 
+                                            icon="pi pi-trash" 
+                                            class="p-button-rounded p-button-warning" 
+                                            (click)="deletePo(rowData)">
+                                            </button>
+                                        </td> -->
+                                    </tr>
+                                </ng-template>
+                            </p-table>
+                        </div>
+                        
+                    </div>
+                </p-panel>
+            </div>       
+        </div>
+    
+        
+    </div>
+</div>

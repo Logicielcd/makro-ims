@@ -1,0 +1,206 @@
+<p-toast></p-toast>
+<p-confirmDialog
+  [baseZIndex]="10000"
+  rejectButtonStyleClass="p-button-text"
+></p-confirmDialog>
+<div class="card col-12 p-0 md:p-3">
+  <div class="flex justify-content-between flex-wrap">
+    <div class="flex align-items-center justify-content-center">
+      <h3 class="font-bold">Dock Management List</h3>
+    </div>
+    <div class="flex align-item-center justify-content-center">
+      <div class="align-item-center">
+        <p-button
+          label="Refresh"
+          icon="pi pi-refresh"
+          (onClick)="fetchData()"
+          [loading]="isLoading"
+        ></p-button>
+      </div>
+    </div>
+  </div>
+  <div class="w-full md:w-12 mx-auto">
+    <p-messages [(value)]="msgs" [enableService]="false"></p-messages>
+  </div>
+  <div class="flex flex-column gap-3 mt-3">
+    <p-table
+      #dt
+      [value]="jobs"
+      [loading]="isLoading"
+      styleClass="p-datatable-sm p-datatable-gridlines"
+      [paginator]="true"
+      [rows]="10"
+      [showCurrentPageReport]="true"
+      responsiveLayout="scroll"
+      [rowHover]="true"
+      scrollHeight="615px"
+      [sortMode]="'multiple'"
+      [globalFilterFields]="[
+        'jobId',
+        'jobType',
+        'trailerLicensePlate',
+        'trailerType',
+        'shuntLicensePlate',
+        'shuntDriver',
+        'locationNo',
+        'locationZone',
+        'locationStatus',
+        'status',
+        'trailerStatus',
+        'totalProcessTime'
+      ]"
+      [sortMode]="'single'"
+      [paginator]="true"
+      [rows]="10"
+      [showCurrentPageReport]="true"
+      [rowsPerPageOptions]="[5, 10, 20, 30, 50, 100, 150, 200]"
+      currentPageReportTemplate="{first} to {last} of {totalRecords}"
+    >
+      <ng-template pTemplate="caption">
+        <div class="flex justify-content-start">
+          <p-button
+            label="Clear"
+            icon="pi pi-filter-slash"
+            (onClick)="clear(dt, filterInput)"
+            severity="help"
+            class="mr-2"
+          ></p-button>
+          <span class="p-input-icon-left">
+            <i class="pi pi-search"></i>
+            <input
+              #filterInput
+              pInputText
+              type="text"
+              (input)="dt.filterGlobal($event.target.value, 'contains')"
+              placeholder="Search..."
+            />
+          </span>
+        </div>
+      </ng-template>
+      <ng-template pTemplate="header">
+        <tr>
+          <th pSortableColumn="locationNo">
+            Location No
+            <p-sortIcon field="locationNo"></p-sortIcon>
+          </th>
+          <th pSortableColumn="locationZone">
+            Location Zone
+            <p-sortIcon field="locationZone"></p-sortIcon>
+          </th>
+          <th pSortableColumn="locationStatus">
+            Location Status
+            <p-sortIcon field="locationStatus"></p-sortIcon>
+          </th>
+          <th pSortableColumn="jobId" class="text-center">
+            Job Id
+            <p-sortIcon field="jobId"></p-sortIcon>
+          </th>
+          <th pSortableColumn="status" class="text-center">
+            Job Status
+            <p-sortIcon field="status"></p-sortIcon>
+          </th>
+          <th pSortableColumn="trailerLicensePlate" class="text-center">
+            Trailer License Plate
+            <p-sortIcon field="trailerLicensePlate"></p-sortIcon>
+          </th>
+          <th pSortableColumn="trailerStatus" class="text-center">
+            Trailer Status
+            <p-sortIcon field="trailerStatus"></p-sortIcon>
+          </th>
+          <th pSortableColumn="totalProcessTime" class="text-center">
+            Total Process Time
+            <p-sortIcon field="totalProcessTime"></p-sortIcon>
+          </th>
+          <th class="text-center">Actions</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-job>
+        <tr>
+          <td>{{ job.locationNo }}</td>
+          <td>{{ job.locationZone }}</td>
+          <td class="text-center">
+            <p-badge
+              *ngIf="getYardSeverity(job.locationStatus)"
+              [severity]="getYardSeverity(job.locationStatus)"
+              [value]="job.locationStatus"
+              styleClass="small-tag"
+            >
+            </p-badge>
+          </td>
+
+          <td cdk-scrollable="text-center">{{ job.jobId }}</td>
+          <td class="text-center">
+            <p-badge
+              [value]="job.status"
+              [style]="{
+                background: getJobSeverity(job.status),
+                color: '#ffffff'
+              }"
+            ></p-badge>
+          </td>
+          <td>
+            <div class="text-center">{{ job.trailerLicensePlate }}</div>
+          </td>
+          <td class="text-center">
+            <p-badge
+              *ngIf="job.trailerStatus && getTrailerSeverity(job.trailerStatus)"
+              [severity]="getTrailerSeverity(job.trailerStatus)"
+              [value]="job.trailerStatus"
+              styleClass="small-tag"
+            >
+            </p-badge>
+          </td>
+          <td class="text-center">{{ job.totalProcessTime }}</td>
+          <td class="text-center">
+            @if (job.status === 'On-Dock'){
+            <p-button
+              icon="pi pi-cart-arrow-down"
+              label="Loading"
+              styleClass="p-button-sm mr-2"
+              [disabled]="!canModify"
+              (onClick)="onLoading(job)"
+            ></p-button>
+            } @if (job.status === 'Loading'){
+            <p-button
+              icon="pi pi-cart-plus"
+              label="Loaded"
+              styleClass="p-button-sm mr-2"
+              [disabled]="!canModify"
+              (onClick)="onLoaded(job)"
+            ></p-button>
+            } @if (job.status === 'Loaded'){
+            <p-button
+              icon="pi pi-check"
+              label="Job Completed"
+              styleClass="p-button-sm mr-2"
+              [disabled]="!canModify"
+              (onClick)="onComplete(job)"
+            ></p-button>
+            } @if (job.status === 'On-Dock'){
+            <p-button
+              label="ย้ายประตู"
+              styleClass="p-button-sm mr-2"
+              [disabled]="!canModify"
+              (onClick)="onMoveTheDoor(job)"
+            ></p-button>
+            <p-button
+              label="ย้ายตู้"
+              styleClass="p-button-sm"
+              [disabled]="!canModify"
+              (onClick)="onMoveTheTrailer(job)"
+            ></p-button>
+            } @if (job.locationStatus === "Not Available" && job.jobId ===
+            null){
+            {{ "กำลังรอรถมาลากตู้ออก" }}
+            }
+          </td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="emptymessage">
+        <tr>
+          <td colspan="8" class="text-center">No jobs found</td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+</div>

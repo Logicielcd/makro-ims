@@ -1,0 +1,120 @@
+# Ignore files for both C# API and Angular
+
+# -----------------------
+# C# (ASP.NET) Ignored Files
+# -----------------------
+
+# Visual Studio
+.vscode/
+.vs/
+*.user
+*.suo
+*.csproj.user
+*.dbmdl
+*.log
+*.tlog
+*.pdb
+*.opendb
+*.obj
+*.tmp
+*.cache
+*.bin
+*.log
+*.sln.docstates
+
+# Visual Studio Code
+.vscode/
+
+# Build results
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+build/
+
+# NuGet
+*.nupkg
+*.snupkg
+.nuget/
+
+# Entity Framework
+*.jfm
+
+# C# project files
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+# Windows image file caches
+Thumbs.db
+ehthumbs.db
+
+# Rider
+.idea/
+.idea_modules/
+*.ipr
+*.iws
+.idea/
+
+# Mono Auto Generated Files
+mono_crash.*
+
+# User-specific files
+*.rsuser
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Rider, JetBrains IDE
+.idea/
+
+# Text Tempting Generator
+*.tt
+
+# Resharper
+_ReSharper.Caches
+
+# -----------------------
+# Angular Ignored Files
+# -----------------------
+
+# Node.js dependencies
+node_modules/
+npm-debug.log
+yarn-error.log
+yarn-debug.log
+
+# Angular output directory
+dist/
+out-tsc/
+
+# Angular test outputs
+coverage/
+
+# Ignore editor-specific files
+/.vscode/
+
+# Logs and temporary files
+*.log
+.temp/
+
+# Environment files (If you store sensitive info)
+src/environments/environment*.ts
+
+# -----------------------
+# OS-specific files
+# -----------------------
+
+# Windows thumbnail cache
+Thumbs.db
+ehthumbs.db
+
+# Mac OS
+.DS_Store
+
+# -----------------------
+# Build directories
+# -----------------------
+
+build/

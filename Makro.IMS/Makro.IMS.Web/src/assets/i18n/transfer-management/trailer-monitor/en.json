@@ -1,0 +1,43 @@
+{
+  "Title": {
+    "List": "Trailer Monitor",
+    "Create": "Create Trailer Monitor",
+    "Detail": "Trailer Monitor Detail",
+    "History": "History"
+  },
+  "Section": {
+    "TrailerMonitorInfo": "Trailer Monitor Info"
+  },
+  "Button": {
+    "Create": "Create",
+    "Upload": "Upload",
+    "Excel": "Excel",
+    "Save": "Save",
+    "Delete": "Delete",
+    "Back": "Back",
+    "Yes": "Yes",
+    "No": "No"
+  },
+  "History": {
+    "Title": "History",
+    "TrailerMonitor": "Trailer Monitor",
+    "TrailerMonitorDetail": "Trailer Monitor Detail",
+    "CreateTrailerMonitor": "Create Trailer Monitor",
+    "DeleteTrailerMonitor": "Delete Trailer Monitor"
+  },
+  "Message": {
+    "Confirm": {
+      "Create": {
+        "Title": "Create",
+        "Message": "Are you sure to create this trailer monitor?"
+      },
+      "OutDc": {
+        "Title": "Out DC",
+        "Message": "Are you sure you want to out ?"
+      }
+    },
+    "Notification": {
+      "OutDc": "Out DC successfully"
+    }
+  }
+}

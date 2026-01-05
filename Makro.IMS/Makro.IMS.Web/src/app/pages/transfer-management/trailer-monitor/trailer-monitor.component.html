@@ -1,0 +1,487 @@
+<div class="card p-3">
+  <div class="grid">
+    <div class="col-12 md:col-12">
+      <div class="surface-card shadow-3 border-round-3xl p-4">
+        <div class="flex justify-content-between align-items-center mb-3">
+          <div class="flex align-items-center">
+            <span class="p-3 border-round bg-primary-100 mr-3">
+              <i class="pi pi-truck text-primary-700 text-xl"></i>
+            </span>
+            <div>
+              <h2 class="text-2xl font-semibold text-900 m-0">
+                Trailer Monitors
+              </h2>
+              <span class="text-500">Track and manage your trailers</span>
+            </div>
+          </div>
+          <div class="flex align-items-center gap-3 col-6">
+            <div
+              style="
+                background-color: var(--teal-100);
+                border-color: var(--teal-500);
+                border-radius: 20px;
+              "
+              class="flex-1 rounded-lg border-2 p-2 transition-all hover:shadow-lg"
+            >
+              <p style="color: var(--teal-700)" class="text-center font-bold">
+                {{ "ตู้ว่าง" }} <br />
+                Empty <br />
+                {{ count_status?.empty?.toString() || "0" }} ตู้
+              </p>
+            </div>
+
+            <div
+              style="
+                background-color: var(--red-100);
+                border-color: var(--red-500);
+                border-radius: 20px;
+              "
+              class="flex-1 rounded-lg border-2 p-2 transition-all hover:shadow-lg"
+            >
+              <p style="color: var(--red-700)" class="text-center font-bold">
+                {{ "ตู้เต็ม" }} <br />
+                Full <br />
+                {{ count_status?.full?.toString() || "0" }} ตู้
+              </p>
+            </div>
+
+            <div
+              style="
+                background-color: var(--orange-100);
+                border-color: var(--orange-500);
+                border-radius: 20px;
+              "
+              class="flex-1 rounded-lg border-2 p-2 transition-all hover:shadow-lg"
+            >
+              <p style="color: var(--orange-700)" class="text-center font-bold">
+                {{ "กำลังโหลด" }} <br />
+                Loading <br />
+                {{ count_status?.ondock?.toString() || "0" }} ตู้
+              </p>
+            </div>
+
+            <div
+              style="
+                background-color: var(--purple-100);
+                border-color: var(--purple-500);
+                border-radius: 20px;
+              "
+              class="flex-1 rounded-lg border-2 p-2 transition-all hover:shadow-lg"
+            >
+              <p style="color: var(--purple-700)" class="text-center font-bold">
+                {{ "ส่งออก" }} <br />
+                Out-DC <br />
+                {{ count_status?.outdc?.toString() || "0" }} ตู้
+              </p>
+            </div>
+
+            <div
+              style="
+                background-color: var(--primary-100);
+                border-color: var(--primary-500);
+                border-radius: 20px;
+              "
+              class="flex-1 rounded-lg border-2 p-2 transition-all hover:shadow-lg"
+            >
+              <p
+                style="color: var(--primary-700)"
+                class="text-center font-bold"
+              >
+                {{ "ทั้งหมด" }} <br />
+                Total <br />
+                {{ count_status?.total?.toString() || "0" }} ตู้
+              </p>
+            </div>
+          </div>
+          <div class="flex align-items-center gap-3">
+            <span class="p-input-icon-left">
+              <i class="pi pi-search"></i>
+              <input
+                pInputText
+                type="text"
+                (input)="onGlobalFilter($event, 'all')"
+                placeholder="Search..."
+                class="p-inputtext-sm"
+              />
+            </span>
+            <button
+              pButton
+              pRipple
+              type="button"
+              icon="pi pi-refresh"
+              class="p-button-text"
+              (click)="refresh()"
+            ></button>
+          </div>
+        </div>
+        <p-table
+          #dtAll
+          [value]="trailers"
+          [loading]="loading"
+          styleClass="p-datatable-sm"
+          [scrollable]="true"
+          scrollHeight="570px"
+          responsiveLayout="scroll"
+          scrollDirection="both"
+          [globalFilterFields]="[
+            'createDate',
+            'licensePlate',
+            'status',
+            'trailerGroup',
+            'trailerType',
+            'trailerSize',
+            'locationNo',
+            'locationType',
+            'jobStatus',
+            'jobDockStatus',
+            'locationZone'
+          ]"
+          [sortMode]="'single'"
+          [paginator]="true"
+          [rows]="10"
+          [showCurrentPageReport]="true"
+          [rowsPerPageOptions]="[5, 10, 20, 30, 50, 100, 150, 200]"
+          currentPageReportTemplate="{first} to {last} of {totalRecords}"
+        >
+          <ng-template pTemplate="header">
+            <tr>
+              <th pSortableColumn="createDate" style="min-width: 150px">
+                Queue
+                <p-sortIcon field="createDate"></p-sortIcon>
+              </th>
+              <th pSortableColumn="licensePlate" style="min-width: 250px">
+                License Plate
+                <p-sortIcon field="licensePlate"></p-sortIcon>
+              </th>
+              <th pSortableColumn="status" style="min-width: 150px">
+                Trailer Status
+                <p-sortIcon field="status"></p-sortIcon>
+              </th>
+              <th pSortableColumn="trailerGroup" style="min-width: 150px">
+                Trailer Group
+                <p-sortIcon field="trailerGroup"></p-sortIcon>
+              </th>
+              <th pSortableColumn="trailerType" style="min-width: 150px">
+                Trailer Type
+                <p-sortIcon field="trailerType"></p-sortIcon>
+              </th>
+              <th pSortableColumn="trailerSize" style="min-width: 120px">
+                Trailer Size
+                <p-sortIcon field="trailerSize"></p-sortIcon>
+              </th>
+              <th pSortableColumn="locationNo" style="min-width: 150px">
+                Location
+                <p-sortIcon field="locationNo"></p-sortIcon>
+              </th>
+              <th pSortableColumn="locationType" style="min-width: 150px">
+                Location Type
+                <p-sortIcon field="locationType"></p-sortIcon>
+              </th>
+              <th pSortableColumn="jobStatus" style="min-width: 150px">
+                Job
+                <p-sortIcon field="jobStatus"></p-sortIcon>
+              </th>
+              <th pSortableColumn="jobDockStatus" style="min-width: 150px">
+                Dock Status
+                <p-sortIcon field="jobDockStatus"></p-sortIcon>
+              </th>
+              <th pSortableColumn="locationZone" style="min-width: 150px">
+                Location Zone
+                <p-sortIcon field="locationZone"></p-sortIcon>
+              </th>
+              <th
+                class="text-center"
+                pFrozenColumn
+                [frozen]="true"
+                alignFrozen="right"
+                style="min-width: 150px"
+              >
+                Actions
+              </th>
+            </tr>
+            <tr>
+              <th>
+                <input
+                  pInputText
+                  type="text"
+                  (input)="
+                    dtAll.filter($event.target.value, 'createDate', 'contains')
+                  "
+                  class="w-full"
+                  [(ngModel)]="filters.createDate"
+                  placeholder="Search date..."
+                />
+              </th>
+              <th>
+                <input
+                  pInputText
+                  type="text"
+                  (input)="
+                    dtAll.filter(
+                      $event.target.value,
+                      'licensePlate',
+                      'contains'
+                    )
+                  "
+                  class="w-full"
+                  [(ngModel)]="filters.licensePlate"
+                />
+              </th>
+              <th>
+                <p-dropdown
+                  [options]="statusOptions"
+                  [(ngModel)]="filters.status"
+                  (onChange)="dtAll.filter($event.value, 'status', 'equals')"
+                  [showClear]="true"
+                  class="w-full"
+                >
+                </p-dropdown>
+              </th>
+              <th>
+                <input
+                  pInputText
+                  type="text"
+                  (input)="
+                    dtAll.filter(
+                      $event.target.value,
+                      'trailerGroup',
+                      'contains'
+                    )
+                  "
+                  class="w-full"
+                  [(ngModel)]="filters.trailerGroup"
+                />
+              </th>
+              <th>
+                <input
+                  pInputText
+                  type="text"
+                  (input)="
+                    dtAll.filter($event.target.value, 'trailerType', 'contains')
+                  "
+                  class="w-full"
+                  [(ngModel)]="filters.trailerType"
+                />
+              </th>
+              <th>
+                <input
+                  pInputText
+                  type="text"
+                  (input)="
+                    dtAll.filter($event.target.value, 'trailerSize', 'contains')
+                  "
+                  class="w-full"
+                  [(ngModel)]="filters.trailerSize"
+                />
+              </th>
+              <th>
+                <input
+                  pInputText
+                  type="text"
+                  (input)="
+                    dtAll.filter($event.target.value, 'locationNo', 'contains')
+                  "
+                  class="w-full"
+                  [(ngModel)]="filters.locationNo"
+                />
+              </th>
+              <th>
+                <input
+                  pInputText
+                  type="text"
+                  (input)="
+                    dtAll.filter(
+                      $event.target.value,
+                      'locationType',
+                      'contains'
+                    )
+                  "
+                  class="w-full"
+                  [(ngModel)]="filters.locationType"
+                />
+              </th>
+              <th>
+                <input
+                  pInputText
+                  type="text"
+                  (input)="
+                    dtAll.filter($event.target.value, 'jobStatus', 'contains')
+                  "
+                  class="w-full"
+                  [(ngModel)]="filters.jobStatus"
+                />
+              </th>
+              <th>
+                <input
+                  pInputText
+                  type="text"
+                  (input)="
+                    dtAll.filter(
+                      $event.target.value,
+                      'jobDockStatus',
+                      'contains'
+                    )
+                  "
+                  class="w-full"
+                  [(ngModel)]="filters.jobDockStatus"
+                />
+              </th>
+              <th>
+                <input
+                  pInputText
+                  type="text"
+                  (input)="
+                    dtAll.filter(
+                      $event.target.value,
+                      'locationZone',
+                      'contains'
+                    )
+                  "
+                  class="w-full"
+                  [(ngModel)]="filters.locationZone"
+                />
+              </th>
+              <th
+                pFrozenColumn
+                [frozen]="true"
+                alignFrozen="right"
+                class="text-center"
+              >
+                <button
+                  pButton
+                  pRipple
+                  type="button"
+                  icon="pi pi-filter-slash"
+                  class="p-button-text"
+                  (click)="clear(dtAll)"
+                  severity="help"
+                ></button>
+              </th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-trailers>
+            <tr>
+              <td>{{ trailers.createDate | date : "dd/MM/yyyy" }}</td>
+              <td>
+                {{ trailers.licensePlate }}
+                @if (trailers.status === 'Full' && trailers.locationType ===
+                'Dock' && !trailers.jobStatusOriginal){ -
+                <p-badge
+                  severity="info"
+                  value="รอแจ้งงาน"
+                  styleClass="small-tag"
+                  class="cssanimation lightning"
+                ></p-badge>
+                }@if (trailers.jobStatusOriginal &&
+                ['New'].includes(trailers.jobStatusOriginal)){ -
+                <p-badge
+                  severity="danger"
+                  value="รอหัวลากมาย้าย"
+                  styleClass="small-tag"
+                  class="cssanimation lightning"
+                ></p-badge>
+                } @if (trailers.jobStatusOriginal && ['Assigned',
+                'In-Process'].includes(trailers.jobStatusOriginal)){ -
+                <p-badge
+                  severity="warning"
+                  value="กำลังขนย้าย"
+                  styleClass="small-tag"
+                  class="cssanimation lightning"
+                ></p-badge>
+                } @if (trailers.jobStatusOriginal &&
+                ['On-Dock'].includes(trailers.jobStatusOriginal)){ -
+                <p-badge
+                  severity="warning"
+                  value="รอโหลด"
+                  styleClass="small-tag"
+                  class="cssanimation lightning"
+                ></p-badge>
+                } @if (trailers.jobStatusOriginal &&
+                ['Loading'].includes(trailers.jobStatusOriginal)){ -
+                <p-badge
+                  severity="warning"
+                  value="กำลังโหลด"
+                  styleClass="small-tag"
+                  class="cssanimation lightning"
+                ></p-badge>
+                } @if (trailers.jobStatusOriginal &&
+                ['Loaded'].includes(trailers.jobStatusOriginal)){ -
+                <p-badge
+                  severity="success"
+                  value="รอยืนยันโหลดเสร็จ"
+                  styleClass="small-tag"
+                  class="cssanimation lightning"
+                ></p-badge>
+                }
+              </td>
+              <td>
+                <p-badge
+                  *ngIf="getSeverity(trailers.status)"
+                  [severity]="getSeverity(trailers.status)"
+                  [value]="trailers.status"
+                  styleClass="small-tag"
+                >
+                </p-badge>
+              </td>
+              <td>{{ trailers.trailerGroup }}</td>
+              <td>{{ trailers.trailerType }}</td>
+              <td>{{ trailers.trailerSize }}</td>
+              <td>{{ trailers.locationNo }}</td>
+              <td>{{ trailers.locationType }}</td>
+              <td>{{ trailers.jobStatus }}</td>
+              <td class="text-center">
+                <p-badge
+                  [value]="trailers.jobDockStatus"
+                  [style]="{
+                    background: getJobSeverity(trailers.jobDockStatus),
+                    color: '#ffffff'
+                  }"
+                ></p-badge>
+              </td>
+              <td>{{ trailers.locationZone }}</td>
+              <td
+                pFrozenColumn
+                [frozen]="true"
+                alignFrozen="right"
+                class="text-center"
+                style="
+                  background-color: var(--blue-100);
+                  border-color: var(--blue-200);
+                "
+              >
+                @if (trailers.status != 'On-Dock' && trailers.status != 'Full'
+                && trailers.status != 'Out-DC' && !trailers.jobStatus){
+                <p-button
+                  icon="pi pi-briefcase"
+                  label="Assign Job"
+                  styleClass="p-button-sm p-button-success"
+                  [disabled]="!canModify"
+                  (onClick)="check_status_before_open(trailers)"
+                ></p-button>
+                } @if (trailers.status === 'Full' && trailers.jobStatus !=
+                'On-Job'){
+                <p-button
+                  icon="pi pi-briefcase"
+                  label="Assign Job"
+                  styleClass="p-button-sm p-button-danger"
+                  [disabled]="!canModify"
+                  (onClick)="check_status_before_open(trailers)"
+                ></p-button>
+                }@if (trailers.status === 'Out-DC' && trailers.status !=
+                'Empty'){
+                <p-button
+                  icon="pi pi-briefcase"
+                  label="Assign Job"
+                  styleClass="p-button-sm p-button-info"
+                  [disabled]="!canModify"
+                  (onClick)="check_status_before_open(trailers)"
+                ></p-button>
+                }
+              </td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </div>
+    </div>
+  </div>
+</div>

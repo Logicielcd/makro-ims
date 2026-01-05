@@ -1,0 +1,51 @@
+.multi-line-button {
+  white-space: pre-wrap; /* Ensures that whitespace is respected and new lines are shown */
+  // display: block; /* Ensures it acts as block element */
+  // text-align: center; /* Optional: center-align the text */
+}
+
+
+input.p-inputtext.p-component.p-element.p-filled.ng-untouched.ng-pristine.ng-valid.ng-star-inserted {
+  width: 2rem;
+  max-width: 4rem;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+  font-size: small;
+}
+
+input.p-inputtext.p-component.p-element.ng-valid.ng-star-inserted.ng-dirty.p-filled.ng-touched {
+  width: 2rem;
+  max-width: 4rem;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+  font-size: small;
+}
+
+input.p-inputtext.p-component.p-element.p-filled.ng-pristine.ng-valid.ng-star-inserted.ng-touched{
+  width: 2rem;
+  max-width: 4rem;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+  font-size: small;
+}
+
+td.p-element.p-editable-column.ng-star-inserted{
+  max-width: 4rem;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+  font-size: small;
+  margin: 0rem;
+}
+
+// th.p-element.p-editable-column.ng-star-inserted {
+//   text-align: center;
+//   border: 1px solid #dfe7ef;
+//   border-width: 0 0 1px 0;
+//   font-weight: 700;
+//   color: #708da9;
+//   background: #eff3f8;
+//   transition: box-shadow 0.2s;
+//   margin: 0.5rem 0rem 0.5rem 0rem;
+//   padding: 0;
+//   max-width: 4rem;
+// }

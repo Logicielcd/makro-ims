@@ -1,0 +1,139 @@
+<button
+  class="layout-config-button p-link"
+  type="button"
+  (click)="onConfigButtonClick()"
+>
+  <i class="pi pi-cog"></i>
+</button>
+
+<p-sidebar
+  [(visible)]="visible"
+  position="right"
+  [transitionOptions]="'.3s cubic-bezier(0, 0, 0.2, 1)'"
+  styleClass="layout-config-sidebar w-20rem"
+>
+  <h5>{{ "Label.Username" | translate }}</h5>
+  <div class="field p-fluid p-inputgroup">
+    <span class="p-inputgroup-addon"><i class="pi pi-user"></i></span>
+    <input
+      id="username"
+      name="username"
+      type="text"
+      [value]="userProfile.userName"
+      pInputText
+      readonly
+    />
+  </div>
+  
+  <!-- <h5>{{ "Label.Role" | translate }}</h5>
+  <div class="field p-fluid p-inputgroup">
+    <span class="p-inputgroup-addon"><i class="pi pi-cog"></i></span>
+    <input
+      id="role"
+      name="role"
+      type="text"
+      [value]="userProfile.role"
+      pInputText
+      readonly
+    />
+  </div> -->
+
+  <!-- <h5>{{ "Label.Department" | translate }}</h5>
+  <div class="field p-fluid">
+    <p-dropdown
+      id="defaultDepartment"
+      name="defaultDepartment"
+      #defaultDepartment="ngModel"
+      [(ngModel)]="userProfile.defaultDepartment"
+      [options]="departments"
+      optionLabel="name"
+      optionValue="id"
+      appendTo="body"
+      (onChange)="changeDep($event.value)"
+    ></p-dropdown>
+  </div> -->
+
+  <!-- <ng-container *ngIf="transporter">
+    <h5>{{ "Label.Transporter" | translate }}</h5>
+    <div class="p-fluid">
+      <input
+        id="transporter"
+        name="transporter"
+        type="text"
+        [value]="transporter.name"
+        pInputText
+        readonly
+      />
+    </div>
+  </ng-container> -->
+
+  <!-- <ng-container *ngIf="mainVehicle">
+    <h5>{{ "Label.MainVehicle" | translate }}</h5>
+    <div class="p-fluid">
+      <input
+        id="mainVehicle"
+        name="mainVehicle"
+        type="text"
+        [value]="mainVehicle.licensePlateType"
+        pInputText
+        readonly
+      />
+    </div>
+  </ng-container> -->
+
+  <!-- <ng-container *ngIf="secondaryVehicle">
+    <h5>{{ "Label.SecondaryVehicle" | translate }}</h5>
+    <div class="p-fluid">
+      <input
+        id="secondaryVehicle"
+        name="secondaryVehicle"
+        type="text"
+        [value]="secondaryVehicle.licensePlateType"
+        pInputText
+        readonly
+      />
+    </div>
+  </ng-container> -->
+
+  <h5>{{ "Label.Language" | translate }}</h5>
+  <div class="field p-fluid" *ngIf="userProfile.translate">
+    <p-dropdown
+      id="translate"
+      name="translate"
+      #translate="ngModel"
+      [(ngModel)]="userProfile.translate"
+      [options]="translates$ | async"
+      optionLabel="name"
+      optionValue="name"
+      appendTo="body"
+      (onChange)="changeTranslate($event.value)"
+    ></p-dropdown>
+  </div>
+
+  <h5>{{ "Label.Scale" | translate }}</h5>
+  <div class="flex align-items-center">
+    <button
+      icon="pi pi-minus"
+      type="button"
+      pButton
+      (click)="decrementScale()"
+      class="p-button-text p-button-rounded w-2rem h-2rem mr-2"
+      [disabled]="scale === scales[0]"
+    ></button>
+    <div class="flex gap-2 align-items-center">
+      <i
+        class="pi pi-circle-fill text-300"
+        *ngFor="let s of scales"
+        [ngClass]="{ 'text-primary-500': s === scale }"
+      ></i>
+    </div>
+    <button
+      icon="pi pi-plus"
+      type="button"
+      pButton
+      (click)="incrementScale()"
+      class="p-button-text p-button-rounded w-2rem h-2rem ml-2"
+      [disabled]="scale === scales[scales.length - 1]"
+    ></button>
+  </div>
+</p-sidebar>
