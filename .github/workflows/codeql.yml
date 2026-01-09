@@ -39,8 +39,8 @@ jobs:
         with:
           languages: ${{ matrix.language }}
           build-mode: ${{ matrix.build-mode }}
-          cache: false   # 🚫 disable CodeQL cache to avoid conflict
-
+          trap-caching: false   # 🚫 disable CodeQL cache to avoid conflict
+          dependency-caching: false
           # 🔍 increase detection coverage (especially JS/TS)
           queries: security-extended,security-and-quality
 
