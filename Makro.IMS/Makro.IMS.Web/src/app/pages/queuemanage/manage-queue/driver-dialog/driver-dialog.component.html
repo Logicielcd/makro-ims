@@ -1,0 +1,64 @@
+<p-toast position="top-right" class="mt-2" key="dg1"></p-toast>
+
+<div class="formgrid grid p-fluid mt-2" *ngIf="data">
+  <div class="field col-12 md:col-12">
+    <label htmlFor="drivername">
+      Driver Name 
+    </label>
+    <input
+      pInputText
+      type="text"
+      id="drivername"    
+      #drivername="ngModel"        
+      [(ngModel)]="data.driverName"
+      required
+      title="Driver Name"
+      placeholder="Enter Driver Name"
+      [autocomplete]="false"
+    />
+  </div>
+  <div class="field col-12 md:col-12">
+    <label htmlFor="telno">
+      Tel No. 
+    </label>
+    <input
+      pInputText
+      type="text"
+      id="telno"    
+      #telno="ngModel"        
+      [(ngModel)]="data.telNo"
+      required
+      title="Tel No."
+      placeholder="Enter Tel No."   
+      [autocomplete]="false"
+    />
+  </div>
+  <div class="field col-12 md:col-6">
+    <button 
+      id="cancel"
+      name="ca cel"
+      pButton
+      type="button" 
+      class="p-button-warning"
+      label="Cancel"
+      icon="pi pi-times"
+      (click)="close()"
+    >
+    </button>   
+  </div>
+  <div class="field col-12 md:col-6">
+    <button 
+      id="save"
+      name="save"
+      pButton
+      type="button" 
+      class="p-button"
+      label="Save"
+      icon="pi pi-save"      
+      (click)="onSaveDriverInfo()"
+      
+    >
+    </button>   
+  </div>
+</div>
+

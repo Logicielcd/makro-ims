@@ -1,0 +1,46 @@
+{
+    "Title": {
+      "Create": "Create Trip",
+      "History": "History"
+    },
+    "Section": {
+
+    },
+    "Label": {
+
+    },
+    "Button": {
+      "Create": "Create",
+      "Upload": "Upload",
+      "Excel": "Excel",
+      "Save": "Save",
+      "Delete": "Delete",
+      "Back": "Back",
+      "Yes": "Yes",
+      "No": "No"
+    },
+    "History": {
+      "Action": "Action",
+      "Who": "Who",
+      "Timestamp": "Timestamp"
+    },
+    "Message": {
+      "Confirm": {
+        "Create": {
+          "Title": "Create Trip",
+          "Message": "Are you sure you want to create ?"
+        }
+      },
+      "Notification": {
+        "Create": "Successfully created",
+        "Update": "Successfully edited",
+        "Delete": "Successfully deleted"
+      },
+      "Validation": {
+        "Required": "{{field}} is required"
+      },
+      "FromApi": {
+
+      }
+    }
+  }

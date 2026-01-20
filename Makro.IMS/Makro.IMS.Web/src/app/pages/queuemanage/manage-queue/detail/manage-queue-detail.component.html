@@ -1,0 +1,397 @@
+<p-toast></p-toast>
+<p-confirmDialog
+  [baseZIndex]="10000"
+  rejectButtonStyleClass="p-button-text"
+></p-confirmDialog>
+<p-toolbar>
+  <div class="p-toolbar-group-left">
+    <h5>Booking Detail</h5>
+  </div>
+  <div class="p-toolbar-group-right">
+    <p-button icon="pi pi-refresh" (click)="refresh()"></p-button>
+  </div>
+</p-toolbar>
+<div class="card" *ngIf="bookingKeyDto">
+  <form #supForm="ngForm">
+    <div class="formgrid grid p-fluid">
+      <div class="field col-12 md:col-3">
+        <label>
+          Supplier
+          <span class="p-error"> *</span>
+        </label>
+        <input
+          id="supplier"
+          pInputText
+          type="text"
+          #supplier="ngModel"
+          [(ngModel)]="supplierDisplay"
+          name="supplier"
+          readonly
+          placeholder="Input supplier"
+        />
+      </div>
+
+      <div class="field col-12 md:col-3">
+        <label for="bookingDate">Booking Date</label>
+        <p-calendar
+          [(ngModel)]="bookingDate"
+          dateFormat="dd/mm/yy"
+          inputId="bookingDate"
+          showIcon="true"
+          required
+          name="bookingdate"
+          #bookingdate="ngModel"
+          [minDate]="minDate"
+          [maxDate]="maxDate"
+          [disabled]="!allowToEdit"
+        >
+        </p-calendar>
+      </div>
+      <div class="field col-12 md:col-2">
+        <button
+          pButton
+          type="button"
+          class="p-button w-12"
+          icon="pi pi-save"
+          (click)="onSaveBooking()"
+          [disabled]="!isCompleted"
+          style="margin-top: 26px"
+          label="Save booking"
+        ></button>
+      </div>
+
+      <div class="field col-12 md:col-3">
+        <button
+          pButton
+          type="button"
+          class="p-button-warning w-12"
+          icon="pi pi-trash"
+          (click)="onDeleteBooking()"          
+          style="margin-top: 26px"
+          label="Delete booking all warehouse"
+        ></button>
+      </div>
+
+
+      <div class="field col-12 md:col-4">
+        <label for="contactName"
+          >Contact name
+          <span class="p-error"> *</span>
+        </label>
+        <input
+          id="contactName"
+          pInputText
+          type="text"
+          #contactname="ngModel"
+          [(ngModel)]="contactName"
+          name="contactname"
+          placeholder="Input contact name"
+          [readonly]="!allowToEdit"
+        />
+      </div>
+
+      <div class="field col-12 md:col-3">
+        <label for="telNo"
+          >Tel No.
+          <span class="p-error"> *</span>
+        </label>
+        <input
+          id="telNo"
+          pInputText
+          type="text"
+          name="telno"
+          #telNo="ngModel"
+          required
+          [(ngModel)]="contactPhone"
+          placeholder="Input tel no."
+          [readonly]="!allowToEdit"
+        />
+      </div>
+
+      <div class="field col-12 md:col-4">
+        <label for="email"
+          >e-Mail
+          <span class="p-error"> *</span>
+        </label>
+        <textarea
+          rows="1"
+          id="email"
+          name="email"
+          #email="ngModel"
+          pInputTextarea
+          [(ngModel)]="contactEmail"
+          placeholder="Input email"
+        ></textarea>
+      </div>
+    </div>
+  </form>
+</div>
+<div class="card">
+  <h5>PO</h5>
+  <form #f="ngForm" novalidate>
+    <div class="formgrid grid p-fluid">
+      <div class="field col-12 md:col-6">
+        <label for="poNo2">PO No</label>
+        <input
+          pInputText
+          type="text"
+          id="poNo"
+          name="poNo"
+          #poNo="ngModel"
+          [(ngModel)]="inputPoNo"
+          placeholder="Input PO"
+          [disabled]="!allowToEdit"
+          (keydown.enter)="addPo()"
+        />
+      </div>
+      <div class="field col-12 md:col-2">
+        <button
+          pButton
+          type="button"
+          label="Add"
+          icon="pi pi-plus"
+          class="p-button"
+          (click)="addPo()"
+          [disabled]="!allowToEdit"
+          style="margin-top: 24px"
+        ></button>
+      </div>
+    </div>
+  </form>
+  <p-tabView [scrollable]="true">
+    <p-tabPanel
+      [header]="item.warehouseDisplay"
+      *ngFor="let item of bookingCreates; let i = index"
+      [selected]="i == 0"
+    >
+      <ng-template pTemplate="content">
+
+        <div class="formgrid grid p-fluid">
+          <div class="field col-12 md:col-3">
+            <span class="p-float-label">
+              <input pInputText id="bookingId" [(ngModel)]="item.bookingId" readonly="true" />
+              <label htmlFor="bookingId">Booking Id</label>
+            </span>
+          </div>
+          <div class="field col-12 md:col-3">
+            <button
+              pButton
+              type="button"
+              class="p-button-warning w-8"
+              icon="pi pi-trash"
+              (click)="onDeleteBookingWarehouse(item)"
+              label="Delete Booking"
+            ></button>
+          </div>
+          <div class="field col-12 md:col-3">
+            <button
+              pButton
+              type="button"
+              class="p-button-danger w-8"
+              icon="pi pi-check"
+              (click)="onApproved(item)"
+              label="Approved Booking"
+              [disabled]="item.status == 'APPROVED'"
+            ></button>            
+          </div>
+        </div>
+
+        <p-tabView [scrollable]="true">
+          <p-tabPanel header="PO List">
+            <ng-template pTemplate="content">
+              <p-table
+                [columns]="cols"
+                [value]="item.bookingDetail"
+                responsiveLayout="scroll"
+              >
+                <ng-template pTemplate="header" let-columns>
+                  <tr>
+                    <th *ngFor="let col of columns">
+                      {{ col.header }}
+                    </th>
+                  </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-rowData let-columns="columns">
+                  <tr>
+                    <td *ngFor="let col of columns">
+                      {{ rowData[col.field] }}
+                    </td>
+                    <td>
+                      <button
+                        pButton
+                        pRipple
+                        icon="pi pi-trash"
+                        class="p-button-rounded p-button-warning"
+                        (click)="deletePo(rowData)"
+                        [disabled]="!allowToEdit"
+                      ></button>
+                    </td>
+                  </tr>
+                </ng-template>
+              </p-table>
+            </ng-template>
+          </p-tabPanel>
+          <p-tabPanel header="Truck List">
+            <ng-template pTemplate="content">
+              <form #truckForm="ngForm">
+                <div class="formgrid grid p-fluid">
+                  <div class="field col-12 md:col-2">
+                    <label for="truckType">Truck Type</label>
+                    <p-dropdown
+                      id="truckType"
+                      name="truckType"
+                      #truckType="ngModel"
+                      [options]="trucks"
+                      [(ngModel)]="item.truckSelected"
+                      optionLabel="truckName"
+                      optionValue="internalTruckId"
+                      [filter]="true"
+                      filterBy="internalTruckId"
+                      [showClear]="true"
+                      placeholder="Select Truck Type"
+                      [readonly]="!allowToEdit"
+                      required
+                      [ngClass]="{
+                        'ng-invalid ng-dirty':
+                          truckType.invalid &&
+                          (truckType.dirty || truckType.touched)
+                      }"
+                      [virtualScroll]="true"
+                      [virtualScrollItemSize]="38"
+                      (onChange)="onTruckSelected(item.warehouseCode, $event)"
+                    >
+                    </p-dropdown>
+                    <small
+                      class="p-error block"
+                      *ngIf="
+                        truckType.invalid &&
+                        (truckType.dirty || truckType.touched)
+                      "
+                    >
+                      {{
+                        "Message.Validation.Required"
+                          | translate
+                            : { field: "Label.SupplierCode" | translate }
+                      }}
+                    </small>
+                  </div>
+                  <div class="field col-12 md:col-3">
+                    <label for="totaltruck">Total Truck</label>
+                    <input
+                      pInputText
+                      type="text"
+                      id="totaltruck"
+                      name="totaltruck"
+                      [(ngModel)]="item.totalTruck"
+                      required
+                      (keypress)="keyPressNumbers($event)"
+                    />
+                  </div>
+                  <div class="field col-12 md:col-2">
+                    <button
+                      pButton
+                      type="button"
+                      class="p-button-sm"
+                      (click)="addTruck(item.warehouseCode)"
+                      [disabled]="!truckForm.form.valid"
+                      label="Add"
+                      icon="pi pi-plus"
+                      style="margin-top: 26px"
+                    ></button>
+                  </div>
+                </div>
+              </form>
+              <div class="field col-12 md:col-12">
+                <p-table
+                  [columns]="truckCols"
+                  [value]="item.bookingTruck"
+                  responsiveLayout="scroll"
+                >
+                  <ng-template pTemplate="header" let-columns>
+                    <tr>
+                      <th *ngFor="let col of columns">
+                        {{ col.header }}
+                      </th>
+                    </tr>
+                  </ng-template>
+                  <ng-template
+                    pTemplate="body"
+                    let-rowData
+                    let-columns="columns"
+                  >
+                    <tr>
+                      <td *ngFor="let col of columns">
+                        {{ rowData[col.field] }}
+                      </td>
+                      <td>
+                        <button
+                          pButton
+                          pRipple
+                          icon="pi pi-trash"
+                          class="p-button-rounded p-button-warning"
+                          (click)="deleteTruck(rowData)"
+                          [disabled]="!allowToEdit"
+                        ></button>
+                      </td>
+                    </tr>
+                  </ng-template>
+                </p-table>
+              </div>
+            </ng-template>
+          </p-tabPanel>
+          <p-tabPanel header="Assign Time slot">
+            <ng-template pTemplate="content">
+              <div class="formgrid grid p-fluid">
+                <div class="field col-12 md:col-3">
+                  <label for="dockdoor">Dock Door</label>
+                  <input
+                    pInputText
+                    type="text"
+                    id="dockdoor"
+                    name="dockdoor"
+                    [(ngModel)]="item.dockDoor"
+                    readonly
+                  />
+                </div>
+                <div class="field col-12 md:col-3">
+                  <label for="timeStart">Time start</label>
+                  <p-calendar
+                    [(ngModel)]="item.startTime"
+                    [showTime]="true"
+                    [showSeconds]="true"
+                    inputId="starttime"
+                    disabled
+                  >
+                  </p-calendar>
+                </div>
+                <div class="field col-12 md:col-3">
+                  <label for="timeStart">Time End</label>
+                  <p-calendar
+                    [(ngModel)]="item.endTime"
+                    [showTime]="true"
+                    [showSeconds]="true"
+                    inputId="time"
+                    disabled
+                  >
+                  </p-calendar>
+                </div>
+                <div class="field col-12 md:col-3">
+                  <button
+                    pButton
+                    type="button"
+                    label=""
+                    class="p-button-sm"
+                    (click)="show(item.warehouseCode)"
+                    [disabled]="!allowToEdit"
+                    style="margin-top: 26px"
+                    icon="pi pi-calendar-plus"
+                  ></button>
+                </div>
+              </div>
+            </ng-template>
+          </p-tabPanel>
+        </p-tabView>
+      </ng-template>
+    </p-tabPanel>
+  </p-tabView>
+</div>

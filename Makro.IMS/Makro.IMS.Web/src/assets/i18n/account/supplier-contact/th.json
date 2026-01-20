@@ -1,0 +1,65 @@
+{
+  "Title": {
+    "List": "Manage User",
+    "Create": "Create User",
+    "Detail": "User Detail",
+    "History": "History"
+  },
+  "Section": {
+    "UserInfo": "User Info",
+    "Password": "Password",
+    "Role": "Role",
+    "Department": "Department"
+  },
+  "Label": {
+    "Username": "Username",
+    "Name": "Name",
+    "Email": "Email",
+    "IsActive": "Active",
+    "DefaultDepartment": "Default Department",
+    "Department": "Department"
+  },
+  "Select": {
+    "Role": "Select Role",
+    "DefaultDepartment": "Select Defualt Department"
+  },
+  "Button": {
+    "SelectFile": "Select File",
+    "Create": "Create",
+    "Upload": "Upload",
+    "Excel": "Excel",
+    "Save": "Save",
+    "Delete": "Delete",
+    "Back": "Back",
+    "Yes": "Yes",
+    "No": "No",
+    "Cancel": "Cancel"
+  },
+  "History": {
+    "Action": "Action",
+    "Who": "Who",
+    "Timestamp": "Timestamp"
+  },
+  "Message": {
+    "Confirm": {
+      "Delete": {
+        "Title": "Delete",
+        "Message": "Are you sure you want to delete ?"
+      },
+      "Upload": {
+        "Title": "Upload",
+        "Message": "Are you sure you want to upload ?"
+      }
+    },
+    "Notification": {
+      "Upload": "Successfully uploaded",
+      "Create": "Successfully created",
+      "Update": "Successfully edited",
+      "Delete": "Successfully deleted"
+    },
+    "Validation": {
+      "Required": "{{field}} is required"
+    },
+    "FromApi": {}
+  }
+}

@@ -1,0 +1,78 @@
+.status-badge {
+  border-radius: var(--border-radius);
+  padding: 0.25em 0.5rem;
+  text-transform: uppercase;
+  font-weight: 700;
+  font-size: 1rem;
+  letter-spacing: 0.3px;  
+}
+
+.all {
+  background-color: #fa8d08;
+  color: #282423;
+}
+
+.new {
+  background-color: #fa8d08;
+  color: #ffffff;
+}
+
+.edit {
+  background-color: yellow;
+  color: black;
+}
+
+.draft {
+  background-color: #eccfff;
+  color: #694382;
+}
+
+.overcap {
+  background-color: red;
+  color: white;
+}
+
+.overcutoff {
+  background-color: red;
+  color: black;
+}
+
+.approved{
+  background-color: green;
+  color: white;
+}
+
+.intransit, .checkin, .queue, .calltruck, .ondock, 
+.unloading, .unloaded, .leavedoor, .waitingdoc, 
+.submitdoc {
+  background-color:var(--primary-400);
+  color: white;
+}
+
+.checkout {
+  background-color: gray;
+  color: white;
+}
+
+.inprocess {
+  background-color: #ffd8b2;
+  color: #805b36;
+}
+
+.completed {
+  background-color: #c8e6c9;
+  color: #256029;
+}
+
+.cancel {
+  background: #e6eaf3;
+  color: black;
+}
+
+.true-icon {
+  color: #1b9c24;
+}
+
+.false-icon {
+  color: #f21b1b;
+}

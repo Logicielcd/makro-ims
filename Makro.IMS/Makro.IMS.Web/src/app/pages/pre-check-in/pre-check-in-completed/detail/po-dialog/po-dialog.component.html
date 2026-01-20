@@ -1,0 +1,32 @@
+<div class="card" *ngIf="pos">
+  <div class="r-2">
+    <button
+      pButton
+      type="button"
+      class="p-button-sm mb-2"
+      icon="pi pi-plus"
+      label="Confirm"
+      (click)="confirm()"
+    ></button>
+  </div>
+  
+  <p-table [columns]="cols" [value]="pos" [(selection)]="selectedPos" dataKey="po_Nbr" [tableStyle]="{'min-width': '50rem'}"  [scrollable]="true" scrollHeight="400px">
+    <ng-template pTemplate="header">
+        <tr>
+            <th style="width: 4rem">
+                <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+            </th>            
+            <th>PO Nbr</th>            
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-polist>
+        <tr>
+            <td>
+                <p-tableCheckbox [value]="polist"></p-tableCheckbox>
+            </td>                        
+            <td>{{polist.poNbr}}</td>            
+        </tr>
+    </ng-template>
+  </p-table>
+
+  </div>

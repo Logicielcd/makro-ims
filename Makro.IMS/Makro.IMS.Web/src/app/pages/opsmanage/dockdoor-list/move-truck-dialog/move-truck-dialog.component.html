@@ -1,0 +1,99 @@
+<div *ngIf="doors">
+  <div class="text-center col-12 md:col-12">
+    <h4>ประตู {{doorQueue.doorName}} จากโซน {{doorQueue.doorArea}}</h4>
+  </div>
+  <div class="formgrid grid p-fluid justify-content-start">
+    <div class="field col-12 md:col-12">
+      <label>
+          Door
+      </label>
+      <p-dropdown
+        id="door"
+        name="door"
+        #door="ngModel"
+        [options]="doors"
+        [(ngModel)]="selectedDoor"
+        optionLabel="doorName"
+        optionValue="internalDoorId"
+        [filter]="true"
+        filterBy="doorName"
+        [showClear]="true"
+        [placeholder]="'Select Door' | translate"
+        required
+        [ngClass]="{
+          'ng-invalid ng-dirty':
+            door.invalid &&
+            (door.dirty || door.touched)
+        }"
+        (onChange)="onDoorChange()"
+      >
+        <ng-template let-item pTemplate="item">
+          {{item.doorName}}
+        </ng-template>
+            
+        <ng-template let-item pTemplate="selectedItem">
+          {{item.doorName}}
+        </ng-template>
+      </p-dropdown>
+      <small
+        class="p-error block"
+        *ngIf="
+          door.invalid &&
+          (door.dirty || door.touched)
+        "
+      >
+        {{
+          "Message.Validation.Required"
+            | translate: { field: "Label.Door" | translate }
+        }}
+      </small>
+    </div>
+    <div class="col-12 md:col-12">
+      <label htmlFor="remarktext">
+        {{ "Label.Remark" | translate }}
+      </label>
+      <input
+        pInputText
+        type="text"
+        id="remarktext"
+        name="remarktext"
+        #remarktext="ngModel"
+        [(ngModel)]="remark"
+        required
+        [ngClass]="{
+          'ng-invalid ng-dirty':
+          remarktext.invalid && (remarktext.dirty || remarktext.touched)
+        }"              
+      />
+      <small
+        class="p-error block"
+        *ngIf="remarktext.invalid && (remarktext.dirty || remarktext.touched)"
+      >
+        {{
+          "Message.Validation.Required"
+            | translate : { field: "Label.Remark" | translate }
+        }}
+      </small>
+    </div>
+    <div class="field col-12 md:col-12"></div>
+    <div class="field col-12 md:col-5">
+      <button
+        pButton
+        type="button"
+        class="p-button w-12"          
+        label="OK"
+        (click)="onConfirm()"
+      ></button>
+    </div>
+    <div class="field col-12 md:col-2"></div>
+    <div class="field col-12 md:col-5">
+      <button
+        pButton
+        type="button"
+        class="p-button-warning w-12"          
+        label="CANCEL"
+        (click)="onCancel()"
+      ></button>
+    </div>
+  </div>
+</div>

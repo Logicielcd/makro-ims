@@ -1,0 +1,23 @@
+<div class="card mt-5">
+  <p-steps [model]="items" [activeIndex]="activeIndex" [readonly]="true"> </p-steps>
+  <hr />
+  <h6 class="text-center">Tracking Log</h6>
+  <p-table [value]="bookingLogs" [tableStyle]="{ 'min-width': '50rem' }" >
+    <ng-template pTemplate="header">
+        <tr style="font-size: small;">
+            <th>Action</th>
+            <th>Remark</th>
+            <th>User name</th>
+            <th>Date Time Stamp</th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-log>
+        <tr style="font-size: small;">
+            <td>{{ log.actionDisplay }}</td>
+            <td>{{ log.remark }}</td>
+            <td>{{ log.userStamp }}</td>
+            <td>{{ log.dateTimeStamp | date : "dd/MM/yyyy HH:mm:ss" }}</td>
+        </tr>
+    </ng-template>
+</p-table>
+</div>

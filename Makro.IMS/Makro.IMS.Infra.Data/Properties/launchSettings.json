@@ -1,0 +1,12 @@
+{
+  "profiles": {
+    "Makro.IMS.Infra.Data": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "applicationUrl": "https://localhost:56715;http://localhost:56720"
+    }
+  }
+}

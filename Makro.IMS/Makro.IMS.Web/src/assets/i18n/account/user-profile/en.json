@@ -1,0 +1,70 @@
+{
+  "Title": {
+    "ManageUsers": "Users List",
+    "List": "Users List",
+    "CreateUser": "Create User",
+    "UserDetail": "User Detail",
+    "History": "History"
+  },
+  "Section": {
+    "UserInfo": "User Info",
+    "Password": "Password",
+    "Role": "Permission",
+    "Department": "Department",
+    "ResetPassword": "Reset Password"
+  },
+  "Label": {
+    "UserId": "User Id",
+    "Username": "User Name",
+    "Lastname": "Lastname",
+    "Warehouse": "Warehouse",
+    "OperationType": "Operation Type",
+    "Email": "Email",
+    "IsActive": "Active",
+    "Approved": "Approved",    
+    "UserType": "User Type",
+    "SupplierGroup": "Supplier Group",
+    "NewPassword": "New Password"
+  },
+  "Select": {
+    "Search": "Search",
+    "UserType": "Select User Type",
+    "Warehouse": "Select Warehouse",
+    "OperationType": "Select Operation Type",
+    "SupplierGroup": "Select Supplier Group"
+  },
+  "Button": {
+    "Create": "Create",
+    "View": "View",
+    "ResetPassword": "Reset Password",
+    "Excel": "Excel",
+    "Save": "Save",
+    "Delete": "Delete",
+    "Back": "Back",
+    "Yes": "Yes",
+    "No": "No",
+    "Refresh": "Refresh"
+  },
+  "History": {
+    "Action": "Action",
+    "Who": "Who",
+    "Timestamp": "Timestamp"
+  },
+  "Message": {
+    "Confirm": {
+      "Delete": {
+        "Title": "Delete",
+        "Message": "Are you sure you want to delete ?"
+      }
+    },
+    "Notification": {
+      "Create": "Successfully created",
+      "Update": "Successfully edited",
+      "Delete": "Successfully deleted"
+    },
+    "Validation": {
+      "Required": "{{field}} is required"
+    },
+    "FromApi": {}
+  }
+}

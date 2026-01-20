@@ -1,0 +1,66 @@
+<div *ngIf="bookingHeader">
+  <div class="flex justify-content-between flex-wrap">
+    <div class="flex-initial flex mt-2 w-4 align-items-center justify-content-center font-bold text-2xl">คลัง</div>
+    <div class="flex-initial flex mt-2 w-4 align-items-center justify-content-center font-bold text-2xl">วันที่นัดหมาย</div>
+    <div class="flex-initial flex mt-2 w-4 align-items-center justify-content-center font-bold text-2xl">ประเภทสินค้า</div>
+  </div>
+  <div class="flex justify-content-between flex-wrap">
+    <div class="flex-initial flex mt-4 w-4 align-items-center justify-content-center font-bold text-2xl">{{ bookingHeader.warehouseCode }}</div>
+    <div class="flex-initial flex mt-4 w-4 align-items-center justify-content-center font-bold text-2xl">{{ formattedDate }}</div>
+    <div class="flex-initial flex mt-4 w-4 align-items-center justify-content-center font-bold text-2xl">{{ bookingHeader.merchType }}</div>
+  </div>
+  <div class="flex justify-content-between flex-wrap">
+    <div class="flex-initial flex mt-4 w-12 align-items-center justify-content-center font-bold text-2xl"><h3 style="color: red;">{{bookingNoti}}</h3></div>    
+  </div>
+</div>
+
+
+<div *ngIf="bookingHeader">
+  <div class="field col-12 md:col-12 -mt-3"  *ngIf="bookingTrucks">
+    <p-dataView #dv [value]="bookingTrucks" layout="grid" >
+      <ng-template let-datas pTemplate="grid">
+        <div class="flex justify-content-between flex-wrap w-12 mb-2 mt-2" *ngFor="let truck of datas">
+          <div class="flex-initial flex w-2 align-items-center justify-content-center px-1" *ngIf="isEarly === true && truck.status === 'INTRANSIT'">
+            <button
+                    *ngIf="isEarly === true && truck.status === 'INTRANSIT'"
+                    pButton
+                    type="button"
+                    class="p-button-danger p-button-lg pi pi-exclamation-triangle"
+                    style="font-size: x-large;"
+                    (click)="confirmEarly(truck.internalTruckCheckInId);"                      
+                  ></button>
+          </div>
+          <div class="flex-column flex w-2 align-items-center justify-content-center px-1">
+            <div class="card h-full w-full">
+              <div class="text-2xl font-bold text-700 text-center align-items-center justify-content-center mt-4">
+                <i *ngIf="truck.status === 'INTRANSIT'" class="pi pi-truck text-center" style="font-size: xx-large; color:red;"></i>
+                <i *ngIf="truck.status !== 'INTRANSIT'" class="pi pi-truck text-center" style="font-size: xx-large; color:green;"></i>
+              </div>              
+              <div class="text-2xl font-bold text-900 text-center align-items-center justify-content-center">{{truck.truckType}}</div>
+            </div>
+          </div>
+          <div class="flex-column flex w-8 font-bold text-2xl px-1">
+            <div class="card h-full w-full">
+                <div class="flex flex-column align-items-center sm:align-items-start gap-3">                          
+                    <div class="text-2xl font-bold text-900">คนขับ : {{ truck.driverName }}</div>
+                    <div class="text-2xl font-bold text-900">ทะเบียนหัว : {{ truck.licensePlate }}</div>
+                    <div class="text-2xl font-bold text-900">ทะเบียนหาง : {{ truck.licensePlate2 }}</div>
+                </div>
+            </div>
+          </div>
+          <div class="flex-initial flex w-2 align-items-center justify-content-center px-1" *ngIf="isEarly === false">
+            <button
+              *ngIf="isEarly === false && truck.status === 'INTRANSIT'"
+              pButton
+              type="button"
+              class="p-button p-button-lg pi pi-check"                    
+              style="font-size: x-large;"                      
+              (click)="confirm(truck.internalTruckCheckInId);"                      
+            ></button>                    
+          </div>
+        </div>
+      </ng-template>
+    </p-dataView>
+  </div>
+
+</div>

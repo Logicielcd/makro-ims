@@ -1,0 +1,71 @@
+{
+  "Title": {
+    "List": "Job List",
+    "Detail": "Job Detail"
+  },
+  "Section": {
+    "Info": "Information"
+  },
+  "Label": {},
+  "Button": {
+    "Create": "Create",
+    "Upload": "Upload",
+    "Excel": "Excel",
+    "ClearFilter": "Clear Filter",
+    "ChooseColumn": "Choose Column",
+    "Column": "Column",
+    "Refresh": "Refresh",
+    "Save": "Save",
+    "Delete": "Delete",
+    "Back": "Back",
+    "Yes": "Yes",
+    "No": "No",
+    "SelectFile": "Select File",
+    "Cancel": "Cancel"
+  },
+  "History": {
+    "Action": "Action",
+    "Who": "Who",
+    "Timestamp": "Timestamp"
+  },
+  "Message": {
+    "Confirm": {
+      "Create": {
+        "Title": "Create",
+        "Message": "Are you sure you want to create ?"
+      },
+      "ChangeDoor": {
+        "Title": "Confirm Change Door",
+        "Message": "Are you sure you want to change the door?"
+      },
+      "ConfirmLoading": {
+        "Title": "Confirm Loading",
+        "Message": "Are you sure you want to load?"
+      },
+      "ConfirmLoaded": {
+        "Title": "Confirm Loading Complete",
+        "Message": "Are you sure loading is complete?"
+      },
+      "ConfirmComplete": {
+        "Title": "Confirm Complete",
+        "Message": "Are you sure you want to complete?"
+      }
+    },
+    "Notification": {
+      "Create": "Job created successfully",
+      "ChangeDoor": "Door changed successfully",
+      "ConfirmLoading": "Loading confirmed successfully",
+      "ConfirmLoaded": "Loading completion confirmed successfully",
+      "ConfirmComplete": "Completion confirmed successfully"
+    },
+    "Validation": {
+      "Required": "{{field}} is required"
+    },
+    "FromApi": {}
+  },
+  "Select": {
+    "WarehouseCode": "Select Warehouse Code",
+    "YardType": "Select yard type",
+    "YardZone": "Select Yard Zone"
+  }
+}

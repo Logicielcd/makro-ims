@@ -1,0 +1,104 @@
+<div *ngIf="warehouseSelect">
+  <div class="r-2">
+    <button
+      pButton
+      type="button"
+      class="p-button-sm mb-2"
+      icon="pi pi-plus"
+      label="Confirm"
+      (click)="confirm()"
+    ></button>
+  </div>
+  <ejs-schedule
+    #scheduleObj
+    width="100%"
+    cssClass="timeline-resource"
+    height="800px"
+    [timeScale]="timeScale"
+    [showQuickInfo]="showQuickInfo"
+    [minDate]="minDate"
+    [maxDate]="maxDate"
+    [currentView]="currentView"
+    [workHours]="workHours"
+    [selectedDate]="selectedDate"
+    [group]="group"
+    [eventSettings]="eventSettings"
+    (eventRendered)="onEventRendered($event)"
+    (actionBegin)="onActionBegin($event)"
+    (renderCell)="onRenderCell($event)"
+    (popupOpen)="onPopupOpen($event)"
+    (popupClose)="onPopupClose($event)"
+    (navigating)="onNavigating($event)"
+    [rowAutoHeight]="false"
+    [timeZone]="timeZone"
+    [workDays]="workDays"
+  >
+    <e-resources>
+      <e-resource
+        field="DoorId"
+        title="Dock Door"
+        [dataSource]="resourceDataSource"
+        [allowMultiple]="allowMultiple"
+        name="Booking"
+        textField="text"
+        idField="id"
+        colorField="color"
+        readonly="true"
+      >
+      </e-resource>
+    </e-resources>
+    <e-views>
+      <e-view option="TimelineDay"></e-view>
+    </e-views>
+    <ng-template #resourceHeaderTemplate let-data>
+      <div class="template-wrap">
+        <div class="dockdoor">{{ data.resourceData.text }}</div>
+      </div>
+    </ng-template>
+    <ng-template #editorTemplate>
+      <table class="custom-event-editor" width="100%" cellpadding="5">
+        <tbody>
+          <tr>
+            <td class="e-textlabel">Dock Door</td>
+            <td colspan="4">
+              <input
+                type="text"
+                id="DoorId"
+                name="DoorId"
+                class="e-field"
+                style="width: 100%"
+                readonly
+              />
+            </td>
+          </tr>
+          <tr>
+            <td class="e-textlabel">From</td>
+            <td colspan="4">
+              <input
+                id="StartTime"
+                class="e-field"
+                type="text"
+                name="StartTime"
+                [min]="minDateTime"
+                [max]="maxDateTime"
+              />
+            </td>
+          </tr>
+          <tr>
+            <td class="e-textlabel">To</td>
+            <td colspan="4">
+              <input
+                id="EndTime"
+                class="e-field"
+                type="text"
+                name="EndTime"
+                [min]="minDateTime"
+                [max]="maxDateTime"
+              />
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </ng-template>
+  </ejs-schedule>
+</div>

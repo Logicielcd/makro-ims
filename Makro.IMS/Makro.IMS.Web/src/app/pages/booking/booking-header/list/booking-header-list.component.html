@@ -1,0 +1,23 @@
+<div *ngIf="lookup">
+  <app-table-page-list
+    [columns]="cols"
+    [datasource]="dataSource"
+    [rowCount]="rowCount"
+    [stateKey]="'booking-header-list'"
+    [canModify]="canModify"
+    [fieldDetail]="4"
+    [createBtn]="false"
+    [dataKey]="'internalKeyId'"
+    [uploadBtn]="false"
+    [exportBtn]="false"
+    [showToolbox]="true"
+    [stateKey]="'booking-header-list'"
+    [lookup]="lookup"
+  >
+  <!-- 
+    (uploadEmit)="uploadData()"
+    [export$]="export$" 
+    [stateKey]="'booking-header-list'"
+  -->
+  </app-table-page-list>
+</div>

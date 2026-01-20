@@ -1,0 +1,28 @@
+<app-table-page-list
+  [columns]="cols"
+  [datasource]="dataSource"
+  [rowCount]="rowCount"  
+  [canModify]="canModify"
+  [fieldDetail]="1"
+  [createBtn]="false"
+  [dataKey]="'internalHeaderKey'"
+  [stateKey]="'precheckin-completed-list'"
+  [uploadBtn]="false"
+  [exportBtn]="false"
+  [showToolbox]="true"
+  (onPrintData)="onPrintData($event)"
+  [lookup]="lookup"
+>
+
+<!-- 
+  [uploadBtn]="false"
+  [exportBtn]="false"
+  [refreshBtn]="false"
+  [selectColumnBtn]="false"
+  [showFilterBtn]="false"
+
+  (uploadEmit)="uploadData()"
+  [export$]="export$" 
+
+-->
+</app-table-page-list>

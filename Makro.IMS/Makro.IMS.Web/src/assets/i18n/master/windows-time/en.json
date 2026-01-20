@@ -1,0 +1,81 @@
+{
+  "Title": {
+    "List": "Windows Time",
+    "Create": "Create Windows Time",
+    "Detail": "Windows Time Detail",
+    "Upload": "Upload Windows Time",
+    "History": "History"
+  },
+  "Section": {
+    "Name": "Name",
+    "Remark": "Remark",
+    "Detail": "Detail"
+  },
+  "Label": {
+    "Name": "Name",
+    "Remark": "Remark",
+    "OperateDay": "Operate Day",
+    "OpenTime": "Open Time",
+    "CloseTime": "Close Time"
+  },
+  "Button": {
+    "Create": "Create",
+    "Upload": "Upload",
+    "Excel": "Excel",
+    "ClearFilter": "Clear Filter",
+    "ChooseColumn": "Choose Column",
+    "Column": "Column",
+    "Refresh": "Refresh",
+    "Save": "Save",
+    "Delete": "Delete",
+    "Back": "Back",
+    "Yes": "Yes",
+    "No": "No",
+    "SelectFile": "Select File",
+    "Cancel": "Cancel"
+  },
+  "History": {
+    "Action": "Action",
+    "Who": "Who",
+    "Timestamp": "Timestamp"
+  },
+  "Select": {
+    "OperateDay": "Select Operate Day"
+  },
+  "Message": {
+    "Confirm": {
+      "Delete": {
+        "Title": "Delete",
+        "Message": "Are you sure you want to delete ?"
+      },
+      "Upload": {
+        "Title": "Upload",
+        "Message": "Are you sure you want to upload ?"
+      }
+    },
+    "Notification": {
+      "Upload": "Successfully uploaded",
+      "Create": "Successfully created",
+      "Update": "Successfully edited",
+      "Delete": "Successfully deleted"
+    },
+    "Validation": {
+      "Required": "{{field}} is required"
+    },
+    "FromApi": {
+      "DEPARTMENT_IS_REQUIRED": "Department Is Required",
+      "WINDOWN_TIME_IS_REQUIRED": "Windows Time Is Required",
+      "NAME_IS_REQUIRED": "Name Is Required",
+      "DEPARTMENT_NOT_FOUND": "Department Not Found",
+      "WINDOWN_TIME_NOT_FOUND": "Windows Time NotFound",
+      "NAME_ALREADY_EXIST": "Name Already Exist",
+
+      "WINDOWN_TIME_DETAIL_IS_REQUIRED": "Windows Time Detail Is Required",
+      "OPERATE_DAY_IS_REQUIRED": "Operate Day Is Required",
+      "OPEN_TIME_IS_REQUIRED": "Open Time Is Required",
+      "CLOSE_TIME_IS_REQUIRED": "Close Time Is Required",
+      "WINDOWN_TIME_DETAIL_NOT_FOUND": "Windows Time Detail Not Found",
+      "OPERATE_DAY_ALREADY_EXIST": "Operate Day Already Exist"
+    }
+  }
+}

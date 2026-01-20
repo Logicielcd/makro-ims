@@ -1,0 +1,60 @@
+{
+  "Title": {
+    "List": "Manage Driver",
+    "Create": "Create Driver",
+    "Detail": "Driver Detail",
+    "History": "History"
+  },
+  "Section": {
+    "UserInfo": "User Info",
+    "Password": "Password",
+    "Role": "Role",
+    "TransporterVehicle": "Transporter / Vehicle"
+  },
+  "Label": {
+    "Username": "Username",
+    "Name": "Name",
+    "Email": "Email",
+    "IsActive": "Active",
+    "Transporter": "Transporter",
+    "MainVehicle": "Main Vehicle",
+    "SecondaryVehicle": "Secondary Vehicle"
+  },
+  "Select": {
+    "Role": "Select Role",
+    "Transporter": "Select Transporter",
+    "MainVehicle": "Select Main Vehicle",
+    "SecondaryVehicle": "Select Secondary Vehicle"
+  },
+  "Button": {
+    "Create": "Create",
+    "Excel": "Excel",
+    "Save": "Save",
+    "Delete": "Delete",
+    "Back": "Back",
+    "Yes": "Yes",
+    "No": "No"
+  },
+  "History": {
+    "Action": "Action",
+    "Who": "Who",
+    "Timestamp": "Timestamp"
+  },
+  "Message": {
+    "Confirm": {
+      "Delete": {
+        "Title": "Delete",
+        "Message": "Are you sure you want to delete ?"
+      }
+    },
+    "Notification": {
+      "Create": "Successfully created",
+      "Update": "Successfully edited",
+      "Delete": "Successfully deleted"
+    },
+    "Validation": {
+      "Required": "{{field}} is required"
+    },
+    "FromApi": {}
+  }
+}

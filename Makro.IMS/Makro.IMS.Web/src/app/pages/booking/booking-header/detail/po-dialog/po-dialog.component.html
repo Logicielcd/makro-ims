@@ -1,0 +1,47 @@
+<div *ngIf="pos">
+  <div class="r-2 mt-2">
+    <button
+      pButton
+      type="button"
+      class="p-button-sm mb-2"
+      icon="pi pi-plus"
+      label="Confirm"
+      (click)="confirm()"
+    ></button>
+  </div>
+
+  <p-table [columns]="cols" [value]="pos" [(selection)]="selectedPos" dataKey="po_Nbr" [tableStyle]="{'min-width': '50rem'}"  [scrollable]="true" scrollHeight="400px">
+    <ng-template pTemplate="header" let-columns>
+        <tr>
+            <th style="width: 4rem">
+                <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+            </th>
+            <th *ngFor="let col of columns">&#123;&#123;col.header&#125;&#125;</th>
+        </tr>
+        <tr>
+          <th></th>
+          <th *ngFor="let col of columns" >
+            <p-columnFilter type="text" [field]="col.field" [matchModeOptions]="matchModeOptions" [matchMode]="CONTAINS"></p-columnFilter>
+        </th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-polist>        
+        <tr [ngStyle]="{'background-color': polist.booking_Id != '0' ? 'lightcoral' : '' }" >
+            <td>
+                <p-tableCheckbox [value]="polist"></p-tableCheckbox>
+            </td>            
+            <td>{{polist.warehouse_Code}}</td>
+            <td>{{polist.warehouse_Name}}</td>
+            <td>{{polist.company_Code}}</td>
+            <td>{{polist.company_Name}}</td>
+            <td>{{polist.po_Nbr}}</td>
+            <td>{{polist.merch_Type}}</td>
+            <td>{{polist.plan_Receive_Date | date: "dd/MM/yyyy"}}</td>
+            <td>{{polist.sup_Code}}</td>
+            <td>{{polist.weight}}</td>
+            <td>{{polist.booking_Id}}</td>
+        </tr>
+    </ng-template>
+  </p-table>
+
+  </div>

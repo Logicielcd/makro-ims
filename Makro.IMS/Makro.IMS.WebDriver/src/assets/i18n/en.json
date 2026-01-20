@@ -1,0 +1,25 @@
+{
+  "Label": {
+    "Username": "Username",
+    "Role": "Role",
+    "Department": "Department",
+    "Transporter": "Transporter",
+    "MainVehicle": "Main Vehicle",
+    "SecondaryVehicle": "Secondary Vehicle",
+    "Language": "Language",
+    "Scale": "Scale"
+  },
+  "Menus": {    
+    "Driver": {
+      "Title": "Driver",      
+      "GatePass": "Gate Pass",
+      "Queue": "Queue"      
+    },
+    "Account": {
+      "Title": "Account",
+      "UserProfile": "User Profile",
+      "SupplierContact": "Supplier Contact",
+      "ResetPassword": "Reset Password"      
+    }
+  }
+}

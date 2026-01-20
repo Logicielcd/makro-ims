@@ -1,0 +1,108 @@
+{
+  "Title": {
+    "List": "Manage Roles",
+    "Create": "Create Role",
+    "Detail": "Role Detail",
+    "History": "History"
+  },
+  "Section": {
+    "RoleInfo": "Role Info"
+  },
+  "Label": {
+    "Name": "ชื่อ",
+
+    "Page": "หน้า",
+    "View": "ดู",
+    "Modify": "แก้ไข",
+    "Disable": "ปิด",
+
+    "Dashboard": "หน้าหลัก",
+    "Overview": "ภาพรวม",
+
+    "Master": "ข้อมูลหลัก",
+    "Department": "แผนก",
+    "Place": "สถานที่",
+    "PlaceType": "ประเภทของสถานที่",
+    "Zone": "โซน",
+    "Product": "สินค้า",
+    "ProductType": "ประเภทสินค้า",
+    "PackageType": "ประเภทบรรจุภัณฑ์",
+    "PlaceProductTypeMatch": "การจับคู่สถานที่กับประเภทสินค้า",
+    "Transporter": "ขนส่ง",
+    "TransporterType": "ประเภทขนส่ง",
+    "Vehicle": "รถ",
+    "VehicleType": "ประเภทรถ",
+    "VehicleStatus": "สถานะรถ",
+    "VehicleTypeProductCapacity": "ประเภทรถความจุสินค้า",
+    "VehicleTypeProductTypeMatch": "การจับคู่รถกับประเภทสินค้า",
+    "ODMatrix": "ความสัมพันธ์ต้นทางปลายทาง",
+    "Route": "เส้นทาง",
+    "VehicleRoute": "เส้นทางเดินรถ",
+    "FixedTrip": "เส้นทางประจำ",
+    "FuelPrice": "ค่าเชื้อเพลิง",
+    "TripRate": "อัตราค่าเดินทาง",
+    "WindowsTime": "เวลาทำการ",
+    "CostType": "ประเภทค่าใช้จ่าย",
+
+    "Document": "เอกสาร",
+    "UploadFeedMillOrder": "อัพโหลดออเดอร์อาหารสัตว์",
+    "UploadChickenOrder": "อัพโหลดออเดอร์ไก่",
+    "CreateDeliveryOrder": "สร้างรายการส่งสินค้า",
+    "DeliveryOrder": "รายการส่งสินค้า",
+
+    "Trip": "เที่ยวรถ",
+    "CheckInList": "รายการเช็คอินสินค้า",
+    "CheckIn": "การเช็คอินสินค้า",
+    "CreateTrip": "สร้างเที่ยวรถ",
+    "TripList": "รายการเที่ยวรถ",
+    "TripInfo": "ข้อมูลเที่ยวรถ",
+    "TripCalculator": "การคำนวนเที่ยวรถ",
+
+    "Tracking": "การติดตาม",
+    "TrackingVehicle": "การติดตามรถ",
+    "TrackingTrip": "การติดตามเที่ยวรถ",
+
+    "Billing": "การเรียกเก็บเงิน",
+
+    "Report": "รายงาน",
+
+    "UserAccount": "บัญชี",
+    "ManageUsers": "จัดการผู้ใช้",
+    "ManageAnimalHusbandmans": "จัดการสัตวบาล",
+    "ManageDrivers": "จัดการคนขับรถ",
+    "ManageRoles": "จัดการบทบาท"
+  },
+  "Select": {},
+  "Button": {
+    "Create": "Create",
+    "Upload": "Upload",
+    "Excel": "Excel",
+    "Save": "Save",
+    "Delete": "Delete",
+    "Back": "Back",
+    "Yes": "Yes",
+    "No": "No"
+  },
+  "History": {
+    "Action": "Action",
+    "Who": "Who",
+    "Timestamp": "Timestamp"
+  },
+  "Message": {
+    "Confirm": {
+      "Delete": {
+        "Title": "Delete",
+        "Message": "Are you sure you want to delete ?"
+      }
+    },
+    "Notification": {
+      "Create": "Successfully created",
+      "Update": "Successfully edited",
+      "Delete": "Successfully deleted"
+    },
+    "Validation": {
+      "Required": "{{field}} is required"
+    },
+    "FromApi": {}
+  }
+}

@@ -1,0 +1,302 @@
+<div class="card p-3" id="dashboard-card">
+  <div class="grid">
+    <div class="col-12 md:col-12">
+      <div class="surface-card shadow-3 border-round-3xl p-4">
+        <div class="flex justify-content-between align-items-center mb-3">
+          <div class="flex align-items-center">
+            <span class="p-3 border-round bg-primary-100 mr-3">
+              <i class="pi pi-map text-primary-700 text-xl"></i>
+            </span>
+            <div>
+              <h2 class="text-2xl font-semibold text-900 m-0">Yard Monitors</h2>
+              <span class="text-500">Track and manage your yards</span>
+            </div>
+          </div>
+          <div class="flex align-items-center gap-3">
+            <div class="flex align-items-center">
+              <p class="m-0">ว่าง</p>
+              <p-badge
+                [value]="count_status?.available?.toString() || '0'"
+                severity="success"
+              ></p-badge>
+            </div>
+            <div class="flex align-items-center">
+              <p class="m-0">เต็ม</p>
+              <p-badge
+                [value]="count_status?.notAvailable?.toString() || '0'"
+                severity="danger"
+              ></p-badge>
+            </div>
+            <div class="flex align-items-center">
+              <p class="m-0">ทั้งหมด</p>
+              <p-badge
+                [value]="count_status?.total?.toString() || '0'"
+                severity="info"
+              ></p-badge>
+            </div>
+            <span class="p-input-icon-left">
+              <i class="pi pi-search"></i>
+              <input
+                pInputText
+                type="text"
+                (input)="onGlobalFilter($event, 'all')"
+                placeholder="Search..."
+                class="p-inputtext-sm"
+              />
+            </span>
+            <button
+              pButton
+              pRipple
+              type="button"
+              icon="pi pi-refresh"
+              class="p-button-text"
+              (click)="onRefresh()"
+            ></button>
+            <button
+              pButton
+              pRipple
+              type="button"
+              icon="pi pi-filter-slash"
+              class="p-button-text"
+              (click)="clear(dtAll)"
+              severity="help"
+            ></button>
+          </div>
+        </div>
+        <p-table
+          #dtAll
+          [value]="yardAlls"
+          [loading]="loading"
+          styleClass="p-datatable-sm"
+          [scrollable]="true"
+          scrollHeight="370px"
+          responsiveLayout="scroll"
+          [sortMode]="'single'"
+          [globalFilterFields]="[
+            'yardZone',
+            'yardNo',
+            'yardStatus',
+            'trailerId',
+            'trailerLicensePlate',
+            'trailerStatus'
+          ]"
+        >
+          <ng-template pTemplate="header">
+            <tr>
+              <th pSortableColumn="yardZone">
+                Yard Zone
+                <p-sortIcon field="yardZone"></p-sortIcon>
+              </th>
+              <th pSortableColumn="yardNo">
+                Yard No
+                <p-sortIcon field="yardNo"></p-sortIcon>
+              </th>
+              <th pSortableColumn="yardStatus">
+                Yard Status
+                <p-sortIcon field="yardStatus"></p-sortIcon>
+              </th>
+              <th pSortableColumn="trailerId">
+                Trailer ID
+                <p-sortIcon field="trailerId"></p-sortIcon>
+              </th>
+              <th pSortableColumn="trailerLicensePlate">
+                License Plate
+                <p-sortIcon field="trailerLicensePlate"></p-sortIcon>
+              </th>
+              <th pSortableColumn="trailerStatus">
+                Trailer Status
+                <p-sortIcon field="trailerStatus"></p-sortIcon>
+              </th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-yard>
+            <tr>
+              <td>{{ yard.yardZone }}</td>
+              <td>{{ yard.yardNo }}</td>
+              <td>
+                <p-badge
+                  *ngIf="getStatusYard(yard.yardStatus)"
+                  [severity]="getStatusYard(yard.yardStatus)"
+                  [value]="yard.yardStatus"
+                  styleClass="small-tag"
+                >
+                </p-badge>
+                <span *ngIf="!getStatusYard(yard.yardStatus)">{{
+                  yard.yardStatus || "-"
+                }}</span>
+              </td>
+              <td>{{ yard.trailerId || "-" }}</td>
+              <td>{{ yard.trailerLicensePlate || "-" }}</td>
+              <td>
+                <p-badge
+                  *ngIf="getStatusTrailer(yard.trailerStatus)"
+                  [severity]="getStatusTrailer(yard.trailerStatus)"
+                  [value]="yard.trailerStatus"
+                  styleClass="small-tag"
+                ></p-badge>
+              </td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid">
+    <div class="col-12 md:col-6">
+      <div class="surface-card shadow-3 border-round-3xl p-4">
+        <div class="flex justify-content-between align-items-center mb-3">
+          <div class="flex align-items-center">
+            <div>
+              <h2 class="text-xl font-semibold text-600 m-0">Yard Full</h2>
+            </div>
+          </div>
+          <div class="flex align-items-center gap-3">
+            <div class="flex align-items-center">
+              <p class="m-0">ทั้งหมด</p>
+              <p-badge
+                [value]="yardFulls.length.toString()"
+                severity="danger"
+              ></p-badge>
+            </div>
+            <span class="p-input-icon-left">
+              <i class="pi pi-search"></i>
+              <input
+                pInputText
+                type="text"
+                (input)="onGlobalFilter($event, 'full')"
+                placeholder="Search..."
+                class="p-inputtext-sm"
+              />
+            </span>
+            <button
+              pButton
+              pRipple
+              type="button"
+              icon="pi pi-filter-slash"
+              class="p-button-text"
+              (click)="clear(dtFull)"
+              severity="help"
+            ></button>
+          </div>
+        </div>
+        <p-table
+          #dtFull
+          [value]="yardFulls"
+          [loading]="loading"
+          styleClass="p-datatable-sm"
+          [scrollable]="true"
+          scrollHeight="210px"
+          responsiveLayout="scroll"
+          [sortMode]="'single'"
+          [globalFilterFields]="[
+            'yardZone',
+            'yardNo',
+            'yardStatus',
+            'trailerId',
+            'trailerLicensePlate'
+          ]"
+        >
+          <ng-template pTemplate="header">
+            <tr>
+              <th pSortableColumn="yardZone">
+                Yard Zone
+                <p-sortIcon field="yardZone"></p-sortIcon>
+              </th>
+              <th pSortableColumn="yardNo">
+                Yard No
+                <p-sortIcon field="yardNo"></p-sortIcon>
+              </th>
+              <th pSortableColumn="trailerId">
+                Trailer ID
+                <p-sortIcon field="trailerId"></p-sortIcon>
+              </th>
+              <th pSortableColumn="trailerLicensePlate">
+                License Plate
+                <p-sortIcon field="trailerLicensePlate"></p-sortIcon>
+              </th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-yard>
+            <tr>
+              <td>{{ yard.yardZone }}</td>
+              <td>{{ yard.yardNo }}</td>
+              <td>{{ yard.trailerId }}</td>
+              <td>{{ yard.trailerLicensePlate }}</td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </div>
+    </div>
+
+    <div class="col-12 md:col-6">
+      <div class="surface-card shadow-3 border-round-3xl p-4">
+        <div class="flex justify-content-between align-items-center mb-3">
+          <div class="flex align-items-center">
+            <div>
+              <h2 class="text-xl font-semibold text-600 m-0">Yard Empty</h2>
+            </div>
+          </div>
+          <div class="flex align-items-center gap-3">
+            <div class="flex align-items-center">
+              <p class="m-0">ทั้งหมด</p>
+              <p-badge
+                [value]="yardEmptys.length.toString()"
+                severity="success"
+              ></p-badge>
+            </div>
+            <span class="p-input-icon-left">
+              <i class="pi pi-search"></i>
+              <input
+                pInputText
+                type="text"
+                (input)="onGlobalFilter($event, 'empty')"
+                placeholder="Search..."
+                class="p-inputtext-sm"
+              />
+            </span>
+            <button
+              pButton
+              pRipple
+              type="button"
+              icon="pi pi-filter-slash"
+              class="p-button-text"
+              (click)="clear(dtEmpty)"
+              severity="help"
+            ></button>
+          </div>
+        </div>
+        <p-table
+          #dtEmpty
+          [value]="yardEmptys"
+          [loading]="loading"
+          styleClass="p-datatable-sm"
+          [scrollable]="true"
+          scrollHeight="210px"
+          responsiveLayout="scroll"
+          [sortMode]="'single'"
+          [globalFilterFields]="['yardZone', 'yardNo']"
+        >
+          <ng-template pTemplate="header">
+            <tr>
+              <th pSortableColumn="yardZone">
+                Yard Zone
+                <p-sortIcon field="yardZone"></p-sortIcon>
+              </th>
+              <th pSortableColumn="yardNo">
+                Yard No
+                <p-sortIcon field="yardNo"></p-sortIcon>
+              </th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-yard>
+            <tr>
+              <td>{{ yard.yardZone }}</td>
+              <td>{{ yard.yardNo }}</td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </div>
+    </div>
+  </div>
+</div>

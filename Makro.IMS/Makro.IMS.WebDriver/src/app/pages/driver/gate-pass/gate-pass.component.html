@@ -1,0 +1,101 @@
+<div class="card">
+    <p-dataView #dv [value]="queueManages" layout="grid">
+        <ng-template pTemplate="header">
+            <div class="flex justify-content-start">
+                Gate Pass List
+                <!-- <p-dataViewLayoutOptions [layout]="layout"></p-dataViewLayoutOptions> -->
+            </div>
+        </ng-template>
+        <!-- <ng-template let-queue pTemplate="listItem">
+            <div class="col-12">
+                <div class="flex flex-column xl:flex-row xl:align-items-start p-4 gap-4">
+                    <div class="flex flex-column sm:flex-row justify-content-between align-items-center xl:align-items-start flex-1 gap-4">
+                        <div class="flex flex-column align-items-center sm:align-items-start gap-3">
+                            <div class="text-2xl font-bold text-900">{{ queue.bookingId }}</div>
+                            <p-rating [ngModel]="product.rating" [readonly]="true" [cancel]="false"></p-rating>
+                            <div class="flex align-items-center gap-3">
+                                <span class="flex align-items-center gap-2">
+                                    <i class="pi pi-tag"></i>
+                                    <span class="font-semibold">{{ queue.warehouseCode }}</span>
+                                </span>
+                                
+                            </div>
+                        </div>
+                        <div class="flex sm:flex-column align-items-center sm:align-items-end gap-3 sm:gap-2">                           
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </ng-template> -->
+        <ng-template let-queue pTemplate="gridItem">
+            <div class="col-12 sm:col-6 lg:col-12 xl:col-4 p-2">
+                <div class="p-4 border-1 surface-border surface-card border-round">
+                    <div class="flex flex-wrap align-items-center justify-content-between gap-2">
+                        <span class="flex align-items-center gap-2">
+                            <i class="pi pi-home text-xl"></i>
+                            <span class="font-semibold text-xl">{{ queue.warehouseCode }}</span>
+                        </span>
+                        <span class="font-semibold text-xl">
+                            {{ queue.operationType}}
+                        </span>
+                        <!-- <p-tag [value]="product.inventoryStatus" [severity]="getSeverity(product)"></p-tag> -->
+                    </div>
+                    <div class="flex flex-wrap align-items-center justify-content-between gap-2 py-5">
+                        <span class="flex align-items-center gap-2">
+                            <i class="pi pi-calendar-plus text-xl"></i>
+                            <span class="font-semibold text-xl">{{ queue.bookingId }}</span>
+                        </span>
+                        <!-- <div class="text-2xl font-bold">{{ queue.warehouseCode }}</div> -->
+                        <!-- <p-rating [ngModel]="product.rating" [readonly]="true" [cancel]="false"></p-rating> -->
+                    </div>
+                    <div class="flex flex-wrap align-items-center justify-content-between gap-2">
+                        <span class="flex align-items-center gap-2">
+                            <i class="pi pi-clock text-xl"></i>
+                            <span class="font-semibold text-xl">{{ queue.bookingStart | date : "dd-MM-yyyy HH:mm:ss" }}</span>
+                        </span>
+                        <!-- <div class="text-2xl font-bold">{{ queue.warehouseCode }}</div> -->
+                        <!-- <p-rating [ngModel]="product.rating" [readonly]="true" [cancel]="false"></p-rating> -->
+                    </div>
+                    <div class="flex align-items-center justify-content-between">     
+                        <span class="font-semibold text-xl">{{ queue.statusDisplay }}</span>
+                        <div>
+                            <button pButton icon="pi pi-ticket" class="p-button-rounded mr-2" (click)="showQueue(queue.queueSeq)"></button>
+                            <button pButton icon="pi pi-qrcode" class="p-button-rounded" (click)="showQr(queue.bookingId)"></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </ng-template>
+    </p-dataView>
+</div>
+
+<p-dialog header="Gate Pass" [(visible)]="visible" [style]="{width: '85vw'}">
+    <div class="flex flex-column align-items-center justify-content-center gap-2 col-12">        
+        <qrcode
+            [qrdata]="qrCodeValue"
+            [allowEmptyString]="true"
+            [ariaLabel]="'QR Code image with the following content...'"
+            [cssClass]="'justify-content-center'"
+            [colorDark]="'#000000ff'"
+            [colorLight]="'#ffffffff'"
+            [elementType]="'canvas'"
+            [errorCorrectionLevel]="'M'"
+            [imageSrc]="'./assets/images/logo.png'"
+            [imageHeight]="25"
+            [imageWidth]="75"
+            [margin]="4"
+            [scale]="1"
+            [title]="'Gate Pass'"
+            width="300"
+        ></qrcode>
+    </div>
+    <div class="text-center col-12">
+        <p>{{qrCodeValue}}</p>
+    </div>
+</p-dialog>
+
+<p-dialog header="Queue" [(visible)]="queuevisible" [style]="{width: '85vw', height:'60%'}">
+    <div class="flex flex-column align-items-center justify-content-center gap-2 col-12" style="height: 100%;">
+        <span class="flex align-items-center gap-2 text-900 text-8xl"> {{queueValue}} </span>
+    </div>
+</p-dialog>

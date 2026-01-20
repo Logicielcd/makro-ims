@@ -1,0 +1,231 @@
+<p-toast  key="dg"></p-toast>
+<p-confirmDialog
+  [baseZIndex]="10000"
+  rejectButtonStyleClass="p-button-text"
+></p-confirmDialog>
+<div class="card col-12 p-0 md:p-3">
+  <div class="flex justify-content-between flex-wrap">
+    <div class="flex align-item-center justify-content-center">
+      <h3 class="font-bold">Assign Queue</h3>
+    </div>
+    <div class="flex align-item-center justify-content-center">
+      <div class="align-item-center mr-2 ">
+        <p-button icon="pi pi-refresh" (click)="refresh()"></p-button>
+      </div>
+    </div>    
+  </div>
+  <div class="w-full md:w-12 mx-auto">
+    <p-messages [(value)]="msgs" [enableService]="false"></p-messages>
+  </div>
+
+  <div class="mt-2" *ngIf="warehouses">
+    <div class="formgrid grid p-fluid">
+      <div class="field col-12 md:col-3">
+        <label>
+            Warehouse
+        </label>
+        <p-dropdown
+          id="warehouseCode"
+          name="warehouseCode"
+          #warehouseCode="ngModel"
+          [options]="warehouses"
+          [(ngModel)]="selectedWhse"
+          optionLabel="warehouseCode"
+          optionValue="warehouseCode"
+          [filter]="true"
+          filterBy="warehouseCode"
+          [showClear]="true"
+          [placeholder]="'Select Warehouse' | translate"
+          required
+          [ngClass]="{
+            'ng-invalid ng-dirty':
+              warehouseCode.invalid &&
+              (warehouseCode.dirty || warehouseCode.touched)
+          }"
+          (onChange)="onWhseChange()"
+        >
+          <ng-template let-item pTemplate="item">
+            {{item.warehouseCode}} - {{item.warehouseName}}
+          </ng-template>
+              
+          <ng-template let-item pTemplate="selectedItem">
+            {{item.warehouseCode}} - {{item.warehouseName}}
+          </ng-template>
+        </p-dropdown>
+        <small
+          class="p-error block"
+          *ngIf="
+            warehouseCode.invalid &&
+            (warehouseCode.dirty || warehouseCode.touched)
+          "
+        >
+          {{
+            "Message.Validation.Required"
+              | translate: { field: "Label.WarehouseCode" | translate }
+          }}
+        </small>
+      </div>
+      <div class="field col-12 md:col-2">
+        <label for="bookingDate">From Date</label>
+        <p-calendar
+          [(ngModel)]="fromDate"
+          dateFormat="dd/mm/yy"
+          inputId="bookingDate"
+          showIcon="true"
+          required
+          name="bookingdate"
+          #bookingdate="ngModel"        
+          showOn="none"        
+        >
+        </p-calendar>
+      </div>
+      <div class="field col-12 md:col-2">
+        <label for="bookingDate">To Date</label>
+        <p-calendar
+          [(ngModel)]="toDate"
+          dateFormat="dd/mm/yy"
+          inputId="bookingDate"
+          showIcon="true"
+          required
+          name="bookingdate"
+          #bookingdate="ngModel"        
+          showOn="none"        
+        >
+        </p-calendar>
+      </div>
+      <div class="field col-12 md:col-2">
+        <label>
+            Status          
+        </label>
+        <p-dropdown
+            id="queuestatus"
+            name="queuestatus"
+            #queuestatus="ngModel"
+            [options]="statuses"
+            [(ngModel)]="selectedstatus"
+            optionLabel="display"
+            optionValue="value"
+            [placeholder]="'Select Status' | translate"                    
+        >
+        </p-dropdown>
+      </div>
+      <div class="field col-12 md:col-2">
+        <label>
+            Operation Type
+        </label>
+        <p-dropdown
+            id="operationtype"
+            name="operationtype"
+            #operationtype="ngModel"
+            [options]="operationtypes"
+            [(ngModel)]="selectedoperationtype"
+            optionLabel="description"
+            optionValue="operationName"
+            [placeholder]="'Select Operation type' | translate"
+        >
+        </p-dropdown>
+      </div>
+      
+      <div class="field col-12 md:col-1">
+        <button 
+          pButton
+          type="button" 
+          class="p-button mr-8"         
+          label="OK"
+          icon="pi pi-check"
+          style="margin-top: 1.5rem"
+          [disabled]="!isCompleted"
+          (click)="onView()"
+          >
+        </button>
+      </div>
+      <div class="field col-12 md:col-2">
+        <label>
+            Booking Id          
+        </label>
+        <input
+          pInputText
+          type="text"
+          id="bookingid"
+          name="bookingid"          
+          [(ngModel)]="bookingId"          
+          [placeholder]="'input booking id'"
+        />
+      </div>
+      <div class="field col-12 md:col-2">
+        <label>
+            License Plate          
+        </label>
+        <input
+          pInputText
+          type="text"
+          id="licenseplate"
+          name="licenseplate"          
+          [(ngModel)]="licensePlate" 
+          [placeholder]="'input license plate'"                   
+        />
+      </div>
+
+      <div class="field col-12 md:col-12">
+        <p-table
+          [value]="dataSource"
+          [paginator]="true"
+          [rows]="10"
+          [showCurrentPageReport]="true"
+          [pResizableColumn] = "true"
+          currentPageReportTemplate="{first} to {last} of {totalRecords}"
+          [rowsPerPageOptions]="[5,10, 20, 30]"
+          [columns]="cols"
+        >
+          <ng-template pTemplate="header" let-columns>
+            <tr>
+              <th class="text-left" *ngIf="showIndex">#</th>
+              <th
+                *ngFor="let col of columns"              
+                [style.width]="col.width || defaultWidth"
+                class="text-center"
+              >
+                {{ col.header | translate }}
+              </th>
+              <th class="text-center">
+                Action
+              </th>
+            </tr>
+          </ng-template>        
+          <ng-template pTemplate="body" let-rowData let-columns="columns" >
+            <tr>            
+              <td
+                *ngFor="let col of columns; index as i"
+                [style.width]="col.width || defaultWidth"
+                class="text-center"
+              >
+                <span *ngIf="col.display === 'string'"  style="white-space: pre-line;"
+                  [ngStyle]="{'color': col.field === 'waitingTimeDisplay' ? getWaitingTimeFontColor(rowData[col.field]) : 'var(--text-color)'}">{{
+                  rowData[col.field]
+                }}</span>
+                <span *ngIf="col.display === 'datetime'"
+                  >{{ rowData[col.field] | date: "dd/MM/yyyy HH:mm:ss" }}
+                </span>
+              </td>
+              <td>
+                <div class="flex align-items-center justify-content-center">
+                  <!-- <button pButton class="p-button mr-2" style="width: 100px;" (click)="onManageQueue(rowData)" label="เพิ่มเติม"></button> -->
+                  <button pButton class="p-button mr-2" (click)="onDriverData(rowData)" label="ข้อมูลคนขับ" *ngIf="!onlyView"></button>
+                  <button pButton class="p-button mr-2" (click)="onTracking(rowData)" label="Tracking"></button>
+                  <button pButton class="p-button mr-2" (click)="onDocumentChecking(rowData)" label="Doc. Check" *ngIf="rowData['status'] === 'CHECKIN' && !onlyView"></button>
+                  <button pButton class="p-button mr-2" (click)="onManageQueue(rowData)" label="รับคิว" *ngIf="rowData['queueSeq'] === null  && !onlyView"></button>
+                  <button pButton class="p-button mr-2" (click)="onFinish(rowData)" label="ลงสินค้าเสร็จ" *ngIf="rowData['status'] === 'LEAVEDOOR' && rowData['waitingDocument'] !=='Y' && !onlyView"></button>
+                  <button pButton class="p-button mr-2" (click)="onSendSms(rowData)" label="ส่ง sms" *ngIf="rowData['waitingDocument'] === 'Y' && rowData['status'] !== 'CHECKOUT' && !onlyView"></button>
+                  <button pButton class="p-button mr-2" (click)="onDocumentConfirm(rowData)" label="คืนเอกสาร" *ngIf="rowData['waitingDocument'] === 'Y' && rowData['status'] !== 'CHECKOUT' && !onlyView"></button> 
+                  <button pButton class="p-button mr-2" (click)="onCancelPo(rowData)" label="ยกเลิกเอกสาร" *ngIf="(rowData['status'] === 'SUBMITDOC' 
+                  || rowData['status'] === 'CHECKOUT' || rowData['status'] === 'LEAVEDOOR' || rowData['status'] === 'WAITINGDOC')  && !onlyView"></button> 
+                </div>
+                <!-- <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning" (click)="deleteProduct(product)"></button> -->
+              </td>
+            </tr>
+        </ng-template>
+      </p-table>
+      </div>
+    </div>
+  </div>
+</div>

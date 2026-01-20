@@ -1,0 +1,52 @@
+<app-table-page-list
+  [columns]="cols"
+  [datasource]="dataSource"
+  [rowCount]="rowCount"  
+  [canModify]="canModify"
+  [fieldDetail]="1"
+  [createBtn]="false"
+  [dataKey]="'internalHeaderKey'"
+  [stateKey]="'precheckin-excel-list'"
+  [uploadBtn]="false"
+  [exportBtn]="false"
+  [showToolbox]="true"
+>
+
+<button
+customExportBtn
+pButton
+type="button"
+pRipple
+icon="pi pi-file"
+class="m-1"
+(click)="exportData()"
+[disabled]="!canUpload"
+>
+</button>
+
+<button
+customUploadBtn
+pButton
+type="button"
+pRipple
+icon="pi pi-upload"
+class="m-1"
+(click)="uploadData()"
+[disabled]="!canUpload"
+>
+</button>
+
+<!-- 
+  [uploadBtn]="false"
+  [exportBtn]="false"
+  [refreshBtn]="false"
+  [selectColumnBtn]="false"
+  [showFilterBtn]="false"
+
+  (uploadEmit)="uploadData()"
+  [export$]="export$" 
+
+-->
+</app-table-page-list>
+
+

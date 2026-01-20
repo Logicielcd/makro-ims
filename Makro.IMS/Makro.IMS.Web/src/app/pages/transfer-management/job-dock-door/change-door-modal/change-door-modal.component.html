@@ -1,0 +1,70 @@
+<p-confirmDialog
+  [baseZIndex]="10000"
+  rejectButtonStyleClass="p-button-text"
+></p-confirmDialog>
+<div class="card mt-4">
+  <p-messages [(value)]="msgs" [enableService]="false"></p-messages>
+  <div class="grid">
+    <div class="col-12 md:col-4">
+      <label class="font-bold">Current Door:</label>
+      <div>{{ job.locationNo }} ({{ job.locationType }})</div>
+    </div>
+    <div class="col-12 md:col-4">
+      <label class="font-bold">License Plate:</label>
+      <div>{{ job.trailerLicensePlate }}</div>
+    </div>
+    <div class="col-12 md:col-4">
+      <div>
+        <p-tag
+          [value]="job.status"
+          [style]="{
+            background: getSeverity(job.status),
+            color: '#ffffff'
+          }"
+        ></p-tag>
+      </div>
+    </div>
+  </div>
+  <div class="field mt-4">
+    <label for="door" class="font-bold">Select New Door</label>
+    <p-dropdown
+      id="locationId"
+      name="locationId"
+      #locationId="ngModel"
+      [options]="yards"
+      [(ngModel)]="selectedYard"
+      optionLabel="yardNo"
+      [placeholder]="'Location' | translate"
+      styleClass="w-full"
+      filter="true"
+      appendTo="body"
+      required
+      [ngClass]="{
+        'ng-invalid ng-dirty':
+          locationId.invalid && (locationId.dirty || locationId.touched)
+      }"
+      [virtualScroll]="true"
+      [virtualScrollItemSize]="38"
+    >
+      <ng-template let-item pTemplate="item">
+        {{ item.yardType }} - {{ item.yardZone }} - {{ item.yardNo }}
+      </ng-template>
+      <ng-template let-item pTemplate="selectedItem">
+        {{ item.yardType }} - {{ item.yardZone }} - {{ item.yardNo }}
+      </ng-template>
+    </p-dropdown>
+  </div>
+  <div class="flex justify-content-end gap-2 mt-4">
+    <p-button
+      label="Save"
+      (onClick)="onSubmit()"
+      [disabled]="!selectedYard || isLoading"
+      [loading]="isLoading"
+    ></p-button>
+    <p-button
+      label="Cancel"
+      (onClick)="onCancel()"
+      styleClass="p-button-outlined"
+    ></p-button>
+  </div>
+</div>

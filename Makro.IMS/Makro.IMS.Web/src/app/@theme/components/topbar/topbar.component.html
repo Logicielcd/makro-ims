@@ -1,0 +1,181 @@
+<div class="layout-topbar bg-blue-100 ">
+  <a class="layout-topbar-logo" routerLink="">
+    <img src="assets/images/logo.png" style="width: 50%; height: 50%" />
+    <span style="margin-left: 20px;font-size: 1.25rem;">Inbound Management System - IMS</span>
+  </a>
+
+  <button
+    class="p-link layout-menu-button layout-topbar-button p-trigger"
+    (click)="layoutService.onMenuToggle()"
+  >
+    <i class="pi pi-bars"></i>
+  </button>
+
+  <button
+    class="p-link layout-topbar-menu-button layout-topbar-button p-trigger"
+    (click)="layoutService.showProfileSidebar()"
+  >
+    <i class="pi pi-user"></i>
+  </button>
+
+  <div
+    class="layout-topbar-menu"
+    [ngClass]="{
+      'layout-topbar-menu-mobile-active':
+        layoutService.state.profileSidebarVisible
+    }"
+  >
+
+  
+  <span class="mt-3">{{user.userName}}</span>
+  <button class="p-link layout-topbar-button mr-4">
+    <i class="pi pi-user"></i>
+    <span>Profile</span>
+  </button>
+
+    <button class="p-link mr-4" (click)="openNewSupGroupDialog()"  *ngIf="showIconSub === true">
+      <i *ngIf="listSups === undefind || listSups.length === 0" class="pi pi-sitemap text-2xl"></i>      
+      <i *ngIf="listSups && listSups.length > 0"  class="pi pi-sitemap text-2xl" pBadge [value]="listSups.length" severity="danger"></i>      
+    </button>
+    
+    <button class="p-link mr-1" (click)="openUserRegisterDialog()" *ngIf="showIcon === true">
+      <i *ngIf="listUser === undefind || listUser.length === 0" class="pi pi-bell text-2xl"></i>
+      <i *ngIf="listUser && listUser.length > 0"  class="pi pi-bell text-2xl" pBadge [value]="listUser.length" severity="danger"></i>
+    </button>
+
+    <button class="p-link layout-topbar-button" (click)="openContactDialog()">
+      <i class="pi pi-whatsapp"></i>
+      <span>Contact</span>
+    </button>
+
+    <p-splitButton 
+      label="Manual" 
+      styleClass="ml-2 mr-2" 
+      icon="pi pi-book" 
+      [model]="this.menuItems$ | async"
+      text               
+    >
+    </p-splitButton>
+<!-- 
+    <button class="p-link layout-topbar-button" (click)="loadManual()">
+      <i class="pi pi-book"></i>
+      <span>Manual</span>
+    </button> -->
+
+    <button class="p-link layout-topbar-button" (click)="userLogout()">
+      <i class="pi pi-sign-out"></i>
+      <span>Sign Out</span>
+    </button>
+  </div>
+
+  <p-dialog header="Header" [(visible)]="userRegisterVisible" position="top" [style]="{ width: '50vw' }">
+    <ng-template pTemplate="header">
+        <span class="text-xl font-bold">รายการ supplier ที่รอการอนุมัติการลงทะเบียนผู้ใช้งาน</span>
+    </ng-template>
+    
+    <p-table [value]="listUser" responsiveLayout="scroll" [paginator]="true" [rows]="10" [responsive]="true">
+      <ng-template pTemplate="header">
+          <tr>
+            <th >Supplier</th>                
+            <th >User ID</th>
+            <th >Name-Last Name</th>     
+            <th >Action</th>         
+          </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-user>
+          <tr>
+              <td>{{user.supCode}}</td>
+              <td>{{user.userId}}</td>
+              <td>{{user.name}}</td>              
+              <td>
+                  <button type="button" pButton icon="pi pi-check" (click)="onApproved(user)"></button>
+                  <button type="button" pButton icon="pi pi-ban" class="p-button-danger ml-2" (click)="onReject(user)"></button>
+              </td>
+          </tr>          
+      </ng-template>
+    </p-table>
+  </p-dialog>
+
+  <p-dialog header="Header" [(visible)]="contactVisible" position="top" [style]="{ width: '50vw' }">
+    <ng-template pTemplate="header">
+        <span class="text-xl font-bold">ติดต่อ</span>
+    </ng-template>
+    <div class="formgrid grid p-fluid col-12" [innerHTML]="safeHtml">      
+    </div>
+  </p-dialog>
+
+  <p-dialog header="Header" [(visible)]="rejectVisible" position="top" [style]="{ width: '50vw' }">    
+    <ng-template pTemplate="header">
+        <span class="text-xl font-bold">ยกเลิก</span>
+    </ng-template>
+    <form #f="ngForm" novalidate>
+      <div class="formgrid grid p-fluid col-12">
+        <div class="col-12 md:col-12">
+          <label htmlFor="remarktext">
+            {{ "Label.Remark" | translate }}
+          </label>
+          <input
+            pInputText
+            type="text"
+            id="remarktext"
+            name="remarktext"
+            #remarktext="ngModel"
+            [(ngModel)]="remark"
+            required
+            [ngClass]="{
+              'ng-invalid ng-dirty':
+              remarktext.invalid && (remarktext.dirty || remarktext.touched)
+            }"              
+          />
+          <small
+            class="p-error block"
+            *ngIf="remarktext.invalid && (remarktext.dirty || remarktext.touched)"
+          >
+            {{
+              "Message.Validation.Required"
+                | translate : { field: "Label.Remark" | translate }
+            }}
+          </small>
+        </div>  
+        <div class="col-12 md:col-10 mt-2"></div>
+        <div class="col-12 md:col-2 mt-2 justify-content-center">
+          <button pButton (click)="onConfirmReject()" class="p-button mr-2" [disabled]="!f.form.valid || f.form.pristine" [label]="'OK'"></button>
+        </div>
+      </div>
+      
+    </form>    
+  </p-dialog>
+</div>
+
+<p-dialog header="Header" [(visible)]="videoVisible" position="top" [style]="{ width: '80vw', height: '100vw'}">    
+  <ng-template pTemplate="header">
+      <span class="text-xl font-bold">Video</span>
+  </ng-template>
+  <div class="col-12 md:col-12" *ngIf="videoUrl">
+    <video width="100%" controlsList="nodownload" controls>
+      <source [src]="videoUrl" type="video/mp4" />
+      Your browser does not support the video tag.
+    </video>
+  </div>
+</p-dialog>
+
+<p-dialog header="Header" [(visible)]="newSupVisible" position="top" [style]="{ width: '50vw' }">
+  <ng-template pTemplate="header">
+      <span class="text-xl font-bold">รายการ supplier ใหม่</span>
+  </ng-template>
+  
+  <p-table [value]="listSups" responsiveLayout="scroll" [paginator]="true" [rows]="10" [responsive]="true">
+    <ng-template pTemplate="header">
+        <tr>
+          <th >Supplier Code</th>                
+          <th >Supplier Name</th>                           
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-sup>
+        <tr>
+            <td>{{sup.supCode}}</td>
+            <td>{{sup.supName}}</td>            
+        </tr>          
+    </ng-template>
+  </p-table>
+</p-dialog>

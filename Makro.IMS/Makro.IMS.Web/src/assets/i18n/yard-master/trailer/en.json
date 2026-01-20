@@ -1,0 +1,79 @@
+{
+  "Title": {
+    "List": "Trailer",
+    "Create": "Create Trailer",
+    "Detail": "Trailer Detail"
+  },
+  "Section": {
+    "Info": "Information"
+  },
+  "Label": {
+    "WarehouseCode": "Warehouse Code",
+    "LicensePlate": "License Plate",
+    "TrailerType": "Trailer Type",
+    "TrailerSize": "Trailer Size",
+    "Yard": "Location",
+    "Status": "Status",
+    "UserStamp": "User Stamp",
+    "CreateDate": "Create Date",
+    "ModDate": "Mod Date",
+    "TrailerGroup": "Trailer Group",
+    "OutDcLicensePlate": "Out-Dc License Plate",
+    "OutDcDriver": "Out-Dc Driver"
+  },
+  "Select": {
+    "Yard": "Select location",
+    "Status": "Select status",
+    "WarehouseCode": "Select Warehouse Code"
+  },
+  "Button": {
+    "Create": "Create",
+    "Upload": "Upload",
+    "Excel": "Excel",
+    "ClearFilter": "Clear Filter",
+    "ChooseColumn": "Choose Column",
+    "Column": "Column",
+    "Refresh": "Refresh",
+    "Save": "Save",
+    "Delete": "Delete",
+    "Back": "Back",
+    "Yes": "Yes",
+    "No": "No",
+    "SelectFile": "Select File",
+    "Cancel": "Cancel"
+  },
+  "History": {
+    "Action": "Action",
+    "Who": "Who",
+    "Timestamp": "Timestamp"
+  },
+  "Message": {
+    "Confirm": {
+      "Delete": {
+        "Title": "Delete",
+        "Message": "Are you sure you want to delete ?"
+      },
+      "Upload": {
+        "Title": "Upload",
+        "Message": "Are you sure you want to upload ?"
+      }
+    },
+    "Notification": {
+      "Upload": "Successfully uploaded",
+      "Create": "Successfully created",
+      "Update": "Successfully edited",
+      "Delete": "Successfully deleted"
+    },
+    "Validation": {
+      "Required": "{{field}} is required"
+    },
+    "FromApi": {
+      "DEPARTMENT_IS_REQUIRED": "Department Is Required",
+      "FUEL_PRICE_IS_REQUIRED": "Fuel Price Is Required",
+      "NAME_IS_REQUIRED": "Fuel Price Name Is Required",
+      "DEPARTMENT_NOT_FOUND": "Department Not Found",
+      "PRICE_NOT_FOUND": "Fuel Price Not Found",
+      "NAME_ALREADY_EXIST": "Fuel Price Name Already Exist"
+    }
+  }
+}

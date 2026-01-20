@@ -1,0 +1,165 @@
+
+<div class="card col-12" *ngIf="slottimeResult">
+  <p-dialog header="Parameter" [(visible)]="visible" [style]="{width: '50vw'}" position="top" >
+    <div class="p-fluid p-formgrid grid mt-4">      
+      <div class="col-12 md:col-4">
+        <label>
+            Booking date
+        </label>
+        <p-calendar 
+                [(ngModel)]="reportDate"  
+                [readonlyInput]="true" 
+                dateFormat="dd/mm/yy"
+                appendTo="body"    
+                required="true"     
+                inputId="float-label-transaction-date" 
+                [placeholder]="'Select.TransactionDate' | translate"              
+                class="m-2"></p-calendar>      
+      </div>
+    </div>
+    
+    <ng-template pTemplate="footer">
+      <button pButton icon="pi pi-check" (click)="getBookingData();" label="Ok" styleClass="p-button-text"></button>
+    </ng-template>
+  </p-dialog>
+
+  <div class="grid">
+    <div class="col-2">
+      <p-button type="button" class="mr-2" (click)="visible = true" icon="pi pi-at"></p-button>
+      <p-button type="button" class="mr-2" (click)="exportExcel()" icon="pi pi-file-excel"></p-button>
+    </div>
+    
+  </div>
+  <div #report>
+    <div class="grid">
+      <div class="text-center col-12 md-col-12">
+        <table style="width: 100%;">
+          <tr>
+            <th align="center">
+              <h3><p>Booking Date : {{reportDate | date : 'dd/MM/yyyy' }} </p></h3>
+            </th>
+          </tr>
+        </table>
+        
+      </div>
+
+      <div class="grid col-12 md-col-12" style="margin-top: 0; margin-left: 0.1cm;">
+        <div style="overflow: auto; position: relative;">
+          <table [border]="'solid 0px'" style="border-collapse: collapse;" [width]="'100%'" >
+            <tr [fontColor]="'#7adca6'">              
+              <th *ngIf="slottimeHeader" [attr.colspan]="colspan+1">
+                <p>Plan Booking</p>
+              </th>
+              <th style="width: 4cm;"><p>Total : Day</p> </th> <th style="width: 4cm;"> <p> UOM </p> </th>
+            </tr>            
+            <tr >
+              <th style="width: 4cm;"> </th> <th style="width: 4cm;"> </th><th style="width: 4cm;"> </th>
+              <th *ngFor="let col of slottimeHeader; let i = index" style="width: 4cm;"> {{col.headerText }} </th>
+            </tr>
+            
+            <tr *ngFor="let merch of slottimeResult; let i = index">
+              <td align="center" [attr.rowspan]="merch.totalRow" *ngIf="merch.dataType == 'Capacity' && merch.rowGroup == 1" [ngClass]="merch.fontColor">
+                {{ merch.warehouseCode }}
+              </td>
+              <td align="center" rowspan="3" *ngIf="merch.dataType == 'Capacity'" [ngClass]="merch.fontColor">
+                {{ merch.merchType }}                
+              </td>
+              <td [ngClass]="merch.fontColor"> {{ merch.dataType }} </td>
+              <td *ngFor="let slot of merch.details; let j = index" style="text-align: right;" [ngClass]="merch.fontColor" > 
+                <div *ngIf="merch.dataType == 'Booking'"> {{slot.quantity | number : '1.0-0'}} </div> 
+                <div *ngIf="merch.dataType == 'Capacity'" [ngClass]="merch.bgColor" > {{slot.quantity | number : '1.0-0'}} </div>
+                <div *ngIf="merch.dataType !== 'Booking' && merch.dataType !== 'Capacity'"> {{slot.quantity | number : '1.0-0'}} </div>
+              </td>
+              <td style="text-align: right;" [ngClass]="merch.fontColor" >
+                <p *ngIf="merch.dataType == 'Booking'"> {{merch.totalQty | number : '1.0-0'}} </p> 
+                <p *ngIf="merch.dataType !== 'Booking'"> {{merch.totalQty | number : '1.0-0'}} </p> 
+              </td>
+              <td [ngClass]="merch.fontColor">{{merch.uom}}</td>
+            </tr>            
+          </table>
+        </div>
+      </div>
+      
+<!--       
+      <div class="grid col-12 md-col-12" style="margin-top: 0.2cm; margin-left: 0.1cm;">
+        <div style="overflow: auto; position: relative;">
+          <table [border]="'solid 0px'" style="border-collapse: collapse;" [width]="'100%'" >
+            <tr [fontColor]="'#87dee6'">
+              <th *ngIf="slottimeHeader" [attr.colspan]="colspan">
+                <p>Actual Booking</p>
+              </th>
+              <th style="width: 4cm;"><p>Total : Day</p> </th> <th style="width: 4cm;"> <p> UOM </p> </th>              
+            </tr>
+            <tr>
+              <th style="width: 4cm;"> </th> <th style="width: 4cm;"> </th>
+              <th *ngFor="let col of slottimeHeader; let i = index" style="width: 4cm;"> {{col.headerText }} </th>
+            </tr>       
+            <tr *ngFor="let merch of slottimeActualResult; let i = index">
+              <td align="center" rowspan="3" *ngIf="merch.dataType == 'Capacity'">
+                {{ merch.merchType }}                
+              </td>
+              <td> {{ merch.dataType }} </td>
+              <td *ngFor="let slot of merch.details; let j = index" style="text-align: right;"> 
+                <div *ngIf="merch.dataType == 'Booking'"> {{slot.quantity | number : '1.0-0'}} </div> 
+                <div *ngIf="merch.dataType == 'Capacity'" class="bg-blue-100"> {{slot.quantity | number : '1.0-0'}} </div>
+                <div *ngIf="merch.dataType !== 'Booking' && merch.dataType !== 'Capacity'"> {{slot.quantity | number : '1.0-0'}} </div> 
+              </td>
+              <td style="text-align: right;">
+                <p *ngIf="merch.dataType == 'Booking'"> {{merch.totalQty | number : '1.0-0'}} </p> 
+                <p *ngIf="merch.dataType !== 'Booking'"> {{merch.totalQty | number : '1.0-0'}} </p>                 
+              </td>
+              <td>{{merch.uom}}</td>
+            </tr>
+            <tr>
+              <td colspan="2">Total Truck</td>
+              <td *ngFor="let sum of summaryActualData; let i = index" style="text-align: right;"> 
+                {{sum.quantity | number : '1.0-0'}}
+              </td>
+            </tr>
+          </table>
+        </div>
+      </div>
+      <div class="grid col-12 md-col-12" style="margin-top: 0.2cm; margin-left: 0.1cm;">
+        <div style="overflow: auto; position: relative;">
+          <table [border]="'solid 0px'" style="border-collapse: collapse;" [width]="'100%'" >
+            <tr [fontColor]="'tomato'">
+              <th *ngIf="slottimeHeader" [attr.colspan]="colspan">
+                <p>Pending Booking</p>
+              </th>              
+              <th style="width: 4cm; color: white;"><p>Total : Day</p> </th> <th style="width: 4cm; color: white;"> <p> UOM </p> </th>
+            </tr>
+            <tr>
+              <th style="width: 4cm;"> </th> <th style="width: 4cm;"> </th>
+              <th *ngFor="let col of slottimeHeader; let i = index" style="width: 4cm;"> {{col.headerText }} </th>
+            </tr>             
+            <tr *ngFor="let merch of slottimePendingResult; let i = index">
+              <td align="center" rowspan="3" *ngIf="merch.dataType == 'Capacity'">
+                {{ merch.merchType }}                
+              </td>
+              <td> {{ merch.dataType }} </td>
+              <td *ngFor="let slot of merch.details; let j = index" style="text-align: right;"> 
+                <div *ngIf="merch.dataType == 'Booking'"> {{slot.quantity | number : '1.0-0'}} </div> 
+                <div *ngIf="merch.dataType == 'Capacity'" class="bg-orange-100"> {{slot.quantity | number : '1.0-0'}} </div>
+                <div *ngIf="merch.dataType !== 'Booking' && merch.dataType !== 'Capacity'"> {{slot.quantity | number : '1.0-0'}} </div>
+              </td>
+              <td style="text-align: right;">
+                <p *ngIf="merch.dataType == 'Booking'"> {{merch.totalQty | number : '1.0-0'}} </p> 
+                <p *ngIf="merch.dataType !== 'Booking'"> {{merch.totalQty | number : '1.0-0'}} </p>                 
+              </td>
+              <td>{{merch.uom}}</td>
+            </tr>
+            <tr>
+              <td colspan="2">Total Truck</td>
+              <td *ngFor="let sum of summaryPendingData; let i = index" style="text-align: right;"> 
+                {{sum.quantity | number : '1.0-0'}}
+              </td>
+            </tr>
+          </table>
+        </div>
+      </div>
+     -->
+    </div>
+
+   
+  </div>
+</div>

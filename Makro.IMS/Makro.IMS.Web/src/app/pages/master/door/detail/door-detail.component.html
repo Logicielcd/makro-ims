@@ -1,0 +1,284 @@
+<p-toast></p-toast>
+<p-confirmDialog
+  [baseZIndex]="10000"
+  rejectButtonStyleClass="p-button-text"
+></p-confirmDialog>
+<div class="grid" *ngIf="loadCompleted === true">
+  <div class="col-12 p-0 md:p-3">    
+    <div class="card">
+      <div class="grid grid-nogutter flex-row justify-content-between">
+        <h3 class="font-bold">
+          {{ (!dataId ? "Title.Create" : "Title.Detail") | translate }}
+        </h3>
+      </div>
+      <p-messages [(value)]="msgs" [enableService]="false"> </p-messages>
+      <form #f="ngForm" novalidate>
+        <div class="grid">
+          <div class="col-12">
+            <p-toolbar>
+              <div class="p-toolbar-group-left flex flex-wrap">
+                <button
+                  *ngIf="canModify"
+                  pButton
+                  type="button"
+                  icon="pi pi-check"
+                  [label]="'Button.Save' | translate"
+                  class="p-button-success mr-2"
+                  [disabled]="!f.form.valid || f.form.pristine"
+                  (click)="onSubmit()"
+                  [loading]="isLoading"
+                ></button>
+                <button
+                  *ngIf="canModify"
+                  pButton
+                  type="button"
+                  icon="pi pi-trash"
+                  [label]="'Button.Delete' | translate"
+                  class="p-button-danger mr-2"
+                  (click)="onDelete()"
+                  [loading]="isLoading"
+                ></button>
+              </div>
+              <div class="p-toolbar-group-right flex flex-wrap">
+                <button
+                  pButton
+                  type="button"
+                  icon="pi pi-refresh"
+                  [pTooltip]="'Button.Refresh' | translate"
+                  tooltipPosition="bottom"
+                  class="p-button-primary mr-2"
+                  (click)="fetchData()"
+                  [loading]="isLoading"
+                ></button>
+                <button
+                  pButton
+                  type="button"
+                  icon="pi pi-times"
+                  [pTooltip]="'Button.Back' | translate"
+                  tooltipPosition="bottom"
+                  class="p-button-primary mr-2"
+                  (click)="onBack()"
+                  [loading]="isLoading"
+                ></button>
+              </div>
+            </p-toolbar>
+          </div>
+        </div>
+
+        <div class="p-fluid p-formgrid grid">
+          <div class="col-12 md:col-4">
+            <label htmlFor="warehouse">
+              {{ "Label.WarehouseCode" | translate }}
+            </label>
+            <p-dropdown
+              id="warehouse"
+              name="warehouse"
+              #warehouse="ngModel"
+              [options]="warehouses"
+              [(ngModel)]="data.warehouseCode"
+              optionLabel="warehouseName"
+              optionValue="warehouseCode"                            
+              [placeholder]="'Select.WarehouseCode' | translate"
+              (onChange)="onWarehouseChange($event)"
+              required              
+              [ngClass]="{
+                'ng-invalid ng-dirty':
+                warehouse.invalid && (warehouse.dirty || warehouse.touched)
+              }"
+              [virtualScroll]="true"
+              [virtualScrollItemSize]="38"
+            >
+              <ng-template let-item pTemplate="item">
+                {{ item.warehouseCode }} - {{ item.warehouseName }}
+              </ng-template>
+              <ng-template let-item pTemplate="selectedItem">
+                {{ item.warehouseCode }} - {{ item.warehouseName }}
+              </ng-template>
+            </p-dropdown>
+            <small
+              class="p-error block"
+              *ngIf="warehouse.invalid && (warehouse.dirty || warehouse.touched)"
+            >
+              {{
+                "Message.Validation.Required"
+                  | translate : { field: "Label.WarehouseCode" | translate }
+              }}
+            </small>
+          </div>
+
+          <div class="col-12 md:col-4">
+            <label htmlFor="doorname">
+              {{ "Label.DoorName" | translate }}
+            </label>
+            <input
+              pInputText
+              type="text"
+              id="doorname"
+              name="doorname"
+              #doorname="ngModel"
+              [(ngModel)]="data.doorName"
+              required
+              [ngClass]="{
+                'ng-invalid ng-dirty':
+                doorname.invalid && (doorname.dirty || doorname.touched)
+              }"              
+            />
+            <small
+              class="p-error block"
+              *ngIf="doorname.invalid && (doorname.dirty || doorname.touched)"
+            >
+              {{
+                "Message.Validation.Required"
+                  | translate : { field: "Label.DoorName" | translate }
+              }}
+            </small>
+          </div>
+
+          <div class="col-12 md:col-4">
+            <label htmlFor="sequence">
+              {{ "Label.Sequence" | translate }}
+            </label>
+            <input
+              pInputText
+              type="text"
+              id="sequence"
+              name="sequence"
+              #sequence="ngModel"
+              [(ngModel)]="data.sequence"
+              required
+              [ngClass]="{
+                'ng-invalid ng-dirty':
+                sequence.invalid && (sequence.dirty || sequence.touched)
+              }"              
+            />
+            <small
+              class="p-error block"
+              *ngIf="sequence.invalid && (sequence.dirty || sequence.touched)"
+            >
+              {{
+                "Message.Validation.Required"
+                  | translate : { field: "Label.LoadingType" | translate }
+              }}
+            </small>
+          </div>
+
+          <div class="col-12 md:col-4">
+            <label htmlFor="operation">
+              {{ "Label.DoorArea" | translate }}
+            </label>
+            <p-multiSelect 
+              id="operation" 
+              name="operation" 
+              #operation="ngModel"
+              [options]="operations" 
+              [(ngModel)]="operationSelected" 
+              placeholder="Select a Door area"   
+              optionLabel="operationName"            
+              display="chip"
+              (onChange)="onDoorAreaChange($event)"
+              required
+              [ngClass]="{
+                'ng-invalid ng-dirty':
+                operation.invalid && (operation.dirty || operation.touched)
+              }"
+              [filter]="false"              
+              >
+              <!-- <ng-template let-value pTemplate="selectedItems">
+                <div class="inline-flex align-items-center" *ngFor="let option of value">                    
+                    <div>{{ option.operationName }},</div>
+                </div>
+                <div *ngIf="!value || value.length === 0">Select a Door area</div>
+            </ng-template>
+            <ng-template let-opt pTemplate="item">
+                <div class="flex align-items-center">                    
+                    <div>{{ opt.operationName }}</div>
+                </div>
+            </ng-template>
+            <ng-template let-opt pTemplate="footer">
+                <div class="py-2 px-3">
+                    <b>
+                        {{ operationSelected ? operationSelected.length : 0 }}
+                    </b> 
+                    item{{ (operationSelected ? operationSelected.length : 0) > 1 ? 's' : '' }} selected.
+                </div>
+            </ng-template> -->
+            </p-multiSelect>
+            <small
+              class="p-error block"
+              *ngIf="operation.invalid && (operation.dirty || operation.touched)"
+            >
+              {{
+                "Message.Validation.Required"
+                  | translate : { field: "Label.DoorArea" | translate }
+              }}
+            </small>            
+          </div>
+
+          <div class="col-12 md:col-4">
+            <label htmlFor="loadingtype">
+              {{ "Label.LoadingType" | translate }}
+            </label>
+            <input
+              pInputText
+              type="text"
+              id="loadingtype"
+              name="loadingtype"
+              #loadingtype="ngModel"
+              [(ngModel)]="data.loadingType"
+              required
+              [ngClass]="{
+                'ng-invalid ng-dirty':
+                loadingtype.invalid && (loadingtype.dirty || loadingtype.touched)
+              }"              
+            />
+            <small
+              class="p-error block"
+              *ngIf="loadingtype.invalid && (loadingtype.dirty || loadingtype.touched)"
+            >
+              {{
+                "Message.Validation.Required"
+                  | translate : { field: "Label.LoadingType" | translate }
+              }}
+            </small>
+          </div>
+
+          <div class="col-12 md:col-4">
+            <label htmlFor="trucktype">
+              {{ "Label.TruckType" | translate }}
+            </label>
+            <p-multiSelect 
+              id="trucktype" 
+              name="trucktype" 
+              #trucktype="ngModel"
+              [options]="trucks" 
+              [(ngModel)]="truckSelected" 
+              defaultLabel="Select a Truck Type" 
+              optionLabel="truckCode" 
+              display="chip"
+              (onChange)="onValidateTruckType($event)"
+              required
+              [ngClass]="{
+                'ng-invalid ng-dirty':
+                trucktype.invalid && (trucktype.dirty || trucktype.touched)
+              }"
+              [filter]="false"
+              [virtualScroll]="true"
+              [virtualScrollItemSize]="38"
+            >
+            </p-multiSelect>           
+            <small
+              class="p-error block"
+              *ngIf="trucktype.invalid && (trucktype.dirty || trucktype.touched)"
+            >
+              {{
+                "Message.Validation.Required"
+                  | translate : { field: "Label.TruckType" | translate }
+              }}
+            </small>
+          </div>
+          
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

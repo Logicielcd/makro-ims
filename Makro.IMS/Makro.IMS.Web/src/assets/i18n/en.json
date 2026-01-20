@@ -1,0 +1,99 @@
+{
+  "Label": {
+    "Username": "Username",
+    "Role": "Role",
+    "Department": "Department",
+    "Transporter": "Transporter",
+    "MainVehicle": "Main Vehicle",
+    "SecondaryVehicle": "Secondary Vehicle",
+    "Language": "Language",
+    "Scale": "Scale",
+    "Remark": "Remark"
+  },
+  "Menus": {
+    "Dashboard": {
+      "Title": "Dashboard",
+      "Overview": "Booking Slot",
+      "ScheduleDoor": "Booking Slot by Door",
+      "SummaryBooking": "Summary Booking",
+      "SlottimeBooking": "Slottime Booking",
+      "DockdoorControl": "Dock Control"
+    },
+    "Master": {
+      "Title": "Master",
+      "Warehouse": "Warehouse",
+      "OperationType": "Operation Type",
+      "Door": "Door",
+      "WarehouseCapacity": "Warehouse Capacity",
+      "WarehouseOperationCapacity": "Warehouse Operation Capacity",
+      "SupplierGroup": "Supplier Group",
+      "Supplier": "Supplier",
+      "Shunt": "Shunt",
+      "Trailer": "Trailer",
+      "Yard": "Yard"
+    },
+    "Booking": {
+      "Title": "Booking",
+      "CreateBooking": "Create booking",
+      "CreateBookingExcel": "Create booking by excel import",
+      "CreateBookingNopo": "Register Inbound",
+      "BookingList": "Booking List",
+      "CheckPo": "Check PO",
+      "PoMonitor": "Po Monitor",
+      "CapMonitor": "Capacity Monitor"
+    },
+    "PreCheckIn": {
+      "Title": "Truck management",
+      "PreCheckInExcel": "Assign Truck",
+      "PreCheckInCompleted": "Truck Pending"
+    },
+    "CheckInOut": {
+      "Title": "Security Guard",
+      "GuardCheckIn": "Guard Check In",
+      "GuardCheckOut": "Guard Check Out",
+      "GuardCreateBooking": "Manual Booking"
+    },
+    "Queuemanage": {
+      "Title": "Data Management",
+      "DocumentCheckIn": "Document Checking",
+      "ManageQueue": "Queue Management",
+      "DocumentConfirmation": "Document Confirmation"
+    },
+    "Opsmanage": {
+      "Title": "OPS Management",
+      "DockdoorList": "OPS Process"
+    },
+    "Yardmanagement": {
+      "Title": "Yard Management",
+      "YardBooking": "Yard Booking"
+    },
+    "Report": {
+      "Title": "Report",
+      "TruckStatus": "Truck Status",
+      "TransactionTrack": "Transaction Track"
+    },
+    "YardMaster": {
+      "Title": "Yard Master",
+      "Yard": "Yard",
+      "Trailer": "Trailer",
+      "Shunt": "Shunt"
+    },
+    "Transfer": {
+      "Title": "Yard Management",
+      "YardMonitor": "Yard Monitor",
+      "TrailerMonitor": "Trailer Monitor",
+      "TransferTrailerEmpty": "Transfer Trailer Empty",
+      "TransferTrailerFull": "Transfer Trailer Full",
+      "JobList": "Job List",
+      "JobDockDoor": "Dock Management",
+      "TransferReport": "Transfer Report"
+    },
+    "Account": {
+      "Title": "Account",
+      "UserMaster": "User Master",
+      "UserProfile": "User Profile",
+      "SupplierContact": "Supplier Contact",
+      "ResetPassword": "Reset Password"
+    }
+  }
+}

@@ -1,0 +1,229 @@
+<p-toast></p-toast>
+<p-confirmDialog
+  [baseZIndex]="10000"
+  rejectButtonStyleClass="p-button-text"
+></p-confirmDialog>
+<div class="grid">
+  <div class="col-12 p-0 md:p-3">
+    <div class="card">
+      <div class="grid grid-nogutter flex-row justify-content-between">
+        <h3 class="font-bold">
+          {{ (!dataId ? "Title.Create" : "Title.Detail") | translate }}
+        </h3>
+      </div>
+      <p-messages [(value)]="msgs" [enableService]="false"> </p-messages>
+      <form #f="ngForm" novalidate>
+        <div class="grid">
+          <div class="col-12">
+            <p-toolbar>
+              <div class="p-toolbar-group-left flex flex-wrap">
+                <button
+                  *ngIf="canModify"
+                  pButton
+                  type="button"
+                  icon="pi pi-check"
+                  [label]="'Button.Save' | translate"
+                  class="p-button-success mr-2"
+                  [disabled]="!f.form.valid || f.form.pristine"
+                  (click)="onSubmit()"
+                  [loading]="isLoading"
+                ></button>
+                <button
+                  *ngIf="canModify"
+                  pButton
+                  type="button"
+                  icon="pi pi-trash"
+                  [label]="'Button.Delete' | translate"
+                  class="p-button-danger mr-2"
+                  (click)="onDelete()"
+                  [loading]="isLoading"
+                ></button>
+              </div>
+              <div class="p-toolbar-group-right flex flex-wrap">
+                <button
+                  pButton
+                  type="button"
+                  icon="pi pi-refresh"
+                  [pTooltip]="'Button.Refresh' | translate"
+                  tooltipPosition="bottom"
+                  class="p-button-primary mr-2"
+                  (click)="fetchData()"
+                  [loading]="isLoading"
+                ></button>
+                <button
+                  pButton
+                  type="button"
+                  icon="pi pi-times"
+                  [pTooltip]="'Button.Back' | translate"
+                  tooltipPosition="bottom"
+                  class="p-button-primary mr-2"
+                  (click)="onBack()"
+                  [loading]="isLoading"
+                ></button>
+              </div>
+            </p-toolbar>
+          </div>
+        </div>
+        <div class="p-fluid p-formgrid grid">
+          <div class="field col-12 md:col-4">
+            <label for="licensePlate" class="font-bold">{{
+              "Label.LicensePlate" | translate
+            }}</label>
+            <input
+              type="text"
+              id="licensePlate"
+              name="licensePlate"
+              pInputText
+              [(ngModel)]="data.licensePlate"
+              #licensePlate="ngModel"
+              placeholder="เช่น 1กก-1234, กก-1234, 123-1234"
+              required
+              [ngClass]="{
+                'ng-invalid ng-dirty':
+                  licensePlate.invalid &&
+                  (licensePlate.dirty || licensePlate.touched)
+              }"
+            />
+            <small
+              class="p-error block"
+              *ngIf="
+                licensePlate.invalid &&
+                (licensePlate.dirty || licensePlate.touched)
+              "
+            >
+              {{
+                "Message.Validation.Required"
+                  | translate : { field: "Label.LicensePlate" | translate }
+              }}
+            </small>
+          </div>
+          <div class="field col-12 md:col-4">
+            <label htmlFor="driverName">
+              {{ "Label.DriverName" | translate }}
+            </label>
+            <input
+              pInputText
+              type="text"
+              id="driverName"
+              name="driverName"
+              [(ngModel)]="data.driverName"
+              #driverName="ngModel"
+              required
+              [ngClass]="{
+                'ng-invalid ng-dirty':
+                  driverName.invalid && (driverName.dirty || driverName.touched)
+              }"
+            />
+            <small
+              class="p-error block"
+              *ngIf="
+                driverName.invalid && (driverName.dirty || driverName.touched)
+              "
+            >
+              {{
+                "Message.Validation.Required"
+                  | translate : { field: "Label.DriverName" | translate }
+              }}
+            </small>
+          </div>
+          <div class="field col-12 md:col-4">
+            <label htmlFor="telNo">
+              {{ "Label.TelNo" | translate }}
+            </label>
+            <input
+              pInputText
+              type="text"
+              id="telNo"
+              name="telNo"
+              [(ngModel)]="data.telNo"
+              #telNo="ngModel"
+              required
+              placeholder="เช่น 0812345678"
+              (input)="validateAndFormatPhoneNumber($event)"
+              [ngClass]="{
+                'ng-invalid ng-dirty':
+                  (telNo.invalid && (telNo.dirty || telNo.touched)) ||
+                  (data.telNo && !isPhoneValid())
+              }"
+            />
+            <small
+              class="p-error block"
+              *ngIf="telNo.invalid && (telNo.dirty || telNo.touched)"
+            >
+              {{
+                "Message.Validation.Required"
+                  | translate : { field: "Label.TelNo" | translate }
+              }}
+            </small>
+            <small class="p-error block" *ngIf="data.telNo && !isPhoneValid()">
+              กรุณากรอกเบอร์โทรศัพท์ให้ถูกต้อง (ขึ้นต้นด้วย 0 ตามด้วยตัวเลข 9
+              หลัก)
+            </small>
+          </div>
+          <div class="field col-12 md:col-4">
+            <label htmlFor="locationId">
+              {{ "Label.Yard" | translate }}
+            </label>
+            <p-dropdown
+              id="locationId"
+              name="locationId"
+              #location="ngModel"
+              [options]="yards"
+              [(ngModel)]="data.locationId"
+              optionLabel="yardNo"
+              optionValue="id"
+              [placeholder]="'Select.Yard' | translate"
+              [virtualScroll]="true"
+              [virtualScrollItemSize]="38"
+            >
+              <ng-template let-item pTemplate="item">
+                {{ item.yardType }} - {{ item.yardNo }}
+              </ng-template>
+              <ng-template let-item pTemplate="selectedItem">
+                {{ item.yardType }} - {{ item.yardNo }}
+              </ng-template>
+            </p-dropdown>
+          </div>
+          <div class="field col-12 md:col-4">
+            <label htmlFor="status">
+              {{ "Label.Status" | translate }}
+            </label>
+            <p-dropdown
+              id="status"
+              name="status"
+              #status="ngModel"
+              [options]="statusOptions"
+              [(ngModel)]="data.status"
+              optionLabel="label"
+              optionValue="value"
+              [placeholder]="'Select.Status' | translate"
+              required
+              [ngClass]="{
+                'ng-invalid ng-dirty':
+                  status.invalid && (status.dirty || status.touched)
+              }"
+              [virtualScroll]="true"
+              [virtualScrollItemSize]="38"
+            >
+              <ng-template let-item pTemplate="item">
+                {{ item.value }}
+              </ng-template>
+              <ng-template let-item pTemplate="selectedItem">
+                {{ item.value }}
+              </ng-template>
+            </p-dropdown>
+            <small
+              class="p-error block"
+              *ngIf="status.invalid && (status.dirty || status.touched)"
+            >
+              {{
+                "Message.Validation.Required"
+                  | translate : { field: "Label.Status" | translate }
+              }}
+            </small>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

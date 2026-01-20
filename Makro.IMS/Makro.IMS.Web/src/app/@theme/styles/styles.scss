@@ -1,0 +1,21 @@
+$gutter: 1rem; //for primeflex grid system
+@import "./layout.scss";
+@import "./badges.scss";
+@import "./custom.scss";
+
+/* PrimeNG */
+@import "~primeng/resources/primeng.min.css";
+@import "~primeflex/primeflex.css";
+@import "~primeicons/primeicons.css";
+
+input[type="text"]:disabled {
+  border: 1px solid #7c7c7c;
+  background: #dcdada;
+  color: black;
+}
+
+.p-panel .p-panel-header {
+  border: 1px solid #ced4db;
+  background: #ddebf2;
+}
+

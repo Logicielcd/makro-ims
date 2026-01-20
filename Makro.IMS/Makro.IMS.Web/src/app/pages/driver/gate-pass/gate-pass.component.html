@@ -1,0 +1,17 @@
+<div>
+    <div class="flex justify-content-between flex-wrap">
+        <div class="flex-initial flex mt-2 w-4 align-items-center justify-content-center font-bold">คลัง</div>
+        <div class="flex-initial flex mt-2 w-4 align-items-center justify-content-center font-bold">วันที่นัดหมาย</div>
+        <div class="flex-initial flex mt-2 w-4 align-items-center justify-content-center font-bold">ประเภทสินค้า</div>
+    </div>
+    <div class="flex justify-content-between flex-wrap">
+        <div class="flex-initial flex mt-4 w-4 align-items-center justify-content-center font-bold">CDC-FRESH</div>
+        <div class="flex-initial flex mt-4 w-4 align-items-center justify-content-center font-bold">28-09-2023</div>
+        <div class="flex-initial flex mt-4 w-4 align-items-center justify-content-center font-bold">CHILL</div>
+    </div>
+</div>
+  
+<div>
+    Gate Pass
+    <qrcode [qrdata]="qrCodeValue" [width]="256" [errorCorrectionLevel]="'M'"></qrcode>
+  </div>

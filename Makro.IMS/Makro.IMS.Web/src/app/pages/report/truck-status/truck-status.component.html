@@ -1,0 +1,277 @@
+<div class="card col-12" *ngIf="warehouses">
+    <p-dialog header="Parameter" [(visible)]="visible" [style]="{width: '50vw', height: '30vw'}" position="top" >
+      <div class="p-fluid p-formgrid grid mt-4">
+        <div class="col-12 md:col-4">
+          <label>
+              Warehouse WMS
+          </label>
+          <p-dropdown
+            id="warehouseCode"
+            name="warehouseCode"
+            #warehouseCode="ngModel"
+            [options]="warehouseList"
+            [(ngModel)]="warehouseSelected"
+            optionLabel="value"
+            optionValue="value"
+            [placeholder]="'Select Warehouse' | translate"
+            required
+            [ngClass]="{
+              'ng-invalid ng-dirty':
+                warehouseCode.invalid &&
+                (warehouseCode.dirty || warehouseCode.touched)
+            }"
+            appendTo="body"
+            (onChange)="onWarehouseSelected($event)"
+          >           
+          </p-dropdown>
+          <small
+            class="p-error block"
+            *ngIf="
+              warehouseCode.invalid &&
+              (warehouseCode.dirty || warehouseCode.touched)
+            "
+          >
+            {{
+              "Message.Validation.Required"
+                | translate: { field: "Label.WarehouseCode" | translate }
+            }}
+          </small>
+        </div>
+        <div class="col-12 md:col-4">
+          <label>
+              Company
+          </label>
+          <p-dropdown
+            id="companyCode"
+            name="companyCode"
+            #companyCode="ngModel"
+            [options]="companies"
+            [(ngModel)]="companySelected"
+            optionLabel="companyCode"
+            optionValue="companyCode"
+            [placeholder]="'Select Company' | translate"
+            required
+            [ngClass]="{
+              'ng-invalid ng-dirty':
+              companyCode.invalid &&
+                (companyCode.dirty || companyCode.touched)
+            }"
+            appendTo="body"
+          >
+            <ng-template let-item pTemplate="item">
+              {{item.companyCode}}
+            </ng-template>
+                
+            <ng-template let-item pTemplate="selectedItem">
+              {{item.companyCode}}
+            </ng-template>
+          </p-dropdown>
+          <small
+            class="p-error block"
+            *ngIf="
+              companyCode.invalid &&
+              (companyCode.dirty || companyCode.touched)
+            "
+          >
+            {{
+              "Message.Validation.Required"
+                | translate: { field: "Label.CompanyCode" | translate }
+            }}
+          </small>
+        </div>
+        <div class="col-12 md:col-4"></div>
+        <div class="col-12 md:col-4">
+          <label>
+              Booking start
+          </label>
+          <p-calendar 
+            [(ngModel)]="dateFrom" [readonlyInput]="false" 
+            dateFormat="dd/mm/yy"
+            [showTime] = "true"
+            [hourFormat] = "24"                 
+            required="true"
+            inputId="float-label-transaction-date" 
+            [placeholder]="'Select.TransactionDate' | translate"              
+            class="m-2"
+            appendTo="body"
+          ></p-calendar>
+        </div>
+        <div class="col-12 md:col-4">
+          <label>
+              Booking End
+          </label>
+          <p-calendar 
+            [(ngModel)]="dateTo" [readonlyInput]="false"
+            dateFormat="dd/mm/yy"
+            [showTime] = "true"
+            [hourFormat] = "24"                 
+            required="true"
+            inputId="float-label-transaction-date" 
+            [placeholder]="'Select.TransactionDate' | translate"              
+            class="m-2"
+            appendTo="body"
+          ></p-calendar>
+        </div>
+      </div>      
+      <ng-template pTemplate="footer">
+        <button pButton icon="pi pi-check" (click)="getBookingData();" label="Ok" styleClass="p-button-text"></button>        
+      </ng-template>
+    </p-dialog>
+
+    <div class="grid">
+      <div class="col-2">
+        <p-button type="button" class="mr-2" (click)="visible = true" icon="pi pi-at"></p-button>
+        <p-button type="button" class="ml-2 mr-2" (click)="exportExcel()" icon="pi pi-file-excel" style="margin-top: 1.75rem;"></p-button>
+      </div>
+      <div class="col-5 justify-content-center">
+        <h1><p>Warehouse WMS : {{warehouseSelected}}</p></h1>
+      </div>
+      <div class="col-5 justify-content-center">
+        <h1><p>Company : {{companySelected}} </p></h1>
+      </div>
+      
+      <div class="col-12">
+        <div class="flex justify-content-center">
+          <div class="flex-initial flex align-items-center justify-content-center
+          border-2 border-round-lg border-solid 
+          text-center text-xl text-bluegray-900 font-bold p-4 m-2 w-13rem"
+          style="background-color: red;"> 
+            <p>Overcap <br>
+            {{totalOvercap}}  คัน</p>
+          </div>
+
+          <div class="flex-initial flex align-items-center justify-content-center
+          border-2 border-round-lg border-solid border-bluegray-900
+          text-center text-xl text-0 font-bold p-4 m-2 w-13rem"
+          style="background-color: red;"> 
+            <p>OverCutoff <br>
+            {{totalOvercutoff}}  คัน</p>
+          </div>
+
+          <div class="flex-initial flex align-items-center justify-content-center
+          border-2 border-round-lg border-solid bg-primary-500
+          text-center text-xl text-primary-50 font-bold p-4 m-2 w-13rem
+          "> 
+            <p>Booking <br>
+            {{totalBooking}}  คัน</p>
+          </div>
+
+          <div class="flex-initial flex align-items-center justify-content-center
+          border-2 border-round-lg border-solid 
+          text-center text-xl text-orange-50 font-bold p-4 m-2 w-13rem
+          "
+          style="background-color: orange;"> 
+            <p>New <br>
+            {{totalNew}}  คัน</p>
+          </div>
+          <div class="flex-initial flex align-items-center justify-content-center
+          border-2 border-round-lg border-solid border-yellow-100
+          text-center text-xl text-bluegray-900 font-bold p-4 m-2 w-13rem
+          "
+          style="background-color: yellow;"> 
+            <p>Edit <br>
+            {{totalEdit}}  คัน</p>
+          </div>
+          <div class="flex-initial flex align-items-center justify-content-center
+          border-2 border-round-lg border-solid
+          text-center text-xl text-green-50 font-bold p-4 m-2 w-13rem
+          "
+          style="background-color: green;"> 
+            <p>Approved <br>
+            {{totalApproved}}  คัน</p>
+          </div>
+          
+          <div class="flex-initial flex  align-items-center justify-content-center
+          border-2 border-round-lg border-solid bg-purple-500
+          text-center text-xl text-purple-50 font-bold p-4 m-2 w-13rem
+          "> 
+            <p>Intransit <br>
+            {{totalPending}}  คัน</p>
+          </div>
+          <div class="flex-initial flex  align-items-center justify-content-center
+          border-2 border-round-lg border-solid
+          text-center text-xl text-0 font-bold p-4 m-2 w-13rem
+          "
+          style="background-color: pink;"
+          > 
+            <p>Check In <br>
+            {{totalCheckIn}}  คัน</p>
+          </div>
+          <div class="flex-initial flex  align-items-center justify-content-center
+          border-2 border-round-lg border-solid bg-blue-500
+          text-center text-xl text-blue-50 font-bold p-4 m-2 w-13rem
+          "> 
+            <p>In WHS<br>
+            {{totalInWarehouse}}  คัน</p>
+          </div>
+          <div class="flex-initial flex  align-items-center justify-content-center
+          border-2 border-round-lg border-solid bg-gray-500
+          text-center text-xl text-gray-50 font-bold p-4 m-2 w-13rem
+          "> 
+            <p>Check Out<br>
+            {{totalCheckOut}}  คัน</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12" *ngIf="truckStatus">
+      <!-- <app-table-page-list
+      [title]="'Truck Status'"
+      [columns]="cols"
+      [datasource]="truckStatus"
+      [rowCount]="10"
+      [stateKey]="'truck-status'"
+      [canModify]="false"
+      [showFilter]="false"
+      [selectColumnBtn]="false"
+      [showToolbox]="false"
+      [showTitle]="false"
+    >
+    
+    </app-table-page-list> -->
+      <p-table
+      [value]="truckStatus"
+      [paginator]="true"
+      [rows]="10"
+      [showCurrentPageReport]="true"
+      [pResizableColumn] = "true"
+      currentPageReportTemplate="{first} to {last} of {totalRecords}"
+      [rowsPerPageOptions]="[5,10, 20, 30, 50, 100]"
+      [columns]="cols"
+      >
+        <ng-template pTemplate="header" let-columns>
+          <tr>
+            <th class="text-left" *ngIf="showIndex">#</th>
+            <th
+              *ngFor="let col of columns"              
+              [style.width]="col.width || defaultWidth"
+              class="text-center"
+            >
+              {{ col.header | translate }}
+            </th>            
+          </tr>
+        </ng-template>        
+        <ng-template pTemplate="body" let-rowData let-columns="columns" >
+          <tr>            
+            <td
+              *ngFor="let col of columns; index as i"
+              [style.width]="col.width || defaultWidth"
+              class="text-center"
+            >
+              <span *ngIf="col.display === 'string'"  style="white-space: pre-line;"
+                [ngStyle]="{'color': col.field === 'waitingTimeDisplay' ? getWaitingTimeFontColor(rowData[col.field]) : 'var(--text-color)'}">{{
+                rowData[col.field]
+              }}</span>
+              <span *ngIf="col.display === 'datetime'"
+                >{{ rowData[col.field] | date: "dd/MM/yyyy HH:mm:ss" }}
+              </span>
+              <span *ngIf="col.display === 'date'"
+                >{{ rowData[col.field] | date: "dd/MM/yyyy" }}
+              </span>
+            </td>            
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+</div>

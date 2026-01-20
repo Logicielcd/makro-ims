@@ -1,0 +1,52 @@
+<p-toast position="top-right" class="-mt-2" key="dg"></p-toast>
+
+<div class="formgrid grid p-fluid mt-5 justify-content-center gap-4 ">
+  <div class="formgrid grid p-fluid mt-3">
+    <div class="field col-12 md:col-12 align-items-center justify-content-center">
+      <div class="field col-12 md:col-12 text-center">      
+        <label class="text-center font-bold">Total PO : {{ totalPo }}</label>      
+      </div>      
+    </div>
+    <div class="field col-12 md:col-12 align-items-center justify-content-center">
+      <div class="field col-12 md:col-12 text-center">      
+        <label id="lblinput" for="remarkcancelpo" name="lblinput" >
+          {{inputLabel}}
+        </label>
+        <input
+          pInputText
+          type="text"
+          id="remarkcancelpo"
+          name="remarkcancelpo"
+          class="w-12"
+          [(ngModel)]="remarkCancelPo"      
+          [placeholder]="inputLabel" />
+      </div>      
+    </div>
+    <div class="field col-12 md:col-12">
+      <p-table [columns]="cols" [value]="poCheckIns" dataKey="id">
+        <ng-template pTemplate="header" let-columns>
+          <tr>              
+              <th *ngFor="let col of columns">&#123;&#123;col.header&#125;&#125;</th>
+              <th> Action </th>
+          </tr>            
+        </ng-template>
+        <ng-template pTemplate="body" let-polist>
+          <tr>                            
+            <td>{{polist.poNbr}}</td>
+            <td>
+              <button
+                pButton
+                pRipple
+                icon="pi pi-trash"
+                class="p-button-rounded p-button-warning"
+                [disabled]="canCancelPo()"
+                (click)="onDeletePo(polist)"
+              ></button>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>     
+  </div>
+</div>
+

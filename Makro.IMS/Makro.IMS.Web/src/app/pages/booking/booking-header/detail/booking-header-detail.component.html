@@ -1,0 +1,678 @@
+<p-toast></p-toast>
+<p-confirmDialog
+  [baseZIndex]="10000"
+  rejectButtonStyleClass="p-button-text"
+></p-confirmDialog>
+<div class="card col-12 p-0 md:p-3">
+  <div class="flex justify-content-between flex-wrap">
+    <div class="flex align-item-center justify-content-center">
+      <h3 class="font-bold">Booking Detail</h3>
+    </div>
+    <div class="flex align-item-center justify-content-right">
+      <div class="flex-wrap justify-content-start w-10rem mr-2">
+        <p-splitButton 
+          label="Action" 
+          styleClass="ml-2 mr-2" 
+          icon="pi pi-bolt" 
+          [model]="this.menuItems$ | async"                  
+        >
+        </p-splitButton>
+      </div>
+      <div class="align-item-center ml-2">
+        <p-button icon="pi pi-refresh" (click)="refresh()"></p-button>
+      </div>
+      <div class="align-item-center ml-2">
+        <p-button
+          icon="pi pi-times"
+          (click)="onBack()"
+          [loading]="isLoading"
+        ></p-button>
+      </div>
+    </div>    
+  </div>
+  <div class="w-full md:w-12 mx-auto">
+    <p-messages [(value)]="msgs" [enableService]="false"></p-messages>
+  </div>
+
+  <div class="flex flex-row justify-content-between">
+    <div *ngIf="bookingKeyDto" class="pt-2">
+      <form #supForm="ngForm">
+        <div class="formgrid grid p-fluid">
+          <div class="field col-12 md:col-4">
+            <label>
+              Supplier
+              <span class="p-error"> *</span>
+            </label>
+            <input
+              id="supplier"
+              pInputText
+              type="text"
+              #supplier="ngModel"
+              [(ngModel)]="supplierDisplay"
+              name="supplier"
+              readonly
+              placeholder="Input supplier"
+            />
+          </div>
+
+          <div class="field col-12 md:col-3">
+            <label for="bookingDate">Delivery Date</label>
+            <p-calendar
+              [(ngModel)]="bookingDate"
+              dateFormat="dd/mm/yy"
+              inputId="bookingDate"
+              showIcon="true"
+              required
+              name="bookingdate"
+              #bookingdate="ngModel"              
+              [disabled]="!allowToEdit"
+              (onSelect)="onBookingDateChange($event)"
+            >
+            </p-calendar>            
+          </div>         
+          <div class="flex field col-12 md:col-2">
+            <div *ngIf="supplierGroup" class="flex-wrap ml-5 mt-5">
+              <label class="text-4xl font-bold text-red-500"> {{supplierGroup.isVip}} </label>
+            </div>
+          </div> 
+          <div class="flex field col-12 md:col-3 justify-content-end">
+            <div class="flex-wrap justify-content-right">
+              <button
+                pButton
+                type="button"
+                class="p-button mt-4"
+                icon="pi pi-save"
+                (click)="onSaveBooking()"
+                [disabled]="!isCompleted || allCancel"
+                label="Save"
+                [loading]="isLoading"
+                name="btnsave"
+              ></button>
+            </div>
+          </div>
+
+          <div class="field col-12 md:col-4">
+            <label for="contactName"
+              >Contact name
+              <span class="p-error"> *</span>
+            </label>
+            <input
+              id="contactName"
+              pInputText
+              type="text"
+              #contactname="ngModel"
+              [(ngModel)]="contactName"
+              name="contactname"
+              placeholder="Input contact name"
+              [readonly]="!allowToEdit"
+            />
+          </div>
+
+          <div class="field col-12 md:col-3">
+            <label for="telNo"
+              >Tel No.
+              <span class="p-error"> *</span>
+            </label>
+            <input
+              id="telNo"
+              pInputText
+              type="text"
+              name="telno"
+              #telNo="ngModel"
+              required
+              [(ngModel)]="contactPhone"
+              placeholder="Input tel no."
+              [readonly]="!allowToEdit"
+            />
+          </div>
+
+          <div class="field col-12 md:col-5">
+            <label for="email">e-Mail
+              <span class="p-error"> *</span>
+            </label>
+            <textarea
+              rows="1"
+              id="email"
+              name="email"
+              #email="ngModel"
+              pInputTextarea
+              [(ngModel)]="contactEmail"
+              placeholder="Input email"
+            ></textarea>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+  <div> 
+  <p-tabView [scrollable]="true">
+    <p-tabPanel
+      [header]="item.bookingId"
+      *ngFor="let item of bookingCreates; let i = index"
+      [selected]="i == 0"      
+      [styleClass]="'tab-one'"
+    >
+      <ng-template pTemplate="header">
+        <div class="flex align-items-center m-0 p-0">
+            <span *ngIf="item.status != 'NEW' && item.status != 'EDIT' && item.status != 'OVERCAP' && item.statua != 'CANCEL'" class="text-primary font-bold m-0 p-0 pi pi-check">
+                {{item.bookingId}}
+            </span>
+            <span *ngIf="item.status == 'NEW' || item.status == 'EDIT' || item.status == 'OVERCAP' || item.status == 'CANCEL'" class="text-red-500 font-bold m-0 p-0 pi pi-times">
+              {{item.bookingId}}
+          </span>
+        </div>
+      </ng-template>
+      <ng-template pTemplate="content">
+        <div class="formgrid grid p-fluid">
+          <div class="field col-12 md:col-3 mt-2">
+            <label class="text-lg font-bold underline ">Booking Id:</label>
+            <label class="text-lg font-bold ml-2">{{item.bookingId}}</label>           
+          </div>
+          <div class="field col-12 md:col-3 mt-2">
+            <label class="text-lg font-bold underline">โซนจัดส่งสินค้า:</label>
+            <label class="text-lg font-bold text-red-500 ml-2">{{item.merchTypeDisplay}}</label>
+          </div>
+          <div class="field flex col-12 md:col-3 mt-2">
+            <label class="text-lg font-bold underline">Status:</label>
+            <label class="text-lg font-bold ml-2" *ngIf="item.status != 'NEW' && item.status != 'EDIT' && item.status != 'OVERCAP' && item.status != 'OVERCUTOFF' ">{{item.status}}</label>        
+            <label class="text-lg font-bold ml-2 text-red-500" *ngIf="item.status == 'NEW' || item.status == 'EDIT' || item.status == 'OVERCAP' || item.status == 'OVERCUTOFF' ">{{item.status}}</label>            
+            <div *ngIf="item.status == 'APPROVED'" class="ml-3">
+              <label class="text-lg font-bold text-red-500"> ยังไม่ได้ Assign รถ </label>
+            </div>
+          </div>
+          <div class="flex field col-12 md:col-3 justify-content-end">
+            <div class="flex-wrap justify-content-start w-8rem mr-2 " *ngIf="!onCheckCancel(item)" >
+              <button
+                pButton
+                type="button"
+                class="p-button-danger"
+                icon="pi pi-delete-left"
+                (click)="onCancel(item)"
+                label="Cancel"                
+                [loading]="isLoading"
+                name="btncancel"
+                [disabled]="onCheckCancel(item)"
+              >              
+            </button>
+            </div>       
+            <div class="flex-wrap justify-content-start w-8rem mr-2 " *ngIf="isApproved">
+              <button
+                pButton
+                type="button"
+                class="p-button"
+                icon="pi pi-check"
+                (click)="onApproved(item)"
+                label="Approved"
+                [disabled]="item.status != 'NEW' && item.status != 'EDIT' && item.status != 'OVERCAP' && item.status !='OVERCUTOFF'"
+                [loading]="isLoading"
+                name="btnapproved"
+              >              
+              </button>
+            </div>            
+            <div class="flex-wrap justify-content-start w-8rem">
+              <button
+                pButton
+                type="button"
+                class="p-button-warning"
+                icon="pi pi-trash"
+                (click)="onDeleteBookingWarehouse(item)"
+                label="Delete"                
+                [loading]="isLoading"
+                [disabled]="canDelete(item)"
+                name="btndeletebkwhse"
+              ></button>
+            </div>
+          </div>
+          
+          <form #f="ngForm" novalidate class="col-12 md:col-12">
+            <div class="formgrid grid p-fluid col-12 md:col-12">
+              <div class="field col-12 md:col-2">
+                <label for="poNo2" class="font-bold">PO No</label>
+                <label class="text-red-500 ml-1">  *กรณีต้องการระบุ PO มากกว่า 1 PO ให้ใส่เครื่องหมาย , ระหว่างเลข PO</label>
+                <input
+                  pInputText
+                  type="text"
+                  id="poNo"
+                  name="poNo"
+                  #poNo="ngModel"
+                  [(ngModel)]="item.inputPoNo"
+                  placeholder="ตัวอย่าง PO0001,PO0002"
+                  [disabled]="!allowToEdit"
+                  (keydown.enter)="addPo(item)"
+                />
+              </div>
+              <div class="field col-12 md:col-1">
+                <button
+                  pButton
+                  type="button"
+                  label="Add"
+                  icon="pi pi-plus"
+                  class="p-button"
+                  (click)="addPo(item)"
+                  [disabled]="!allowToEdit"
+                  style="margin-top: 1.75rem"
+                  [loading]="isLoading"
+                  name="btnaddpo"
+                ></button>
+              </div>
+              <div class="field col-12 md:col-2 w-12rem">
+                <button
+                  pButton
+                  type="button"
+                  label="List PO"
+                  class="p-button"
+                  icon="pi pi-search-plus"
+                  style="margin-top: 1.75rem"
+                  (click)="getPo(item)"
+                  [disabled]="!allowToEdit || item.status === 'CANCEL'"
+                  name="btngetpo"
+                ></button>
+              </div>
+              <div *ngIf="user.userType !== 'SUP'" class="field grid col-12 md:col-7" >
+                <div class="field col-12 md:col-3"></div>
+                <div class="field col-12 md:col-3">
+                  <label for="backhaul" class="font-bold">Truck Group </label>
+                  <p-toggleButton 
+                    [(ngModel)]="item.backHaul"                 
+                    onLabel="BackHaul" 
+                    offLabel="ส่งสินค้าปกติ"
+                    (onChange)="onBackhaulChange(item)"
+                    [disabled]="!isBh || item.status === 'CANCEL'"
+                    name="tgbbackhaul"
+                  >
+                  </p-toggleButton>
+                </div>
+                <div class="field col-12 md:col-3" *ngIf="isBh">
+                  <button
+                    pButton
+                    type="button"
+                    name="btnbackhaulsave"
+                    class="p-button"
+                    icon="pi pi-check"
+                    (click)="backhaulSave(item)"
+                    label="Update Back Haul"
+                    [disabled]="!isBh || item.status === 'CANCEL'"
+                    [loading]="isLoading"
+                    style="margin-top: 1.75rem"
+                  >              
+                  </button>
+                </div>
+                <div class="field col-12 md:col-3" *ngIf="item.isLate">
+                    <button
+                      pButton
+                      type="button"
+                      name="btnupdaedcdelay"
+                      class="p-button"
+                      icon="pi pi-check"
+                      (click)="dcDelaySave(item)"
+                      label="Update DC Delay"
+                      [disabled]="!isDcDelay || item.status === 'CANCEL'"
+                      [loading]="isLoading"
+                      style="margin-top: 1.75rem"
+                    >              
+                    </button>
+                </div>
+              </div>
+              <div class="field col-12 md:col-12" *ngIf="!['SUP','SUPTRAN','BH'].includes(user.userType)">
+                <label for="remark" class="font-bold">Remark Booking</label>
+                <input
+                  pInputText
+                  type="text"
+                  id="remark"
+                  name="remark"
+                  #remark="ngModel"
+                  [(ngModel)]="item.remark"
+                  placeholder="Input remark"
+                  [disabled]="!allowToEdit"
+                  maxlength="250"
+                />
+              </div>
+              <div class="field col-12 md:col-12" *ngIf="item.isLate">
+                <label for="remarkdelay" class="font-bold">Remark Delay</label>
+                <input
+                  pInputText
+                  type="text"
+                  id="remarkdelay"
+                  name="remarkdelay"
+                  #remarkdelay="ngModel"
+                  [(ngModel)]="item.remarkDelay"
+                  placeholder="Input remark delay"
+                  [disabled]="!allowToEdit"
+                  maxlength="250"
+                />
+              </div>
+            </div>            
+          </form>
+        </div>
+        
+        <p-tabView [scrollable]="true">
+          <p-tabPanel header="PO List">
+            <ng-template pTemplate="content">
+              <div class="field col-12 md:col-12 -ml-5 -mt-5">
+                <p-table
+                  [columns]="item.whseCap == 'CS' ? colsCs : cols"
+                  [value]="item.bookingDetail"
+                  responsiveLayout="scroll"
+                  [scrollable]="true"
+                >
+                  <ng-template pTemplate="header" let-columns>
+                    <tr>
+                      
+                      <th [attr.colspan] = "columns.length"></th>
+                      <th>Total Kg or CS</th>
+                      <th>{{item.totalQty}}</th>
+                    </tr>
+                    <tr>
+                      <th *ngFor="let col of columns">
+                        {{ col.header }}
+                      </th>
+                      <th pFrozenColumn>
+                      </th>
+                      <th class="w-10rem">
+                        <div *ngIf="user.userType !== 'SUP' && item.isLate" class="field col-12 md:col-12 m-0 p-0">
+                          <div class="flex align-items-center">
+                            <p-checkbox 
+                                name="approved" 
+                                value="true" 
+                                [(ngModel)]="item.allApproved"
+                                (onChange)="onAllDcDelayClick($event)"
+                                [disabled] = "!isDcDelay"
+                                inputId="approved1" />
+                            <label for="approved1" class="ml-2">
+                                All DC Delay
+                            </label>
+                        </div>                        
+                        </div>
+                      </th>
+                    </tr>
+                  </ng-template>
+                  <ng-template pTemplate="body" let-rowData let-columns="columns">
+                    <tr>
+                      <td
+                      *ngFor="let col of columns; index as i"
+                      [style.width]="col.width || defaultWidth"                          
+                      >
+                        <span *ngIf="col.display === 'string'"  style="white-space: pre-line;">{{
+                          rowData[col.field]
+                        }}</span>
+                        <span *ngIf="col.display === 'datetime'"
+                          >{{ rowData[col.field] | date: "dd/MM/yyyy HH:mm:ss" }}
+                        </span>
+                        <span *ngIf="col.display === 'date'"
+                          >{{ rowData[col.field] | date: "dd/MM/yyyy" }}
+                        </span>
+                        <span *ngIf="col.display === 'icon' && rowData[col.field] === 'Y'"
+                              ><i class="pi pi-clock" style="color: red; font-size: 1.5rem;"></i>
+                        </span>
+                        <span *ngIf="col.display === 'textbox'"  style="white-space: pre-line;">
+                          <input 
+                                pInputText 
+                                type="text" 
+                                [(ngModel)]="rowData[col.field]" />
+                        </span>
+                      </td>
+                      <td pFrozenColumn>
+                        <button
+                          pButton
+                          pRipple
+                          icon="pi pi-trash"
+                          class="p-button-rounded p-button-warning"
+                          (click)="deletePo(rowData,item)"
+                          [disabled]="!allowToEdit"
+                        ></button>
+                      </td>
+                      <td>                            
+                        <div *ngIf="user.userType !== 'SUP' && rowData['alert'] === 'Y'" class="field col-12 md:col-12 m-0 p-0">
+                          <p-toggleButton 
+                            [(ngModel)]="rowData['isPostPoned']" 
+                            onLabel="DC Delay" 
+                            offLabel="Not Receive On-Time"
+                            (onChange)="onPostponedChange(rowData)"
+                            [disabled]="!isDcDelay"
+                          >
+                          </p-toggleButton>
+                        </div>
+                      </td>
+                    </tr>                    
+                  </ng-template>
+                  
+                </p-table>
+              </div>
+            </ng-template>
+          </p-tabPanel>
+          <p-tabPanel header="Truck List">
+            <ng-template pTemplate="content">
+              <form #truckForm="ngForm">
+                <div class="formgrid grid p-fluid -ml-5 -mt-3">
+                  <div class="field col-12 md:col-3">
+                    <label for="truckType">Truck Type</label>
+                    <p-dropdown
+                      id="truckType"
+                      name="truckType"
+                      #truckType="ngModel"
+                      [options]="trucks"
+                      [(ngModel)]="item.truckSelected"
+                      optionLabel="truckName"
+                      optionValue="internalTruckId"
+                      [filter]="true"
+                      filterBy="internalTruckId"
+                      [showClear]="true"
+                      placeholder="Select Truck Type"
+                      [readonly]="!allowToEdit"
+                      required
+                      [ngClass]="{
+                        'ng-invalid ng-dirty':
+                          truckType.invalid &&
+                          (truckType.dirty || truckType.touched)
+                      }"
+                      [virtualScroll]="true"
+                      [virtualScrollItemSize]="38"
+                      (onChange)="onTruckSelected(item.warehouseCode, $event)"
+                    >
+                    </p-dropdown>
+                    <small
+                      class="p-error block"
+                      *ngIf="
+                        truckType.invalid &&
+                        (truckType.dirty || truckType.touched)
+                      "
+                    >
+                      {{
+                        "Message.Validation.Required"
+                          | translate
+                            : { field: "Label.SupplierCode" | translate }
+                      }}
+                    </small>
+                  </div>
+                  <div class="field col-12 md:col-1">
+                    <label for="totaltruck">Total Truck</label>
+                    <input
+                      pInputText
+                      type="text"
+                      id="totaltruck"
+                      name="totaltruck"
+                      [(ngModel)]="item.totalTruck"
+                      required
+                      (keypress)="keyPressNumbers($event)"
+                    />
+                  </div>
+                  <div class="field col-12 md:col-2">
+                    <button
+                      pButton
+                      type="button"
+                      class="p-button"
+                      (click)="addTruck(item.warehouseCode)"
+                      [disabled]="!truckForm.form.valid"
+                      label="Add"
+                      icon="pi pi-plus"
+                      style="margin-top: 1.5rem"
+                    ></button>
+                  </div>
+                </div>
+              </form>
+              <div class="field col-12 md:col-12 -ml-5 -mt-3">
+                <p-table
+                  [columns]="truckCols"
+                  [value]="item.bookingTruck"
+                  responsiveLayout="scroll"
+                >
+                  <ng-template pTemplate="header" let-columns>
+                    <tr>
+                      <th *ngFor="let col of columns">
+                        {{ col.header }}
+                      </th>
+                    </tr>
+                  </ng-template>
+                  <ng-template
+                    pTemplate="body"
+                    let-rowData
+                    let-columns="columns"
+                  >
+                    <tr>
+                      <td *ngFor="let col of columns">
+                        {{ rowData[col.field] }}
+                      </td>
+                      <td>
+                        <button
+                          pButton
+                          pRipple
+                          icon="pi pi-trash"
+                          class="p-button-rounded p-button-warning"
+                          (click)="deleteTruck(rowData)"
+                          [disabled]="!allowToEdit"
+                        ></button>
+                      </td>
+                    </tr>
+                  </ng-template>
+                </p-table>
+              </div>
+            </ng-template>
+          </p-tabPanel>
+          <p-tabPanel header="Assign Time slot">
+            <ng-template pTemplate="content">
+              <div class="formgrid grid p-fluid -ml-5 -mt-3">
+                <div class="field col-12 md:col-2">
+                  <label for="dockdoor">Dock Door</label>
+                  <input
+                    pInputText
+                    type="text"
+                    id="dockdoor"
+                    name="dockdoor"
+                    [(ngModel)]="item.dockDoor"
+                    readonly
+                  />
+                </div>
+                <div class="field col-12 md:col-2">
+                  <label for="timeStart">Time start</label>
+                  <p-calendar
+                    [(ngModel)]="item.startTime"
+                    [showTime]="true"
+                    [showSeconds]="true"
+                    inputId="starttime"
+                    dateFormat="dd/mm/yy"
+                    disabled
+                  >
+                  </p-calendar>
+                </div>
+                <div class="field col-12 md:col-2">
+                  <label for="timeStart">Time End</label>
+                  <p-calendar
+                    [(ngModel)]="item.endTime"
+                    [showTime]="true"
+                    [showSeconds]="true"
+                    inputId="time"
+                    dateFormat="dd/mm/yy"
+                    disabled
+                  >
+                  </p-calendar>
+                </div>
+                <div class="field col-12 md:col-2">
+                  <button
+                    pButton
+                    type="button"
+                    label=""
+                    class="p-button"
+                    (click)="show(item.warehouseCode,item.companyCode,item.merchType,item.bookingId)"
+                    [disabled]="!allowToEdit"
+                    style="margin-top: 1.5rem"
+                    icon="pi pi-calendar-plus"
+                  ></button>
+                </div>
+                <div class="field col-12 md:col-4"></div>
+                <div class="field col-12 md:col-2">
+                  <label for="firstuserstamp">First user booking</label>
+                  <input
+                    pInputText
+                    type="text"
+                    id="firstuserstamp"
+                    name="firstuserstamp"
+                    [(ngModel)]="item.firstUser"
+                    readonly
+                  />
+                </div>
+                <div class="field col-12 md:col-2">
+                  <label for="firsttimestart">First Booking Time start</label>
+                  <p-calendar
+                    [(ngModel)]="item.firstTimeStart"
+                    [showTime]="true"
+                    [showSeconds]="true"
+                    inputId="firsttimestart"
+                    dateFormat="dd/mm/yy"
+                    disabled
+                  >
+                  </p-calendar>
+                </div>
+                <div class="field col-12 md:col-2">
+                  <label for="firsttimeend">First Booking Time End</label>
+                  <p-calendar
+                    [(ngModel)]="item.firstTimeEnd"
+                    [showTime]="true"
+                    [showSeconds]="true"
+                    inputId="firsttimeend"
+                    dateFormat="dd/mm/yy"
+                    disabled
+                  >
+                  </p-calendar>
+                </div>                
+                <div class="field col-12 md:col-2">
+                  <label for="userstamp">User stamp</label>
+                  <input
+                    pInputText
+                    type="text"
+                    id="userstamp"
+                    name="userstamp"
+                    [(ngModel)]="item.userStamp"
+                    readonly
+                  />
+                </div>
+                <div class="field col-12 md:col-2">
+                  <label for="moddate">Modify date time</label>
+                  <p-calendar
+                    [(ngModel)]="item.modDate"
+                    [showTime]="true"
+                    [showSeconds]="true"
+                    inputId="moddate"
+                    dateFormat="dd/mm/yy"
+                    disabled
+                  >
+                  </p-calendar>
+                </div>                               
+              </div>
+            </ng-template>
+          </p-tabPanel>
+        </p-tabView>
+      </ng-template>
+    </p-tabPanel>
+  </p-tabView>
+</div>
+
+<p-dialog header="Input remark cancel" [modal]="true" [(visible)]="showRemark" [style]="{ width: '50vw' }" >  
+  <div class="flex align-items-center mt-3">
+      <label for="remarkcancel" class="font-semibold w-6rem">Remark</label>
+      <input pInputText id="remarkcancel" class="flex-auto" autocomplete="off" maxlength="100" [(ngModel)]="remarkCancel" />
+  </div> 
+  <div class="flex justify-content-end gap-2 mt-3">
+      <p-button label="Cancel" severity="secondary" (onClick)="showRemark = false" />
+      <p-button label="Save" (click)="onSaveCancel()" [disabled]="remarkCancel === ''" />
+  </div>
+</p-dialog>

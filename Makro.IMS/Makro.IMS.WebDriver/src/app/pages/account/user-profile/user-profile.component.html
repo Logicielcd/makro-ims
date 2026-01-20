@@ -1,0 +1,29 @@
+<p-toast></p-toast>
+<p-confirmDialog
+  [baseZIndex]="10000"
+  rejectButtonStyleClass="p-button-text"
+></p-confirmDialog>
+<p-toolbar>
+    <div class="p-toolbar-group-left">
+        <h5>User Profile</h5>
+    </div>
+</p-toolbar>
+<div class="card">
+    <div class="formgrid grid p-fluid">    
+        <div class="field col-12 md:col-4">
+            <label>
+                User Login Name                
+            </label>       
+            <input
+                pInputText
+                type="text"
+                id="userid"
+                name="userid"
+                #username="ngModel"
+                [(ngModel)]="data.userName"
+                readonly                               
+                placeholder="input po"
+            />             
+        </div>
+    </div> 
+</div>  

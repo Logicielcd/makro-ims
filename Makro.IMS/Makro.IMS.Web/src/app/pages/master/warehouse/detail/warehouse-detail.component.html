@@ -1,0 +1,936 @@
+<p-toast></p-toast>
+<p-confirmDialog
+  [baseZIndex]="10000"
+  rejectButtonStyleClass="p-button-text"
+></p-confirmDialog>
+<div class="grid">
+  <div class="col-12 p-0 md:p-3">    
+    <div class="card">
+      <div class="grid grid-nogutter flex-row justify-content-between">
+        <h3 class="font-bold">
+          {{ (!dataId ? "Title.Create" : "Title.Detail") | translate }}
+        </h3>
+      </div>
+      <p-messages [(value)]="msgs" [enableService]="false"> </p-messages>
+      <form #f="ngForm" novalidate>
+        <div class="grid">
+          <div class="col-12">
+            <p-toolbar>              
+              <div class="p-toolbar-group-left flex flex-wrap">
+                <button
+                  *ngIf="canModify"
+                  pButton
+                  type="button"
+                  icon="pi pi-check"
+                  [label]="'Button.Save' | translate"
+                  class="p-button-success mr-2"
+                  [disabled]="!f.form.valid || f.form.pristine"
+                  (click)="onSubmit()"
+                  [loading]="isLoading"
+                ></button>
+                <button
+                  *ngIf="canModify"
+                  pButton
+                  type="button"
+                  icon="pi pi-trash"
+                  [label]="'Button.Delete' | translate"
+                  class="p-button-danger mr-2"
+                  (click)="onDelete()"
+                  [loading]="isLoading"
+                ></button>
+              </div>
+              <div class="p-toolbar-group-right flex flex-wrap">
+                <button
+                  pButton
+                  type="button"
+                  icon="pi pi-refresh"
+                  [pTooltip]="'Button.Refresh' | translate"
+                  tooltipPosition="bottom"
+                  class="p-button-primary mr-2"
+                  (click)="fetchData()"
+                  [loading]="isLoading"
+                ></button>
+                <button
+                  pButton
+                  type="button"
+                  icon="pi pi-times"
+                  [pTooltip]="'Button.Back' | translate"
+                  tooltipPosition="bottom"
+                  class="p-button-primary mr-2"
+                  (click)="onBack()"
+                  [loading]="isLoading"
+                ></button>
+              </div>
+            </p-toolbar>
+          </div>
+        </div>
+
+        <div class="p-fluid p-formgrid grid">
+          <div class="col-12 md:col-12">
+            <p-panel [toggleable]="true" class="p-fluid">
+              <ng-template pTemplate="header">
+                <h6 class="line-height-3 m-0">
+                  {{ "Section.Info" | translate }}
+                </h6>
+              </ng-template>
+              <div class="grid">
+                <div class="col-12 md:col-2">
+                  <label htmlFor="warehouseCode">
+                    {{ "Label.WarehouseCode" | translate }}
+                  </label>
+                  <input
+                    pInputText
+                    type="text"
+                    id="warehouseCode"
+                    name="warehouseCode"
+                    #warehouseCode="ngModel"
+                    [(ngModel)]="data.warehouseCode"
+                    required
+                    [ngClass]="{
+                      'ng-invalid ng-dirty':
+                      warehouseCode.invalid && (warehouseCode.dirty || warehouseCode.touched)
+                    }"
+                    [readOnly]="!isNew"
+                  />
+                  <small
+                    class="p-error block"
+                    *ngIf="warehouseCode.invalid && (warehouseCode.dirty || warehouseCode.touched)"
+                  >
+                    {{
+                      "Message.Validation.Required"
+                        | translate : { field: "Label.WarehouseCode" | translate }
+                    }}
+                  </small>
+                </div>
+                <div class="col-12 md:col-2">
+                  <label htmlFor="companycode">
+                    {{ "Label.CompanyCode" | translate }}
+                  </label>
+                  <input
+                    pInputText
+                    type="text"
+                    id="companycode"
+                    name="companycode"
+                    #companycode="ngModel"
+                    [(ngModel)]="data.companyCode"
+                    required
+                    [ngClass]="{
+                      'ng-invalid ng-dirty':
+                      companycode.invalid && (companycode.dirty || companycode.touched)
+                    }"
+                    [readOnly]="!isNew"
+                  />
+                  <small
+                    class="p-error block"
+                    *ngIf="companycode.invalid && (companycode.dirty || companycode.touched)"
+                  >
+                    {{
+                      "Message.Validation.Required"
+                        | translate : { field: "Label.CompanyCode" | translate }
+                    }}
+                  </small>
+                </div>
+                <div class="col-12 md:col-8">
+                  <label htmlFor="warehouseName">
+                    {{ "Label.WarehouseName" | translate }}
+                  </label>
+                  <input
+                    pInputText
+                    type="text"
+                    id="warehouseName"
+                    name="warehouseName"
+                    #warehouseName="ngModel"
+                    [(ngModel)]="data.warehouseName"
+                    required
+                    [ngClass]="{
+                      'ng-invalid ng-dirty':
+                      warehouseName.invalid && (warehouseName.dirty || warehouseName.touched)
+                    }"
+                    [readOnly]="!isNew"
+                  />
+                  <small
+                    class="p-error block"
+                    *ngIf="warehouseName.invalid && (warehouseName.dirty || warehouseName.touched)"
+                  >
+                    {{
+                      "Message.Validation.Required"
+                        | translate : { field: "Label.WarehouseName" | translate }
+                    }}
+                  </small>
+                </div>
+                <div class="col-12 md:col-6" style="margin-top: -1rem;">
+                  <label htmlFor="address1">
+                    {{ "Label.Address1" | translate }}
+                  </label>
+                  <input
+                    pInputText
+                    type="text"
+                    id="address1"
+                    name="address1"                    
+                    [(ngModel)]="data.address1"                  
+                  />               
+                </div>
+                <div class="col-12 md:col-6" style="margin-top: -1rem;">
+                  <label htmlFor="address2">
+                    {{ "Label.Address2" | translate }}
+                  </label>
+                  <input
+                    pInputText
+                    type="text"
+                    id="address2"
+                    name="address2"                    
+                    [(ngModel)]="data.address2"                  
+                  />               
+                </div>
+                <div class="col-12 md:col-6" style="margin-top: -1rem;">
+                  <label htmlFor="address3">
+                    {{ "Label.Address3" | translate }}
+                  </label>
+                  <input
+                    pInputText
+                    type="text"
+                    id="address3"
+                    name="address3"                    
+                    [(ngModel)]="data.address3"                  
+                  />               
+                </div>
+                <div class="col-12 md:col-2" style="margin-top: -1rem;">
+                  <label htmlFor="city">
+                    {{ "Label.City" | translate }}
+                  </label>
+                  <input
+                    pInputText
+                    type="text"
+                    id="city"
+                    name="city"                    
+                    [(ngModel)]="data.city"                  
+                  />               
+                </div>
+                <div class="col-12 md:col-2" style="margin-top: -1rem;">
+                  <label htmlFor="country">
+                    {{ "Label.Country" | translate }}
+                  </label>
+                  <input
+                    pInputText
+                    type="text"
+                    id="country"
+                    name="country"                    
+                    [(ngModel)]="data.country"                  
+                  />
+                </div>
+                <div class="col-12 md:col-2" style="margin-top: -1rem;">
+                  <label htmlFor="zipcode">
+                    {{ "Label.ZipCode" | translate }}
+                  </label>
+                  <input
+                    pInputText
+                    type="text"
+                    id="zipcode"
+                    name="zipcode"                    
+                    [(ngModel)]="data.zipcode"                  
+                  />               
+                </div>
+                <div class="col-12 md:col-4" style="margin-top: -1rem;">
+                  <label htmlFor="contactname">
+                    {{ "Label.ContactName" | translate }}
+                  </label>
+                  <input
+                    pInputText
+                    type="text"
+                    id="contactname"
+                    name="contactname"                    
+                    [(ngModel)]="data.contactName"                  
+                  />               
+                </div>
+                <div class="col-12 md:col-4" style="margin-top: -1rem;">
+                  <label htmlFor="mobilenumber">
+                    {{ "Label.MobileNumber" | translate }}
+                  </label>
+                  <input
+                    pInputText
+                    type="text"
+                    id="mobilenumber"
+                    name="mobilenumber"                    
+                    [(ngModel)]="data.mobileNumber"                
+                  />               
+                </div>
+                <div class="col-12 md:col-4" style="margin-top: -1rem;">
+                  <label htmlFor="phonenumber">
+                    {{ "Label.PhoneNumber" | translate }}
+                  </label>
+                  <input
+                    pInputText
+                    type="text"
+                    id="phonenumber"
+                    name="phonenumber"                    
+                    [(ngModel)]="data.phoneNumber"                
+                  />               
+                </div>
+                <div class="col-12 md:col-12" style="margin-top: -1rem;">
+                  <label htmlFor="contactemail">
+                    {{ "Label.ContactEMail" | translate }}
+                  </label>
+                  <input
+                    pInputText
+                    type="text"
+                    id="contactemail"
+                    name="contactemail"                    
+                    [(ngModel)]="data.contactEMail"                
+                  />               
+                </div>
+                <div class="col-12 md:col-12" style="margin-top: -1rem;">
+                  <label htmlFor="note">
+                    {{ "Label.Note" | translate }}
+                  </label>
+                  <input
+                    pInputText
+                    type="text"
+                    id="note"
+                    name="note"                    
+                    [(ngModel)]="data.note"                
+                  />               
+                </div>
+              </div>
+            </p-panel>
+          </div>
+          
+          <div class="col-12 md:col-12" style="margin-top: -1rem;">
+            <p-panel [toggleable]="true" class="p-fluid">
+              <ng-template pTemplate="header">
+                <h6 class="line-height-3 m-0">
+                  {{ "Section.BookingSetting" | translate }}
+                </h6>
+              </ng-template>
+              <div class="grid">
+                <div class="col-12 md:col-2" style="margin-top: -1rem;">
+                  <label htmlFor="bookingidprefix">
+                    {{ "Label.BookingIdPrefix" | translate }}
+                  </label>
+                  <input
+                    pInputText
+                    type="text"
+                    id="bookingidprefix"
+                    name="bookingidprefix"
+                    #bookingidprefix="ngModel"
+                    [(ngModel)]="data.bookingIdPrefix"
+                    required
+                    [ngClass]="{
+                      'ng-invalid ng-dirty':
+                      bookingidprefix.invalid && (bookingidprefix.dirty || bookingidprefix.touched)
+                    }"
+                  />
+                  <small
+                    class="p-error block"
+                    *ngIf="bookingidprefix.invalid && (bookingidprefix.dirty || bookingidprefix.touched)"
+                  >
+                    {{
+                      "Message.Validation.Required"
+                        | translate : { field: "Label.BookingIdPrefix" | translate }
+                    }}
+                  </small>
+                </div>
+                <div class="col-12 md:col-2" style="margin-top: -1rem;">
+                  <label htmlFor="bookingidrunning">
+                    {{ "Label.BookingIdRunning" | translate }}
+                  </label>
+                  <input
+                    pInputText
+                    type="number"
+                    [min]="0"
+                    id="bookingidrunning"
+                    name="bookingidrunning"
+                    #bookingidrunning="ngModel"
+                    [(ngModel)]="data.bookingIdRunning"
+                    required
+                    [ngClass]="{
+                      'ng-invalid ng-dirty':
+                      bookingidrunning.invalid && (bookingidrunning.dirty || bookingidrunning.touched)
+                    }"
+                  />
+                  <small
+                    class="p-error block"
+                    *ngIf="bookingidrunning.invalid && (bookingidrunning.dirty || bookingidrunning.touched)"
+                  >
+                    {{
+                      "Message.Validation.Required"
+                        | translate : { field: "Label.BookingIdRunning" | translate }
+                    }}
+                  </small>
+                </div>
+                <div class="col-12 md:col-2" style="margin-top: -1rem;">
+                  <label htmlFor="onlinebookingidprefix">
+                    {{ "Label.OnlineBookingIdPrefix" | translate }}
+                  </label>
+                  <input
+                    pInputText
+                    type="text"
+                    id="onlinebookingidprefix"
+                    name="onlinebookingidprefix"
+                    #onlinebookingidprefix="ngModel"
+                    [(ngModel)]="data.onlineBookingIdPrefix"
+                    required
+                    [ngClass]="{
+                      'ng-invalid ng-dirty':
+                      onlinebookingidprefix.invalid && (onlinebookingidprefix.dirty || onlinebookingidprefix.touched)
+                    }"
+                  />
+                  <small
+                    class="p-error block"
+                    *ngIf="onlinebookingidprefix.invalid && (onlinebookingidprefix.dirty || onlinebookingidprefix.touched)"
+                  >
+                    {{
+                      "Message.Validation.Required"
+                        | translate : { field: "Label.OnlineBookingIdPrefix" | translate }
+                    }}
+                  </small>
+                </div>
+                <div class="col-12 md:col-2" style="margin-top: -1rem;">
+                  <label htmlFor="onlinebookingidrunning">
+                    {{ "Label.OnlineBookingIdRunning" | translate }}
+                  </label>
+                  <input
+                    pInputText
+                    type="number"
+                    [min]="0"
+                    id="onlinebookingidrunning"
+                    name="onlinebookingidrunning"
+                    #onlinebookingidrunning="ngModel"
+                    [(ngModel)]="data.onlineBookingIdRunning"
+                    required
+                    [ngClass]="{
+                      'ng-invalid ng-dirty':
+                      onlinebookingidrunning.invalid && (onlinebookingidrunning.dirty || onlinebookingidrunning.touched)
+                    }"
+                  />
+                  <small
+                    class="p-error block"
+                    *ngIf="onlinebookingidrunning.invalid && (onlinebookingidrunning.dirty || onlinebookingidrunning.touched)"
+                  >
+                    {{
+                      "Message.Validation.Required"
+                        | translate : { field: "Label.OnlineBookingIdRunning" | translate }
+                    }}
+                  </small>
+                </div>
+                <div class="col-12 md:col-4"></div>
+                <div class="col-12 md:col-3" style="margin-top: -1rem;">
+                  <label htmlFor="warehouseWms">
+                    {{ "Label.WarehouseWms" | translate }}
+                  </label>
+                  <input
+                    pInputText
+                    type="text"
+                    id="warehousewms"
+                    name="warehousewms"
+                    #warehousewms="ngModel"
+                    [(ngModel)]="data.warehouseWms"
+                    required
+                    [ngClass]="{
+                      'ng-invalid ng-dirty':
+                      warehousewms.invalid && (warehousewms.dirty || warehousewms.touched)
+                    }"
+                  />
+                  <small
+                    class="p-error block"
+                    *ngIf="warehousewms.invalid && (warehousewms.dirty || warehousewms.touched)"
+                  >
+                    {{
+                      "Message.Validation.Required"
+                        | translate : { field: "Label.WarehouseWms" | translate }
+                    }}
+                  </small>
+                </div>
+                <div class="col-12 md:col-3" style="margin-top: -1rem;">
+                  <label htmlFor="warehousemain">
+                    {{ "Label.WarehouseMain" | translate }}
+                  </label>
+                  <input
+                    pInputText
+                    type="text"
+                    id="warehousemain"
+                    name="warehousemain"
+                    #warehousemain="ngModel"
+                    [(ngModel)]="data.warehouseMain"
+                    required
+                    [ngClass]="{
+                      'ng-invalid ng-dirty':
+                      warehousemain.invalid && (warehousemain.dirty || warehousemain.touched)
+                    }"
+                  />
+                  <small
+                    class="p-error block"
+                    *ngIf="warehousemain.invalid && (warehousemain.dirty || warehousemain.touched)"
+                  >
+                    {{
+                      "Message.Validation.Required"
+                        | translate : { field: "Label.WarehouseMain" | translate }
+                    }}
+                  </small>
+                </div>
+                <div class="col-12 md:col-2" style="margin-top: -1rem;">
+                  <label htmlFor="warehouselevel">
+                    {{ "Label.WarehouseLevel" | translate }}
+                  </label>
+                  <input
+                    pInputText
+                    type="text"
+                    id="warehouselevel"
+                    name="warehouselevel"
+                    #warehouselevel="ngModel"
+                    [(ngModel)]="data.warehouseLevel"
+                    required
+                    [ngClass]="{
+                      'ng-invalid ng-dirty':
+                      warehouselevel.invalid && (warehouselevel.dirty || warehouselevel.touched)
+                    }"
+                  />
+                  <small
+                    class="p-error block"
+                    *ngIf="warehouselevel.invalid && (warehouselevel.dirty || warehouselevel.touched)"
+                  >
+                    {{
+                      "Message.Validation.Required"
+                        | translate : { field: "Label.WarehouseLevel" | translate }
+                    }}
+                  </small>
+                </div>
+                <div class="col-12 md:col-2" style="margin-top: -1rem;">
+                  <label htmlFor="fixdoor">
+                    {{ "Label.FixDoor" | translate }}
+                  </label>
+                  <p-toggleButton 
+                    id="isfixdoor"
+                    name="isfixdoor"
+                    [(ngModel)]="data.isFixDoor"
+                    onLabel="Yes"
+                    offLabel="No"
+                    [ngModelOptions]="{standalone: false}"
+                    (onChange)="onFixDoorChange()"
+                  >
+                  </p-toggleButton>
+                </div>
+                <div class="col-12 md:col-2"></div>
+                <div class="col-12 md:col-2">
+                  <label htmlFor="advanceBookingPeriod">
+                    {{ "Label.AdvanceBookingPeriod" | translate }}
+                  </label>
+                  <input
+                    pInputText
+                    type="number"
+                    id="advancebookingperiod"
+                    name="advancebookingperiod"
+                    [min]="00"
+                    [max]="10000"
+                    #advancebookingperiod="ngModel"
+                    [(ngModel)]="data.advanceBookingPeriod"
+                    required
+                    [ngClass]="{
+                      'ng-invalid ng-dirty':
+                      advancebookingperiod.invalid && (advancebookingperiod.dirty || advancebookingperiod.touched)
+                    }"                    
+                  />
+                  <small
+                    class="p-error block"
+                    *ngIf="advancebookingperiod.invalid && (advancebookingperiod.dirty || advancebookingperiod.touched)"
+                  >
+                    {{
+                      "Message.Validation.Required"
+                        | translate : { field: "Label.AdvanceBookingPeriod" | translate }
+                    }}
+                  </small>
+                </div>
+                <div class="col-12 md:col-2">
+                  <label htmlFor="advanceBookingDay">
+                    {{ "Label.AdvanceBookingDay" | translate }} (Hours)
+                  </label>
+                  <input
+                    pInputText
+                    type="number"
+                    id="advancebookingday"
+                    name="advancebookingday"
+                    [min]="-1"
+                    [max]="48"
+                    #advancebookingday="ngModel"
+                    [(ngModel)]="data.advanceBookingDay"
+                    required
+                    [ngClass]="{
+                      'ng-invalid ng-dirty':
+                      advancebookingday.invalid && (advancebookingday.dirty || advancebookingday.touched)
+                    }"                    
+                  />
+                  <small
+                    class="p-error block"
+                    *ngIf="advancebookingday.invalid && (advancebookingday.dirty || advancebookingday.touched)"
+                  >
+                    {{
+                      "Message.Validation.Required"
+                        | translate : { field: "Label.AdvanceBookingDay" | translate }
+                    }}
+                  </small>
+                </div>
+                <div class="col-12 md:col-2">
+                  <label htmlFor="firsttimeofday">
+                    {{ "Label.FirstTimeOfDay" | translate }}
+                  </label>
+                  <input
+                    pInputText
+                    type="number"
+                    id="firsttimeofday"
+                    name="firsttimeofday"
+                    [min]="00"
+                    [max]="24"
+                    #firsttimeofday="ngModel"
+                    [(ngModel)]="data.firstTimeOfDay"
+                    required
+                    [ngClass]="{
+                      'ng-invalid ng-dirty':
+                      firsttimeofday.invalid && (firsttimeofday.dirty || firsttimeofday.touched)
+                    }"                    
+                  />
+                  <small
+                    class="p-error block"
+                    *ngIf="firsttimeofday.invalid && (firsttimeofday.dirty || firsttimeofday.touched)"
+                  >
+                    {{
+                      "Message.Validation.Required"
+                        | translate : { field: "Label.FirstTimeOfDay" | translate }
+                    }}
+                  </small>
+                </div>
+                <div class="col-12 md:col-2">
+                  <label htmlFor="endtimeofday">
+                    {{ "Label.EndTimeOfDay" | translate }}
+                  </label>
+                  <input
+                    pInputText
+                    type="number"
+                    id="endtimeofday"
+                    name="endtimeofday"
+                    [min]="00"
+                    [max]="24"
+                    #endtimeofday="ngModel"
+                    [(ngModel)]="data.endTimeOfDay"
+                    required
+                    [ngClass]="{
+                      'ng-invalid ng-dirty':
+                      endtimeofday.invalid && (endtimeofday.dirty || endtimeofday.touched)
+                    }"                    
+                  />
+                  <small
+                    class="p-error block"
+                    *ngIf="endtimeofday.invalid && (endtimeofday.dirty || endtimeofday.touched)"
+                  >
+                    {{
+                      "Message.Validation.Required"
+                        | translate : { field: "Label.EndTimeOfDay" | translate }
+                    }}
+                  </small>
+                </div>
+                <div class="col-12 md:col-2">
+                  <label htmlFor="timeincreasestep">
+                    {{ "Label.TimeIncreaseStep" | translate }}
+                  </label>
+                  <input
+                    pInputText
+                    type="number"
+                    id="timeincreasestep"
+                    name="timeincreasestep"
+                    [min]="00"
+                    [max]="60"
+                    [step]="10"
+                    #timeincreasestep="ngModel"
+                    [(ngModel)]="data.timeIncreaseStep"
+                    required
+                    [ngClass]="{
+                      'ng-invalid ng-dirty':
+                      timeincreasestep.invalid && (timeincreasestep.dirty || timeincreasestep.touched)
+                    }"                    
+                  />
+                  <small
+                    class="p-error block"
+                    *ngIf="timeincreasestep.invalid && (timeincreasestep.dirty || timeincreasestep.touched)"
+                  >
+                    {{
+                      "Message.Validation.Required"
+                        | translate : { field: "Label.TimeIncreaseStep" | translate }
+                    }}
+                  </small>
+                </div>
+                <!-- <div class="col-12 md:col-2">
+                  <label htmlFor="timewidth">
+                    {{ "Label.TimeWidth" | translate }}
+                  </label>
+                  <input
+                    pInputText
+                    type="number"
+                    id="timewidth"
+                    name="timewidth"
+                    [min]="0"
+                    [max]="100"
+                    [step]="10"
+                    #timewidth="ngModel"
+                    [(ngModel)]="data.timeWidth"
+                    required
+                    [ngClass]="{
+                      'ng-invalid ng-dirty':
+                      timewidth.invalid && (timewidth.dirty || timewidth.touched)
+                    }"                    
+                  />
+                  <small
+                    class="p-error block"
+                    *ngIf="timewidth.invalid && (timewidth.dirty || timewidth.touched)"
+                  >
+                    {{
+                      "Message.Validation.Required"
+                        | translate : { field: "Label.TimeWidth" | translate }
+                    }}
+                  </small>
+                </div> -->
+                <div class="col-12 md:col-2"></div>
+                <div class="col-12 md:col-2">
+                  <label htmlFor="pobeforeperiod">
+                    {{ "Label.PoBeforePeriod" | translate }}
+                  </label>
+                  <input
+                    pInputText
+                    type="number"
+                    id="pobeforeperiod"
+                    name="pobeforeperiod"
+                    [min]="0"
+                    [max]="1000"                    
+                    #pobeforeperiod="ngModel"
+                    [(ngModel)]="data.poBeforePeriod"
+                    required
+                    [ngClass]="{
+                      'ng-invalid ng-dirty':
+                      pobeforeperiod.invalid && (pobeforeperiod.dirty || pobeforeperiod.touched)
+                    }"                    
+                  />
+                  <small
+                    class="p-error block"
+                    *ngIf="pobeforeperiod.invalid && (pobeforeperiod.dirty || pobeforeperiod.touched)"
+                  >
+                    {{
+                      "Message.Validation.Required"
+                        | translate : { field: "Label.PoBeforePeriod" | translate }
+                    }}
+                  </small>
+                </div>
+                <div class="col-12 md:col-2">
+                  <label htmlFor="poafterperiod">
+                    {{ "Label.PoAfterPeriod" | translate }}
+                  </label>
+                  <input
+                    pInputText
+                    type="number"
+                    id="poafterperiod"
+                    name="poafterperiod"
+                    [min]="0"
+                    [max]="1000"                    
+                    #poafterperiod="ngModel"
+                    [(ngModel)]="data.poAfterPeriod"
+                    required
+                    [ngClass]="{
+                      'ng-invalid ng-dirty':
+                      poafterperiod.invalid && (poafterperiod.dirty || poafterperiod.touched)
+                    }"                    
+                  />
+                  <small
+                    class="p-error block"
+                    *ngIf="poafterperiod.invalid && (poafterperiod.dirty || poafterperiod.touched)"
+                  >
+                    {{
+                      "Message.Validation.Required"
+                        | translate : { field: "Label.PoAfterPeriod" | translate }
+                    }}
+                  </small>
+                </div>
+                <div class="col-12 md:col-2">
+                  <label htmlFor="advancecheckintime">
+                    {{ "Label.AdvanceCheckinTime" | translate }}
+                  </label>
+                  <input
+                    pInputText
+                    type="number"
+                    id="advancecheckintime"
+                    name="advancecheckintime"
+                    [min]="0"
+                    [max]="1000"                    
+                    #advancecheckintime="ngModel"
+                    [(ngModel)]="data.advanceCheckinTime"
+                    required
+                    [ngClass]="{
+                      'ng-invalid ng-dirty':
+                      advancecheckintime.invalid && (advancecheckintime.dirty || advancecheckintime.touched)
+                    }"                    
+                  />
+                  <small
+                    class="p-error block"
+                    *ngIf="advancecheckintime.invalid && (advancecheckintime.dirty || advancecheckintime.touched)"
+                  >
+                    {{
+                      "Message.Validation.Required"
+                        | translate : { field: "Label.AdvanceCheckinTime" | translate }
+                    }}
+                  </small>
+                </div>
+                <div class="col-12 md:col-2">
+                  <label htmlFor="latecheckintime">
+                    {{ "Label.LateCheckinTime" | translate }}
+                  </label>
+                  <input
+                    pInputText
+                    type="number"
+                    id="latecheckintime"
+                    name="latecheckintime"
+                    [min]="0"
+                    [max]="1000"                    
+                    #latecheckintime="ngModel"
+                    [(ngModel)]="data.lateCheckinTime"
+                    required
+                    [ngClass]="{
+                      'ng-invalid ng-dirty':
+                      latecheckintime.invalid && (latecheckintime.dirty || latecheckintime.touched)
+                    }"                    
+                  />
+                  <small
+                    class="p-error block"
+                    *ngIf="latecheckintime.invalid && (latecheckintime.dirty || latecheckintime.touched)"
+                  >
+                    {{
+                      "Message.Validation.Required"
+                        | translate : { field: "Label.LateCheckinTime" | translate }
+                    }}
+                  </small>
+                </div>
+                <div class="col-12 md:col-2">
+                  <label htmlFor="capuom">
+                    {{ "Label.CapUom" | translate }}
+                  </label>
+                  <p-toggleButton 
+                    id="capuom"
+                    name="capuom"
+                    [(ngModel)]="data.isCapCS"
+                    onLabel="CS"
+                    offLabel="KG"
+                    [ngModelOptions]="{standalone: false}"
+                    (onChange)="onCapUomChange()"
+                  >
+                  </p-toggleButton>
+                </div>
+              </div>              
+            </p-panel>
+          </div>
+
+          <!-- <div class="col-12 md:col-12" style="margin-top: -1rem;">
+            <p-panel [toggleable]="true" class="p-fluid">
+              <ng-template pTemplate="header">
+                <h6 class="line-height-3 m-0">
+                  {{ "Section.Capacity" | translate }}
+                </h6>
+              </ng-template>
+
+              <div class="grid">
+                <div class="col-12 md:col-3">
+                  <label for="maxcon">
+                    {{ "Label.MaxCon" | translate }}
+                  </label>
+                  <input
+                    pInputText
+                    type="number"
+                    id="maxcon"
+                    name="maxcon"
+                    #maxcon="ngModel"
+                    [(ngModel)]="data.maxConPerHour"
+                  />
+                </div>
+
+                <div class="col-12 md:col-3">
+                  <label for="maxnon">
+                    {{ "Label.MaxNon" | translate }}
+                  </label>
+                  <input
+                    pInputText
+                    type="number"
+                    id="maxnon"
+                    name="maxnon"
+                    #maxnon="ngModel"
+                    [(ngModel)]="data.maxNonPerHour"
+                  />
+                </div>
+
+                <div class="col-12 md:col-3">
+                  <label for="maxfull">
+                    {{ "Label.MaxFull" | translate }}
+                  </label>
+                  <input
+                    pInputText
+                    type="number"
+                    id="maxfull"
+                    name="maxfull"
+                    #maxfull="ngModel"
+                    [(ngModel)]="data.maxFullPerHour"
+                  />
+                </div>
+              </div>
+            </p-panel>
+          </div> -->
+
+          <!-- <div class="col-12 md:col-12" style="margin-top: -1rem;">
+            <p-panel [toggleable]="true" class="p-fluid">
+              <ng-template pTemplate="header">
+                <h6 class="line-height-3 m-0">
+                  {{ "Section.CapacityCube" | translate }}
+                </h6>
+              </ng-template>
+
+              <div class="grid">
+                <div class="col-12 md:col-3">
+                  <label for="maxccon">
+                    {{ "Label.MaxCCon" | translate }}
+                  </label>
+                  <input
+                    pInputText
+                    type="number"
+                    id="maxccon"
+                    name="maxccon"
+                    #maxccon="ngModel"
+                    [(ngModel)]="data.maxCConPerHour"
+                  />
+                </div>
+
+                <div class="col-12 md:col-3">
+                  <label for="maxcnon">
+                    {{ "Label.MaxCNon" | translate }}
+                  </label>
+                  <input
+                    pInputText
+                    type="number"
+                    id="maxcnon"
+                    name="maxcnon"
+                    #maxcnon="ngModel"
+                    [(ngModel)]="data.maxCNonPerHour"
+                  />
+                </div>
+
+                <div class="col-12 md:col-3">
+                  <label for="maxcfull">
+                    {{ "Label.MaxCFull" | translate }}
+                  </label>
+                  <input
+                    pInputText
+                    type="number"
+                    id="maxcfull"
+                    name="maxcfull"
+                    #maxcfull="ngModel"
+                    [(ngModel)]="data.maxCFullPerHour"
+                  />
+                </div>
+              </div>
+            </p-panel>
+          </div> -->
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

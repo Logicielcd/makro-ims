@@ -1,0 +1,98 @@
+
+    .h1{
+        font-size: 14pt "Tahoma";
+        font-weight: 800;
+    }
+    
+    .page {    
+        font: 10pt "Tahoma";
+        color: black;
+        position: relative;
+        width: 21.2cm;
+        min-height: 29.68cm;
+        padding: 0.2cm;
+        margin: 0cm 0cm 0cm 0cm;
+        border: 1px #D3D3D3 solid;
+        border-radius: 5px;
+        background: white;
+        box-shadow: 0 0 1px rgba(0, 0, 0, 0.1);
+    }
+    
+    .footer {
+        font: 8pt "Tahoma";
+        position: absolute;
+        width: 20cm;
+        min-height: 3cm;
+        padding: 0.2cm;    
+        bottom: 0cm;
+    }
+    
+    .ph{
+        font-weight: 1000;
+        padding: 0;
+    }
+    
+    .pd{
+        padding: 0;
+        margin: 0;
+    }
+    
+    table.main {
+        width: 100%;
+        margin: 0cm;
+        padding: 0cm;
+        
+        border-style: none;
+        border-width: 0px;
+    }
+    
+    table.main tr,td{
+        border-style: none;
+        border-width: 0px;
+    }
+    
+    table.header{
+        width: 100%;
+    }
+    
+    table.tbgrid{
+        width: 100%;
+        border: 1px solid black;
+        border-collapse: collapse;
+    }
+    
+    td.tbgrid-row{
+        border-collapse: collapse;
+        border: 1px solid black;
+    }
+    
+    th.tbgrid-hdr{
+        font: 10pt "Tahoma" bold;
+        border-collapse: collapse;
+        border: 1px solid black;
+        padding: 0.1cm;
+    }
+    
+    td.pageno{
+        font-size: 10pt;
+    }
+    
+    
+    @page {
+        size: A4;
+        margin: 0;
+    }
+/*     
+    // @media print {
+    //     .page {
+    //         margin: 0;
+    //         border: initial;
+    //         border-radius: initial;
+    //         width: initial;
+    //         min-height: initial;
+    //         box-shadow: initial;
+    //         background: initial;
+    //        // page-break-after: always;
+    //     }
+    // } */
+    

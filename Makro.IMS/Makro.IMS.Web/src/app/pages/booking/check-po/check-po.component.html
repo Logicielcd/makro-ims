@@ -1,0 +1,282 @@
+<p-toast></p-toast>
+<p-confirmDialog
+  [baseZIndex]="10000"
+  rejectButtonStyleClass="p-button-text"
+></p-confirmDialog>
+<div class="card col-12 p-0 md:p-3">
+  <div class="flex justify-content-between flex-wrap">
+    <div class="flex align-item-center justify-content-center">
+      <h3 class="font-bold">Check PO</h3>
+    </div>
+    <div class="flex align-item-center justify-content-center">
+      <div class="align-item-center mr-2 ">
+        <p-button icon="pi pi-refresh" (click)="refresh()"></p-button>
+      </div>
+    </div>    
+  </div>
+  <div class="w-full md:w-12 mx-auto">
+    <p-messages [(value)]="msgs" [enableService]="false"></p-messages>
+  </div>
+
+  <div class="grid  p-fluid justify-content-start mt-2 col-12 md:col-12">
+    <div class="field col-12 md:col-3">
+      <label htmlFor="gatepass">
+          {{ "PO Nbr" | translate }}
+          <span class="p-error"> *</span>
+      </label>            
+      <input
+        pInputText
+        type="text"
+        id="ponbr"
+        name="ponbr"
+        #ponbr="ngModel"
+        [(ngModel)]="poNbr"
+        required
+        [ngClass]="{
+          'ng-invalid ng-dirty':
+          ponbr.invalid && (ponbr.dirty || ponbr.touched)
+        }"
+        (keydown.enter)="onCheckPo()"
+      />
+      <small
+        class="p-error block"
+        *ngIf="ponbr.invalid && (ponbr.dirty || ponbr.touched)"
+      >
+        {{
+          "Message.Validation.Required"
+            | translate : { field: "PO Nbr" | translate }
+        }}
+      </small>
+    </div>
+    <div class="field col-12 md:col-1">
+      <button 
+        pButton
+        type="button" 
+        class="p-button"
+        (click)="onCheckPo()"
+        label="OK"
+        icon="pi pi-check"
+        style="margin-top: 1.75rem"
+        >
+      </button>
+    </div>
+    <div class="field col-12 md:col-3"></div>
+    <div class="field col-12 md:col-2" style="margin-top: 1.75rem" *ngIf="poList">
+      <p-toggleButton
+        [(ngModel)]="poList[0]['isDelayReason']" 
+        onLabel="DC Delay" 
+        offLabel="Not Receive On-Time"
+        [disabled]="!isDcDelay"
+      >
+      </p-toggleButton>
+    </div>
+    <div class="field col-12 md:col-3" *ngIf="poList">
+      <button
+        pButton
+        type="button"
+        class="p-button"
+        icon="pi pi-check"      
+        label="Update DC Delay"      
+        style="margin-top: 1.75rem"
+        (click)="onSaveDcDelay()"
+        [disabled]="!isDcDelay"
+      >              
+      </button>  
+    </div>
+  </div>
+  
+  <div class="field col-12 md:col-12 mt-1">
+    <p-table
+      [columns]="cols"
+      [value]="poList"
+      responsiveLayout="scroll"
+    >
+      <ng-template pTemplate="header" let-columns>
+        <tr>
+          <th *ngFor="let col of columns">
+            {{ col.header }}
+          </th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-rowData let-columns="columns">
+        <tr>
+          <td
+          *ngFor="let col of columns; index as i"
+          [style.width]="col.width || defaultWidth"                          
+          >
+            <span *ngIf="col.display === 'string'"  style="white-space: pre-line;">{{
+              rowData[col.field]
+            }}</span>
+            
+            <span *ngIf="col.display === 'datetime'"
+              >{{ rowData[col.field] | date: "dd/MM/yyyy HH:mm:ss" }}
+            </span>
+            <span *ngIf="col.display === 'date'"
+              >{{ rowData[col.field] | date: "dd/MM/yyyy" }}
+            </span>
+            <i
+              *ngIf="col.display === 'bool'"
+              class="pi"
+              [ngClass]="{
+                'true-icon pi-check-circle': rowData[col.field],
+                'false-icon pi-times-circle': !rowData[col.field]
+              }"
+            ></i>
+          </td>          
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+  <div class="formgrid grid p-fluid justify-content-start mt-2" *ngIf="poList && user.userType !== 'SUP' && user.userType !== 'BH'">
+    <div class="field col-12 md:col-12">
+      <label htmlFor="comment1">
+          HREC          
+      </label>            
+      <input
+        pInputText
+        type="text"
+        id="comment1"
+        name="comment1"
+        #comment1="ngModel"
+        [(ngModel)]="poComment.comment1"     
+        maxlength="150"
+        [readOnly]="!isComment"
+      />      
+    </div>
+    <div class="field col-12 md:col-12">      
+      <label htmlFor="comment2">
+          Do not hold          
+      </label>            
+      <input
+        pInputText
+        type="text"
+        id="comment2"
+        name="comment2"
+        #comment2="ngModel"
+        [(ngModel)]="poComment.comment2"        
+        maxlength="150"
+        [readOnly]="!isComment"
+      />      
+    </div>
+    <div class="field col-12 md:col-12">      
+      <label htmlFor="comment3">
+          เลื่อนส่ง    
+      </label>            
+      <input
+        pInputText
+        type="text"
+        id="comment3"
+        name="comment3"
+        #comment3="ngModel"
+        [(ngModel)]="poComment.comment3"     
+        maxlength="150"   
+        [readOnly]="!isComment"
+      />      
+    </div>
+    <div class="field col-12 md:col-12">      
+      <label htmlFor="comment4">
+          ตัดยอด 1   
+      </label>            
+      <input
+        pInputText
+        type="text"
+        id="comment4"
+        name="comment4"
+        #comment4="ngModel"
+        [(ngModel)]="poComment.comment4"       
+        maxlength="150" 
+        [readOnly]="!isComment"
+      />      
+    </div>
+    <div class="field col-12 md:col-12">      
+      <label htmlFor="comment5">
+          ตัดยอด 2   
+      </label>            
+      <input
+        pInputText
+        type="text"
+        id="comment5"
+        name="comment5"
+        #comment5="ngModel"
+        [(ngModel)]="poComment.comment5"      
+        maxlength="150" 
+        [readOnly]="!isComment" 
+      />      
+    </div>
+    <div class="field col-12 md:col-12">      
+      <label htmlFor="comment6">
+          อื่นๆ    
+      </label>            
+      <input
+        pInputText
+        type="text"
+        id="comment6"
+        name="comment6"
+        #comment6="ngModel"
+        [(ngModel)]="poComment.comment6"        
+        maxlength="150"
+        [readOnly]="!isComment"
+      />      
+    </div>
+    <div class="field col-12 md:col-2">
+      <button 
+        pButton
+        type="button" 
+        class="p-button"
+        (click)="onSaveComment()"
+        label="Save"
+        icon="pi pi-save"
+        style="margin-top: 1.5rem"
+        [disabled]="!isComment"
+        >
+      </button>
+    </div>
+    <div class="field col-12 md:col-8"></div>
+    <div class="field col-12 md:col-2">
+      <button 
+        pButton
+        type="button" 
+        class="p-button"
+        (click)="openLog()"
+        label="Log"
+        icon="pi pi-history"
+        style="margin-top: 1.5rem"
+        [disabled]="!isDcDelay"
+        >
+      </button>
+    </div>
+  </div>
+</div>
+
+<p-dialog 
+    header="Header" 
+    [(visible)]="openDialog" 
+    [modal]="true" 
+    [style]="{ width: '80rem', height: '50rem' }">
+        <ng-template pTemplate="header">
+            <div class="inline-flex align-items-center justify-content-center gap-2">                
+                <span class="font-bold white-space-nowrap">
+                    PO Log
+                </span>
+            </div>
+        </ng-template>        
+        <div class="flex align-items-center gap-3 mb-3 col:12 md:col-12">
+          <p-table [value]="poLog" [tableStyle]="{ 'min-width': '75rem' }">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th>User Name</th>
+                    <th>Log</th>
+                    <th>Time stamp</th>                                   
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-log>
+                <tr>
+                    <td>{{ log.userStamp }}</td>
+                    <td>{{ log.log }}</td>                    
+                    <td>{{ log.dateTimeStamp | date:'dd/MM/yyyy HH:mm:ss' }}</td>
+                </tr>
+            </ng-template>
+        </p-table>
+        </div>        
+</p-dialog>
+

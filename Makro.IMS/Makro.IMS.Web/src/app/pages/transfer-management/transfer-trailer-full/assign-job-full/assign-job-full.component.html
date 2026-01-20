@@ -1,0 +1,149 @@
+<p-toast></p-toast>
+<p-confirmDialog
+  [baseZIndex]="10000"
+  rejectButtonStyleClass="p-button-text"
+></p-confirmDialog>
+<div class="surface-card shadow-2 border-round p-4 mt-3">
+  <p-messages [(value)]="msgs" [enableService]="false"></p-messages>
+  <h3 class="text-xl text-900">
+    <i class="pi pi-calendar mr-2"></i>
+    Job Information
+  </h3>
+  <hr />
+  <div class="card p-4 mb-3" *ngIf="trailer">
+    <div class="flex justify-content-between align-items-center mb-3">
+      <h3 class="text-xl text-900 m-0">
+        <i class="pi pi-truck mr-2"></i>
+        Trailer Information
+      </h3>
+      <p-badge
+        *ngIf="getSeverity(trailer.status)"
+        [severity]="getSeverity(trailer.status)"
+        [value]="trailer.status"
+      >
+      </p-badge>
+    </div>
+    <div class="field p-2">
+      <div class="flex justify-content-between mb-2">
+        <span class="font-semibold">License Plate:</span>
+        <span>{{ trailer.licensePlate }}</span>
+      </div>
+      <div class="flex justify-content-between mb-2">
+        <span class="font-semibold">Trailer Type:</span>
+        <span>{{ trailer.trailerType }}</span>
+      </div>
+      <div class="flex justify-content-between mb-2">
+        <span class="font-semibold">Location No:</span>
+        <span>{{ trailer.locationNo }}</span>
+      </div>
+      <div class="flex justify-content-between mb-2">
+        <span class="font-semibold">Location Type:</span>
+        <span>{{ trailer.locationType }}</span>
+      </div>
+      <div class="flex justify-content-between mb-2">
+        <span class="font-semibold">Location Zone:</span>
+        <span>{{ trailer.locationZone }}</span>
+      </div>
+    </div>
+  </div>
+  <div class="card p-4 mb-3">
+    <div class="flex justify-content-between align-items-center mb-3">
+      <h3 class="text-xl text-900 m-0">
+        <i class="pi pi-car mr-2"></i>
+        Assign Shunt
+      </h3>
+      <p-button
+        label="Search Shunt"
+        icon="pi pi-search"
+        severity="primary"
+        [raised]="true"
+        (onClick)="openShuntSearch()"
+      ></p-button>
+    </div>
+
+    <div *ngIf="shunt" class="p-2 border-round surface-ground">
+      <div class="grid">
+        <div class="col-12 md:col-4">
+          <span class="font-semibold block mb-2">License Plate : </span>
+          <span>{{ shunt.licensePlate }}</span>
+        </div>
+        <div class="col-12 md:col-4">
+          <span class="font-semibold block mb-2">Driver Name : </span>
+          <span>{{ shunt.driverName }}</span>
+        </div>
+        <div class="col-12 md:col-4">
+          <span class="font-semibold block mb-2">Tel No : </span>
+          <span>{{ shunt.telNo }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="card p-4 mb-3">
+    <div class="flex justify-content-between align-items-center mb-3">
+      <h3 class="text-xl text-900 m-0">
+        <i class="pi pi-map-marker mr-2"></i>
+        Assign Zone
+      </h3>
+      <p-button
+        label="Search Zone"
+        icon="pi pi-search"
+        severity="primary"
+        [raised]="true"
+        [disabled]="!shunt"
+        (onClick)="openYardSearch()"
+      ></p-button>
+    </div>
+    <div *ngIf="yard" class="p-2 border-round surface-ground">
+      <div class="grid">
+        <div class="col-12 md:col-3">
+          <span class="font-semibold block mb-2">Yard No : </span>
+          <span>{{ yard.yardNo }}</span>
+        </div>
+        <div class="col-12 md:col-3">
+          <span class="font-semibold block mb-2">Yard Type : </span>
+          <span>{{ yard.yardType }}</span>
+        </div>
+        <div class="col-12 md:col-3">
+          <span class="font-semibold block mb-2">Yard Zone : </span>
+          <span>{{ yard.yardZone }}</span>
+        </div>
+        <div class="col-12 md:col-3">
+          <span class="font-semibold block mb-2">Location No : </span>
+          <span>{{ yard.locationNo }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="flex justify-content-between align-items-center mb-3">
+    <div class="flex justify-content-start gap-2">
+      @if (trailer.status != 'Out-DC') {
+      <p-button
+        label="Update Out DC"
+        (onClick)="on_update_dc('out_dc')"
+        styleClass="bg-purple-300"
+      ></p-button>
+      } @if(trailer.status === 'Out-DC') {
+      <p-button
+        label="Update In DC"
+        (onClick)="on_update_dc('in_dc')"
+        styleClass="bg-purple-300"
+      ></p-button>
+      }
+    </div>
+    <div class="flex justify-content-end gap-2">
+      <p-button
+        label="Create Job"
+        icon="pi pi-check"
+        [disabled]="!shunt || !yard"
+        (onClick)="onCreateJob()"
+        severity="success"
+      ></p-button>
+      <p-button
+        label="Cancel"
+        icon="pi pi-times"
+        (onClick)="cancel()"
+        severity="secondary"
+      ></p-button>
+    </div>
+  </div>
+</div>

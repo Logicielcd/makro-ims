@@ -1,0 +1,288 @@
+<p-toast></p-toast>
+<p-confirmDialog
+  [baseZIndex]="10000"
+  rejectButtonStyleClass="p-button-text"
+></p-confirmDialog>
+<div class="card col-12 p-0 md:p-3">
+    <div class="flex justify-content-between flex-wrap">
+      <div class="flex align-item-center justify-content-center">
+        <h3 class="font-bold">Truck Pending</h3>
+      </div>
+      <div class="flex align-item-center justify-content-center">
+        <div class="align-item-center mr-2 ">
+            <p-button icon="pi pi-refresh" (click)="refresh()"></p-button>
+        </div>    
+        <div class="align-item-center ml-2">
+            <p-button
+            icon="pi pi-times"
+            (click)="onBack()"
+            [loading]="isLoading"
+            ></p-button>
+        </div>
+      </div>
+    </div>
+    <div class="w-full md:w-12 mx-auto">
+      <p-messages [(value)]="msgs" [enableService]="false"></p-messages>
+    </div>
+    
+    <div class="flex flex-row justify-content-between">
+        <div class="pt-2" *ngIf="bookingHeader && truckTypes"> 
+            <form #truckForm="ngForm" novalidate>
+                <div class="formgrid grid p-fluid justify-content-start">
+                    <div class="field col-12 md:col-3">
+                        <label for="warehousecode">Warehouse Code</label>
+                        <input pInputText
+                            type="text"
+                            id="whsecode"
+                            name="whsecode"
+                            [(ngModel)]="bookingHeader.warehouseCode"
+                            readonly
+                            placeholder=""
+                        /> 
+                    </div>
+                    <div class="field col-12 md:col-3" >
+                        <label for="bookingNo">Booking No</label>
+                        <input pInputText
+                            type="text"
+                            id="bookingid"
+                            name="bookingid"
+                            [(ngModel)]="bookingHeader.bookingId"
+                            readonly
+                            placeholder=""        
+                        />
+                    </div>
+                    <div class="field col-12 md:col-3" >
+                        <label for="bookingdate">Booking Date Start</label>
+                        <p-calendar 
+                            [(ngModel)]="bookingHeader.bookingStart" 
+                            [showTime]="true" 
+                            [showSeconds]="true" 
+                            inputId="bookingstart"
+                            disabled
+                            [ngModelOptions]="{standalone: true}">
+                        </p-calendar>
+                    </div>
+                    <div class="field col-12 md:col-3" >
+                        <label for="bookingdateend">Booking Date End</label>
+                        <p-calendar 
+                            [(ngModel)]="bookingHeader.bookingEnd" 
+                            [showTime]="true" 
+                            [showSeconds]="true" 
+                            inputId="bookingend "
+                            disabled
+                            [ngModelOptions]="{standalone: true}">
+                        </p-calendar>
+                    </div>
+                    
+                    <div class="field col-12 md:col-3" >
+                        <label for="trucktype1">Truck type</label>
+                        <p-dropdown
+                            id="truckType"
+                            name="truckType"
+                            #truckType="ngModel"
+                            [options]="truckTypes"
+                            [(ngModel)]="truckSelected"
+                            optionLabel="truckName"
+                            optionValue="internalTruckId"
+                            [filter]="true"
+                            filterBy="internalTruckId"
+                            [showClear]="true"
+                            placeholder="Select Truck Type"
+                            required
+                            [ngClass]="{
+                            'ng-invalid ng-dirty':
+                            truckType.invalid &&
+                                (truckType.dirty || truckType.touched)
+                            }
+                            "                            
+                        >                              
+                        </p-dropdown>
+                        <small
+                            class="p-error block"
+                            *ngIf="truckType.invalid && (truckType.dirty || truckType.touched)"
+                        >
+                            {{
+                            "Message.Validation.Required"
+                                | translate: { field: "Label.TruckType" | translate }
+                            }}
+                        </small>
+                    </div>
+                    <div class="flex field col-12 md:col-9 justify-content-between">
+                        <div class="flex-wrap justify-content-start w-8rem">
+                            <button
+                                pButton
+                                type="button"                            
+                                class="p-button"                      
+                                label="Add"
+                                icon="pi pi-plus"
+                                style="margin-top:1.5rem;"
+                                (click)="addTruck()"
+                                [disabled]="!truckForm.form.valid"
+                            >
+                            </button>
+                        </div>                        
+                        <div class="flex field col-12 md:col-7 justify-content-end">
+                            <div class="flex-wrap justify-content-start w-10rem "> 
+                                <button
+                                    pButton
+                                    type="button"
+                                    class="p-button"
+                                    label="Save"
+                                    icon="pi pi-save"
+                                    style="margin-top:1.5rem;"
+                                    (click)="savePreCheckIn()"
+                                    [disabled]="!isCompleted"
+                                ></button>
+                            </div>
+                            <div class="flex-wrap justify-content-start w-10rem ml-4 ">
+                                <button
+                                    pButton
+                                    type="button"
+                                    label="Delete"
+                                    icon="pi pi-trash"
+                                    class="p-button-warning"
+                                    style="margin-top:1.5rem;"
+                                    (click)="deletePreCheckIn()"
+                                ></button>
+                            </div>
+                        </div>     
+                       
+                    </div>
+                </div>
+            </form>
+  
+            <div class="field col-12 md:col-12" *ngIf="bookingHeader.bookingCheckIns">   
+                <p-tabView  [scrollable]="true" (onChange)="tabChange($event)" [(activeIndex)]="tabIndex">
+                    <p-tabPanel [header]="item.displayText" *ngFor="let item of bookingHeader.bookingCheckIns; let i = index; trackBy: trackByMethod" >         
+                        <ng-template pTemplate="content">                                                
+                            <form #truckForm="ngForm" *ngIf="item">
+                                <div class="formgrid grid p-fluid">
+                                    <div class="field col-12 md:col-3">
+                                        <label for="drivername">License Plate Head</label>
+                                        <input pInputText
+                                            type="text"
+                                            id="licenseplate"
+                                            name="licenseplate"
+                                            [(ngModel)]="item.licensePlate"
+                                            placeholder="Input license plate"
+                                            required
+                                        />
+                                    </div>
+                                    <div class="field col-12 md:col-3">
+                                        <label for="drivername">License Plate Trail</label>
+                                        <input pInputText
+                                            type="text"
+                                            id="licenseplate2"
+                                            name="licenseplate2"
+                                            [(ngModel)]="item.licensePlate2"
+                                            placeholder="Input license plate Trail"                                            
+                                        />
+                                    </div>
+                                    <div class="field col-12 md:col-3">
+                                        <label for="drivername">Driver name</label>
+                                        <input pInputText
+                                            type="text"
+                                            id="drivername"
+                                            name="drivername"
+                                            [(ngModel)]="item.driverName"
+                                            placeholder="Input driver name"
+                                            required
+                                        />
+                                    </div>
+                                    <div class="field col-12 md:col-3">
+                                        <label for="telno">Tel no.</label>
+                                        <input pInputText
+                                            type="text"
+                                            id="telno"
+                                            name="telno"
+                                            [(ngModel)]="item.telNo"
+                                            placeholder="Input Tel No."
+                                            required
+                                        />
+                                    </div>
+                                    <div class="field col-12 md:col-3">
+                                        <label for="lineno">Line Id.</label>
+                                        <input pInputText
+                                            type="text"
+                                            id="lineid"
+                                            name="lineid"
+                                            [(ngModel)]="item.lineId"
+                                            placeholder="Input Line Id."                                        
+                                        />
+                                    </div>
+                                    
+                                    <div class="field col-12 md:col-3">
+                                    <label for="pono">PO Nbr</label>
+                                        <input pInputText
+                                            #poCheckInFocus
+                                            type="text"
+                                            id="pono"
+                                            name="pono"
+                                            [(ngModel)]="item.poNo"                                        
+                                            [disabled]="!truckForm.form.valid"
+                                            (keydown.enter)="checkInPo(item.internalTruckCheckInId,$event.target)"
+                                        />
+                                    </div>
+                                    <div class="flex field col-12 md:col-9 justify-content-between">
+                                        <div class="flex-wrap justify-content-start w-8rem">
+                                        <button
+                                            pButton
+                                            type="button"
+                                            label="List PO"
+                                            class="p-button"
+                                            icon="pi pi-search-plus"
+                                            style="margin-top: 1.5rem"
+                                            (click)="getPo(item.internalTruckCheckInId,$event.target)"
+                                            [disabled]="!truckForm.form.valid"
+                                            ></button>                                  
+                                        </div>                                        
+                                        <div class="flex-wrap justify-content-start w-10rem">
+                                            <button   
+                                                pButton
+                                                type="button"
+                                                label="Delete"
+                                                icon="pi pi-trash"
+                                                class="p-button-warning"
+                                                style="margin-top: 1.5rem;"
+                                                (click)="deleteTruck(item)"
+                                            >
+                                            </button>
+                                        </div>
+                                    </div>           
+                                    
+                                </div>
+                            </form>
+                                    <div class="field col-12 md:col-12">
+                                        <p-table [columns]="cols" [value]="item.bookingTruckCheckInDetails" responsiveLayout="scroll">
+                                            <ng-template pTemplate="header" let-columns>
+                                                <tr>
+                                                    <th *ngFor="let col of columns">
+                                                        {{col.header}}
+                                                    </th>
+                                                </tr>
+                                            </ng-template>
+                                            <ng-template pTemplate="body" let-rowData let-columns="columns">
+                                                <tr>
+                                                    <td *ngFor="let col of columns">
+                                                        {{rowData[col.field]}}
+                                                    </td>
+                                                    <td>
+                                                        <button 
+                                                        pButton pRipple 
+                                                        icon="pi pi-trash" 
+                                                        class="p-button-rounded p-button-warning" 
+                                                        (click)="deletePo(rowData)"
+                                                        >
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                            </ng-template>
+                                        </p-table>
+                                    </div>
+                                                    
+                        </ng-template>
+                    </p-tabPanel>
+                </p-tabView>
+            </div>
+    </div>
+</div>

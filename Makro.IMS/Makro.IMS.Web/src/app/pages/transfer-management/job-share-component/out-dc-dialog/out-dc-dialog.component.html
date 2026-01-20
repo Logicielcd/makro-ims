@@ -1,0 +1,48 @@
+<p-toast></p-toast>
+<p-confirmDialog
+  [baseZIndex]="10000"
+  rejectButtonStyleClass="p-button-text"
+></p-confirmDialog>
+<form #form="ngForm" class="surface-card shadow-3 p-4 mt-3">
+  <p-messages [(value)]="msgs" [enableService]="false"></p-messages>
+  <div class="flex flex-column gap-4">
+    <div class="flex flex-column gap-2">
+      <label for="outDcLicensePlate">License Plate</label>
+      <input
+        type="text"
+        id="outDcLicensePlate"
+        name="outDcLicensePlate"
+        #outDcLicensePlate="ngModel"
+        [(ngModel)]="out_dc.outDcLicensePlate"
+        required
+        pInputText
+      />
+    </div>
+    <div class="flex flex-column gap-2">
+      <label for="outDcDriver">Driver name</label>
+      <input
+        type="text"
+        id="outDcDriver"
+        name="outDcDriver"
+        #outDcDriver="ngModel"
+        [(ngModel)]="out_dc.outDcDriver"
+        required
+        pInputText
+      />
+    </div>
+    <div class="flex justify-content-end">
+      <div class="flex justify-content-end gap-2">
+        <p-button
+          label="Cancel"
+          (onClick)="cancel()"
+          styleClass="p-button-outlined"
+        ></p-button>
+        <p-button
+          label="Save"
+          [disabled]="!form.valid"
+          (onClick)="save()"
+        ></p-button>
+      </div>
+    </div>
+  </div>
+</form>

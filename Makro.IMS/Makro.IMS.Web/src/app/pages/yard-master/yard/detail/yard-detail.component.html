@@ -1,0 +1,268 @@
+<p-toast></p-toast>
+<p-confirmDialog
+  [baseZIndex]="10000"
+  rejectButtonStyleClass="p-button-text"
+></p-confirmDialog>
+<div class="grid">
+  <div class="col-12 p-0 md:p-3">
+    <div class="card">
+      <div class="grid grid-nogutter flex-row justify-content-between">
+        <h3 class="font-bold">
+          {{ (!dataId ? "Title.Create" : "Title.Detail") | translate }}
+        </h3>
+      </div>
+      <p-messages [(value)]="msgs" [enableService]="false"> </p-messages>
+      <form #f="ngForm" novalidate>
+        <div class="grid">
+          <div class="col-12">
+            <p-toolbar>
+              <div class="p-toolbar-group-left flex flex-wrap">
+                <button
+                  *ngIf="canModify"
+                  pButton
+                  type="button"
+                  icon="pi pi-check"
+                  [label]="'Button.Save' | translate"
+                  class="p-button-success mr-2"
+                  [disabled]="!f.form.valid || f.form.pristine"
+                  (click)="onSubmit()"
+                  [loading]="isLoading"
+                ></button>
+                <button
+                  *ngIf="canModify"
+                  pButton
+                  type="button"
+                  icon="pi pi-trash"
+                  [label]="'Button.Delete' | translate"
+                  class="p-button-danger mr-2"
+                  (click)="onDelete()"
+                  [loading]="isLoading"
+                ></button>
+              </div>
+              <div class="p-toolbar-group-right flex flex-wrap">
+                <button
+                  pButton
+                  type="button"
+                  icon="pi pi-refresh"
+                  [pTooltip]="'Button.Refresh' | translate"
+                  tooltipPosition="bottom"
+                  class="p-button-primary mr-2"
+                  (click)="fetchData()"
+                  [loading]="isLoading"
+                ></button>
+                <button
+                  pButton
+                  type="button"
+                  icon="pi pi-times"
+                  [pTooltip]="'Button.Back' | translate"
+                  tooltipPosition="bottom"
+                  class="p-button-primary mr-2"
+                  (click)="onBack()"
+                  [loading]="isLoading"
+                ></button>
+              </div>
+            </p-toolbar>
+          </div>
+        </div>
+        <div class="p-fluid p-formgrid grid">
+          <div class="field col-12 md:col-4">
+            <label for="yardNo" class="font-bold">{{
+              "Label.YardNo" | translate
+            }}</label>
+            <input
+              type="text"
+              id="yardNo"
+              name="yardNo"
+              pInputText
+              [(ngModel)]="data.yardNo"
+              #yardNo="ngModel"
+              required
+              [ngClass]="{
+                'ng-invalid ng-dirty':
+                  yardNo.invalid && (yardNo.dirty || yardNo.touched)
+              }"
+            />
+            <small
+              class="p-error block"
+              *ngIf="yardNo.invalid && (yardNo.dirty || yardNo.touched)"
+            >
+              {{
+                "Message.Validation.Required"
+                  | translate : { field: "Label.YardNo" | translate }
+              }}
+            </small>
+          </div>
+          <div class="field col-12 md:col-4">
+            <label htmlFor="status">
+              {{ "Label.YardType" | translate }}
+            </label>
+            <p-dropdown
+              id="yardType"
+              name="yardType"
+              #yardType="ngModel"
+              [options]="yard_types"
+              [(ngModel)]="data.yardType"
+              optionLabel="label"
+              optionValue="value"
+              [placeholder]="'Select.YardType' | translate"
+              required
+              [ngClass]="{
+                'ng-invalid ng-dirty':
+                  yardType.invalid && (yardType.dirty || yardType.touched)
+              }"
+              [virtualScroll]="true"
+              [virtualScrollItemSize]="38"
+            >
+              <ng-template let-item pTemplate="item">
+                {{ item.value }}
+              </ng-template>
+              <ng-template let-item pTemplate="selectedItem">
+                {{ item.value }}
+              </ng-template>
+            </p-dropdown>
+            <small
+              class="p-error block"
+              *ngIf="yardType.invalid && (yardType.dirty || yardType.touched)"
+            >
+              {{
+                "Message.Validation.Required"
+                  | translate : { field: "Label.YardType" | translate }
+              }}
+            </small>
+          </div>
+          <div class="field col-12 md:col-4">
+            <label htmlFor="yardZone">
+              {{ "Label.YardZone" | translate }}
+            </label>
+            <input
+              pInputText
+              type="text"
+              id="yardZone"
+              name="yardZone"
+              [(ngModel)]="data.yardZone"
+              #yardZone="ngModel"
+              required
+              [ngClass]="{
+                'ng-invalid ng-dirty':
+                  yardZone.invalid && (yardZone.dirty || yardZone.touched)
+              }"
+            />
+            <small
+              class="p-error block"
+              *ngIf="yardZone.invalid && (yardZone.dirty || yardZone.touched)"
+            >
+              {{
+                "Message.Validation.Required"
+                  | translate : { field: "Label.YardZone" | translate }
+              }}
+            </small>
+          </div>
+          <div class="field col-12 md:col-4">
+            <label htmlFor="trailerType">
+              {{ "Label.TrailerType" | translate }}
+            </label>
+            <p-multiSelect
+              id="trailerType"
+              name="trailerType"
+              #trailerType="ngModel"
+              [options]="trailer_types"
+              [(ngModel)]="trailer_type_selected"
+              defaultLabel="Select Trailer Type"
+              optionLabel="label"
+              display="chip"
+              required
+              [ngClass]="{
+                'ng-invalid ng-dirty':
+                  trailerType.invalid &&
+                  (trailerType.dirty || trailerType.touched)
+              }"
+              [filter]="false"
+              [virtualScroll]="true"
+              [virtualScrollItemSize]="38"
+            >
+            </p-multiSelect>
+            <small
+              class="p-error block"
+              *ngIf="
+                trailerType.invalid &&
+                (trailerType.dirty || trailerType.touched)
+              "
+            >
+              {{
+                "Message.Validation.Required"
+                  | translate : { field: "Label.TrailerType" | translate }
+              }}
+            </small>
+          </div>
+          <div class="field col-12 md:col-4">
+            <label for="locationNo" class="font-bold">{{
+              "Label.LocationNo" | translate
+            }}</label>
+            <input
+              type="text"
+              id="locationNo"
+              name="locationNo"
+              pInputText
+              [(ngModel)]="data.locationNo"
+              #locationNo="ngModel"
+              required
+              [ngClass]="{
+                'ng-invalid ng-dirty':
+                  locationNo.invalid && (locationNo.dirty || locationNo.touched)
+              }"
+            />
+            <small
+              class="p-error block"
+              *ngIf="
+                locationNo.invalid && (locationNo.dirty || locationNo.touched)
+              "
+            >
+              {{
+                "Message.Validation.Required"
+                  | translate : { field: "Label.LocationNo" | translate }
+              }}
+            </small>
+          </div>
+          <div class="field col-12 md:col-4">
+            <label htmlFor="status">
+              {{ "Label.Status" | translate }}
+            </label>
+            <p-dropdown
+              id="status"
+              name="status"
+              #status="ngModel"
+              [options]="statusOptions"
+              [(ngModel)]="data.status"
+              optionLabel="label"
+              optionValue="value"
+              [placeholder]="'Select.Status' | translate"
+              required
+              [ngClass]="{
+                'ng-invalid ng-dirty':
+                  status.invalid && (status.dirty || status.touched)
+              }"
+              [virtualScroll]="true"
+              [virtualScrollItemSize]="38"
+            >
+              <ng-template let-item pTemplate="item">
+                {{ item.value }}
+              </ng-template>
+              <ng-template let-item pTemplate="selectedItem">
+                {{ item.value }}
+              </ng-template>
+            </p-dropdown>
+            <small
+              class="p-error block"
+              *ngIf="status.invalid && (status.dirty || status.touched)"
+            >
+              {{
+                "Message.Validation.Required"
+                  | translate : { field: "Label.Status" | translate }
+              }}
+            </small>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
